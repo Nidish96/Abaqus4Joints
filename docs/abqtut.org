@@ -1,4 +1,4 @@
-#+TITLE: An Abaqus-MATLAB tutorial for Jointed Systems
+#+TITLE: An ABAQUS-MATLAB tutorial for Jointed Systems
 #+AUTHOR: Nidish Narayanaa Balaji
 #+EXPORT_FILE_NAME: index.html
 #+OPTIONS: startup:indent
@@ -24,7 +24,7 @@
 * Preprocessing
 
 The Brake-Reuß Beam (BRB) is a 3-bolted lap-joint beam which will serve as our tutorial joint structure (read more about the benchmark [[https://jointmechanics.org/index.php/Benchmarks#The_Brake-Reu%C3%9F_Beams][here]]).
-To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in Abaqus and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
+To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in ABAQUS and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
 Buckle up! :)
 
 #+CAPTION: Geometry of the BRB Benchmark
@@ -40,12 +40,12 @@ Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread 
 The general principles in the modeling section are, however, recommended for all jointed structure modeling.
 
 ** A Note on Python Scripting                                       :Script:
-Abaqus Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
-+ For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. Abaqus would have saved the actions in a Python file called =abaqus.rpy=. This is just python code that can be imported into abaqus to repeat the same tasks.
+ABAQUS Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
++ For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. ABAQUS would have saved the actions in a Python file called =abaqus.rpy=. This is just python code that can be imported into ABAQUS to repeat the same tasks.
   All standard python commands work so this makes it very helpful.
-+ On Windows the *work directory* may be an unfamiliar concept (on Linux it is just the directory from which Abaqus is launched). This directory can be manually set by ~File->Set Work Directory~, following which all the files (including the =abaqus.rpy= file) will be put in the specified folder.
-+ Fig [[fig:ovw]] shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.
-#+CAPTION: Options in Abaqus for Scripting
++ On Windows the *work directory* may be an unfamiliar concept (on Linux it is just the directory from which ABAQUS is launched). This directory can be manually set by ~File->Set Work Directory~, following which all the files (including the =ABAQUS.rpy= file) will be put in the specified folder.
++ Fig [[fig:ovw]] shows a pictorial overview of the different options available in ABAQUS for scripting support. The ABAQUS PDE can be used for ABAQUS python script development.
+#+CAPTION: Options in ABAQUS for Scripting
 #+ATTR_HTML: :width 600px
 #+ATTR_LATEX: :width \textwidth
 #+NAME: fig:ovw
@@ -54,7 +54,7 @@ Abaqus Python scripting is quite powerful and will be used quite liberally throu
 ** Modeling Parts                                               :Script:GUI:
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
 
-We will do the construction through Abaqus Python code that can be imported through =File->Run Script= or just typed into the command line.
+We will do the construction through ABAQUS Python code that can be imported through =File->Run Script= or just typed into the command line.
 
 1. First import the following code to import all the necessary objects and then the material properties (steel, here).
    #+begin_src python -n :tangle yes
@@ -199,7 +199,7 @@ We will do the construction through Abaqus Python code that can be imported thro
    #+end_src
 #+begin_details Scripting note :background-color "#cccccc" :title-color "black"
 You can see that certain faces and edges were used in the above.
-A quick way to check which face is what will be to use the =highlight= command on the Abaqus python console.
+A quick way to check which face is what will be to use the =highlight= command on the ABAQUS python console.
 Here is an example:
 #+ATTR_HTML: :width 600px
 [[./figs/highl.png]]
@@ -310,7 +310,7 @@ Now that the assembly is complete, the relevant constraints will have to be enfo
 * Constraints
 ** Tie-Constraint Enforcement                                   :Script:GUI:
 All the following operations can be conducted in the ~Interaction~ module in CAE.
-But since selecting each surface can be a time-consuming process, we use the following for-loop in Abaqus-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
+But since selecting each surface can be a time-consuming process, we use the following for-loop in ABAQUS-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
 Specifically, it ties the Bolt-Washer, Nut-Washer, and Washer-Beam surfaces.
 Note that in the last set of constraints, we recall the fact that the bottom beam is flipped.
 So =WASHER-1= is tied to =BmW3= of the bottom beam (and so on for 2,3).
@@ -351,10 +351,10 @@ So =WASHER-1= is tied to =BmW3= of the bottom beam (and so on for 2,3).
 <<sec:boltprel>>
 You might already have encountered the different parts of the model above that were carefully constructed for the bolt preload application (bolt-shank partitioning, reference points, etc.).
 #+begin_Details What's wrong with the inbuilt Bolt Pretension in ABAQUS? :background-color "#cccccc" :title-color "black"
-*The Abaqus Approach*
-+ You can find the Abaqus documentation for the bolt load [[https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usi/default.htm?startat=pt04ch21s02s01.html][here]].
+*The ABAQUS Approach*
++ You can find the ABAQUS documentation for the bolt load [[https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usi/default.htm?startat=pt04ch21s02s01.html][here]].
 + ABAQUS/CAE applies bolt load by specifying a *bolt cross-section*, a *bolt axis*, and the *bolt load*.
-+ The documentation for the Abaqus implementation can be found [[https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usb/default.htm?startat=pt07ch27s05aus102.html#usb-prc-ppretension][here]].
++ The documentation for the ABAQUS implementation can be found [[https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usb/default.htm?startat=pt07ch27s05aus102.html#usb-prc-ppretension][here]].
 + The load is applied in the context of a constraint:
   + It can be a load constraint wherein the displacements/strains at the cross-section are adjusted to match the load.
   + It can be a deformation constraint, wherein the loads are adjusted.

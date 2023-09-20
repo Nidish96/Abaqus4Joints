@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-09-20 Wed 16:57 -->
+<!-- 2023-09-20 Wed 17:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>An Abaqus-MATLAB tutorial for Jointed Systems</title>
+<title>An ABAQUS-MATLAB tutorial for Jointed Systems</title>
 <meta name="author" content="Nidish Narayanaa Balaji" />
 <meta name="generator" content="Org Mode" />
 <base target="_blank">
@@ -123,45 +123,45 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">An Abaqus-MATLAB tutorial for Jointed Systems</h1>
+<h1 class="title">An ABAQUS-MATLAB tutorial for Jointed Systems</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org916495f">1. Preprocessing</a>
+<li><a href="#orgc8620f5">1. Preprocessing</a>
 <ul>
-<li><a href="#org9afefd2">1.1. A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#orga770093">1.2. Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
-<li><a href="#org19dd067">1.3. Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
-<li><a href="#org624f068">1.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#org0fe02ee">1.1. A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org1e8779c">1.2. Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org5dd46f3">1.3. Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#orgd43a1ef">1.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orge5faa12">2. Constraints</a>
+<li><a href="#org39efe59">2. Constraints</a>
 <ul>
-<li><a href="#orgb0e3888">2.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
-<li><a href="#org1b1a085">2.2. Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#orge18ce88">2.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org64ed874">2.2. Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgfb9ed00">3. Meshing</a>
+<li><a href="#orga14a4b5">3. Meshing</a>
 <ul>
-<li><a href="#org0b58b50">3.1. Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
-<li><a href="#orgc23fc80">3.2. (Optional, recommended) Verify correctness of model through frictionless prestress&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#org8f06a3a">3.1. Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#orgc1cfa54">3.2. (Optional, recommended) Verify correctness of model through frictionless prestress&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org390f312">4. Postprocessing</a>
+<li><a href="#org287d82f">4. Postprocessing</a>
 <ul>
-<li><a href="#org5226da1">4.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org52aebd5">4.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#orgcd63574">4.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org347726a">4.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org56f120e">4.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org05d9862">4.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org191fd51">5. Matrix Extraction</a>
+<li><a href="#org2c3e670">5. Matrix Extraction</a>
 <ul>
-<li><a href="#org9d775c6">5.1. Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org7b5d676">5.2. Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org1daafb7">5.1. Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orgeb9dddd">5.2. Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org556a24f">6. Outro/Contact Details</a></li>
+<li><a href="#orgc9895f1">6. Outro/Contact Details</a></li>
 </ul>
 </div>
 </div>
@@ -170,25 +170,25 @@
 <!-- <script type="text/javascript" src="./collcont_clkbls.js"></script> -->
 <script>var HS_STARTUP_FOLDED = true;</script>
 
-<div id="outline-container-org916495f" class="outline-2">
-<h2 id="org916495f"><span class="section-number-2">1.</span> Preprocessing</h2>
+<div id="outline-container-orgc8620f5" class="outline-2">
+<h2 id="orgc8620f5"><span class="section-number-2">1.</span> Preprocessing</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The Brake-Reuß Beam (BRB) is a 3-bolted lap-joint beam which will serve as our tutorial joint structure (read more about the benchmark <a href="https://jointmechanics.org/index.php/Benchmarks#The_Brake-Reu%C3%9F_Beams">here</a>).
-To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in Abaqus and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
+To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in ABAQUS and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
 Buckle up! :)
 </p>
 
 
-<div id="orgb5f4be5" class="figure">
+<div id="org99f9858" class="figure">
 <p><img src="./figs/300px-BRB.png" alt="300px-BRB.png" width="300px" />
 </p>
 <p><span class="figure-number">Figure 1: </span>Geometry of the BRB Benchmark</p>
 </div>
 
 <p>
-A picture of the parts of the BRB is shown in Fig. <a href="#orgb5f4be5">1</a> and this will be used to guide the modeling here.
-Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see <a href="#orgd1dbc50">2.2</a> for more details on bolt prestress modeling).
+A picture of the parts of the BRB is shown in Fig. <a href="#org99f9858">1</a> and this will be used to guide the modeling here.
+Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see <a href="#org75b8f9c">2.2</a> for more details on bolt prestress modeling).
 </p>
 
 <p>
@@ -197,36 +197,36 @@ The general principles in the modeling section are, however, recommended for all
 </p>
 </div>
 
-<div id="outline-container-org9afefd2" class="outline-3">
-<h3 id="org9afefd2"><span class="section-number-3">1.1.</span> A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org0fe02ee" class="outline-3">
+<h3 id="org0fe02ee"><span class="section-number-3">1.1.</span> A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-Abaqus Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
+ABAQUS Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
 </p>
 <ul class="org-ul">
-<li>For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. Abaqus would have saved the actions in a Python file called <code>abaqus.rpy</code>. This is just python code that can be imported into abaqus to repeat the same tasks.
+<li>For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. ABAQUS would have saved the actions in a Python file called <code>abaqus.rpy</code>. This is just python code that can be imported into ABAQUS to repeat the same tasks.
 All standard python commands work so this makes it very helpful.</li>
-<li>On Windows the <b>work directory</b> may be an unfamiliar concept (on Linux it is just the directory from which Abaqus is launched). This directory can be manually set by <code>File-&gt;Set Work Directory</code>, following which all the files (including the <code>abaqus.rpy</code> file) will be put in the specified folder.</li>
-<li>Fig <a href="#orgfe4ded9">2</a> shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.</li>
+<li>On Windows the <b>work directory</b> may be an unfamiliar concept (on Linux it is just the directory from which ABAQUS is launched). This directory can be manually set by <code>File-&gt;Set Work Directory</code>, following which all the files (including the <code>ABAQUS.rpy</code> file) will be put in the specified folder.</li>
+<li>Fig <a href="#orge9e8757">2</a> shows a pictorial overview of the different options available in ABAQUS for scripting support. The ABAQUS PDE can be used for ABAQUS python script development.</li>
 </ul>
 
-<div id="orgfe4ded9" class="figure">
+<div id="orge9e8757" class="figure">
 <p><img src="./figs/ovw.png" alt="ovw.png" width="600px" />
 </p>
-<p><span class="figure-number">Figure 2: </span>Options in Abaqus for Scripting</p>
+<p><span class="figure-number">Figure 2: </span>Options in ABAQUS for Scripting</p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orga770093" class="outline-3">
-<h3 id="orga770093"><span class="section-number-3">1.2.</span> Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org1e8779c" class="outline-3">
+<h3 id="org1e8779c"><span class="section-number-3">1.2.</span> Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
 </p>
 
 <p>
-We will do the construction through Abaqus Python code that can be imported through <code>File-&gt;Run Script</code> or just typed into the command line.
+We will do the construction through ABAQUS Python code that can be imported through <code>File-&gt;Run Script</code> or just typed into the command line.
 </p>
 
 <ol class="org-ol">
@@ -397,11 +397,11 @@ Now use the following to model the half beam (this can be done on CAE with the G
                   </summary>
 <p>
 You can see that certain faces and edges were used in the above.
-A quick way to check which face is what will be to use the <code>highlight</code> command on the Abaqus python console.
+A quick way to check which face is what will be to use the <code>highlight</code> command on the ABAQUS python console.
 Here is an example:
 </p>
 
-<div id="org234c0f3" class="figure">
+<div id="orgbf24e6c" class="figure">
 <p><img src="./figs/highl.png" alt="highl.png" width="600px" />
 </p>
 </div>
@@ -413,7 +413,7 @@ At the end of this step, you should have a partitioned part that looks like this
 The partitioning is done in this way to help with the seeded meshing, constraint enforcement, etc.
 </p>
 
-<div id="org9e610b8" class="figure">
+<div id="org0d67b8e" class="figure">
 <p><img src="./figs/parthb.png" alt="parthb.png" width="600px" />
 </p>
 </div>
@@ -437,7 +437,7 @@ You have to ensure that the curved edges on the above are, indeed, single edges.
 If not, you will have to use the "Merge Edges" tool in the Part module and individually select each edge and merge them.
 </p>
 
-<div id="orgbccdf4e" class="figure">
+<div id="orge25edc6" class="figure">
 <p><img src="./figs/medg.png" alt="medg.png" width="600px" />
 </p>
 </div>
@@ -447,7 +447,7 @@ If not, you will have to use the "Merge Edges" tool in the Part module and indiv
 <ol class="org-ol">
 <li><p>
 Create a Reference Point Part called <code>REFPT</code>.
-This will be necessary for the application of bolt prestress (see <a href="#orgd1dbc50">2.2</a> below).
+This will be necessary for the application of bolt prestress (see <a href="#org75b8f9c">2.2</a> below).
 </p>
 <div class="org-src-container">
 <pre class="src src-python"><span class="linenr">135: </span><span class="org-variable-name">rpt</span> <span class="org-operator">=</span> mdl.Part(name<span class="org-operator">=</span><span class="org-string">'REFPT'</span>, dimensionality<span class="org-operator">=</span>THREE_D, 
@@ -472,8 +472,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </p>
 </div>
 </div>
-<div id="outline-container-org19dd067" class="outline-3">
-<h3 id="org19dd067"><span class="section-number-3">1.3.</span> Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org5dd46f3" class="outline-3">
+<h3 id="org5dd46f3"><span class="section-number-3">1.3.</span> Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
@@ -487,7 +487,7 @@ Select the faces by holding <code>Shift</code> and deselect by holding <code>Ctr
 Here is a picture of the surface highlighted in the viewport.
 </p>
 
-<div id="orgee6ce76" class="figure">
+<div id="orgbbaaa7f" class="figure">
 <p><img src="./figs/insurf.png" alt="insurf.png" width="300px" />
 </p>
 </div></li>
@@ -497,7 +497,7 @@ These will be tied to the washer for the analysis. (<code>BmWi</code> denotes th
 Here is a picture of the relevant surfaces highlighted (using different colors for each).
 </p>
 
-<div id="org0f6384f" class="figure">
+<div id="org7f84779" class="figure">
 <p><img src="./figs/bmwsurfs.png" alt="bmwsurfs.png" width="300px" />
 </p>
 </div></li>
@@ -507,7 +507,7 @@ Name the surface marked white as <code>BlW</code> and the surface marked green a
 (<code>BlW</code> denotes the Bolt-Washer contact surface; <code>BN</code> denotes the Bolt-Nut contact surface)
 </p>
 
-<div id="org5968504" class="figure">
+<div id="org47797ce" class="figure">
 <p><img src="./figs/boltsurfs.png" alt="boltsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -518,7 +518,7 @@ Name the white surface as <code>NW</code> and the green surface as <code>NB</cod
 <b>Note the direction axes carefully.</b>
 </p>
 
-<div id="org8b9b42b" class="figure">
+<div id="org0df8024" class="figure">
 <p><img src="./figs/nutsurfs.png" alt="nutsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -527,7 +527,7 @@ Create two surface on the <code>WASHER</code> model and label them as <code>WSTO
 Here is a graphical depiction of the model with the surfaces.
 </p>
 
-<div id="org01bda0c" class="figure">
+<div id="org5eb5fab" class="figure">
 <p><img src="./figs/wshrsurf.png" alt="wshrsurf.png" width="200px" />
 </p>
 </div></li>
@@ -539,8 +539,8 @@ Now all the parts have been created and relevant surfaces have been identified.
 </p>
 </div>
 </div>
-<div id="outline-container-org624f068" class="outline-3">
-<h3 id="org624f068"><span class="section-number-3">1.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orgd43a1ef" class="outline-3">
+<h3 id="orgd43a1ef"><span class="section-number-3">1.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 <b>Note</b>: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
@@ -556,7 +556,7 @@ This will be the convention followed throughout this tutorial.
 The green beam in the following is renamed as <code>TOPBEAM</code> and the white beam in the following is renamed as <code>BOTBEAM</code>.
 </p>
 
-<div id="orga264947" class="figure">
+<div id="org3b16ade" class="figure">
 <p><img src="./figs/asb1.png" alt="asb1.png" width="400px" />
 </p>
 </div></li>
@@ -567,7 +567,7 @@ Rename the washer instances in the top and bottom as <code>TOPWASHER-1</code> an
 Rename the bolt and nut as <code>NUT-1</code> and <code>BOLT-1</code> respectively.
 </p>
 
-<div id="org5de12ac" class="figure">
+<div id="org066c8da" class="figure">
 <p><img src="./figs/asbwn.png" alt="asbwn.png" width="300px" />
 </p>
 </div></li>
@@ -581,13 +581,13 @@ The figure below shows an example (a datum point was used for this here).
 Rename this to <code>BPT-1</code> (standing for Bolt Point 1).
 </p>
 
-<div id="orgc34cc1a" class="figure">
+<div id="org9ffb41a" class="figure">
 <p><img src="./figs/asrpt.png" alt="asrpt.png" width="400px" />
 </p>
 </div></li>
 <li>Now import another instance of the reference point <code>REFPT</code> and translate it to be coincident with <code>BPT-1</code>.
 Rename this <code>NPT-1</code> (standing for Nut Point 1).
-These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see <a href="#orgd1dbc50">2.2</a> below for those steps).
+These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see <a href="#org75b8f9c">2.2</a> below for those steps).
 The point <code>BPT-1</code> will be coupled to the bolt surface <code>BN</code> and <code>NPT-1</code> will be tied to the nut surface <code>NB</code> through RBE3 elements.</li>
 <li><p>
 Use the "Linear Pattern" dialog and copy the bolt-washer-washer-nut assembly thrice along the beam such that the assembly is complete.
@@ -595,7 +595,7 @@ The figure below shows the final assembly along with a representation of the nam
 Recall that  the beam shown in the figure below is <code>TOPBEAM</code> and the hidden one is <code>BOTBEAM</code>.
 </p>
 
-<div id="org1691b48" class="figure">
+<div id="org1d26f6a" class="figure">
 <p><img src="./figs/as3bwn.png" alt="as3bwn.png" width="600px" />
 </p>
 </div></li>
@@ -607,16 +607,16 @@ Now that the assembly is complete, the relevant constraints will have to be enfo
 </div>
 </div>
 </div>
-<div id="outline-container-orge5faa12" class="outline-2">
-<h2 id="orge5faa12"><span class="section-number-2">2.</span> Constraints</h2>
+<div id="outline-container-org39efe59" class="outline-2">
+<h2 id="org39efe59"><span class="section-number-2">2.</span> Constraints</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgb0e3888" class="outline-3">
-<h3 id="orgb0e3888"><span class="section-number-3">2.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orge18ce88" class="outline-3">
+<h3 id="orge18ce88"><span class="section-number-3">2.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 All the following operations can be conducted in the <code>Interaction</code> module in CAE.
-But since selecting each surface can be a time-consuming process, we use the following for-loop in Abaqus-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
+But since selecting each surface can be a time-consuming process, we use the following for-loop in ABAQUS-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
 Specifically, it ties the Bolt-Washer, Nut-Washer, and Washer-Beam surfaces.
 Note that in the last set of constraints, we recall the fact that the bottom beam is flipped.
 So <code>WASHER-1</code> is tied to <code>BmW3</code> of the bottom beam (and so on for 2,3).
@@ -657,11 +657,11 @@ So <code>WASHER-1</code> is tied to <code>BmW3</code> of the bottom beam (and so
 </div>
 </div>
 </div>
-<div id="outline-container-org1b1a085" class="outline-3">
-<h3 id="org1b1a085"><span class="section-number-3">2.2.</span> Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org64ed874" class="outline-3">
+<h3 id="org64ed874"><span class="section-number-3">2.2.</span> Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
-<a id="orgd1dbc50"></a>
+<a id="org75b8f9c"></a>
 You might already have encountered the different parts of the model above that were carefully constructed for the bolt preload application (bolt-shank partitioning, reference points, etc.).
 </p>
 <details class="code-details"
@@ -680,12 +680,12 @@ You might already have encountered the different parts of the model above that w
                     </strong>
                   </summary>
 <p>
-<b>The Abaqus Approach</b>
+<b>The ABAQUS Approach</b>
 </p>
 <ul class="org-ul">
-<li>You can find the Abaqus documentation for the bolt load <a href="https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usi/default.htm?startat=pt04ch21s02s01.html">here</a>.</li>
+<li>You can find the ABAQUS documentation for the bolt load <a href="https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usi/default.htm?startat=pt04ch21s02s01.html">here</a>.</li>
 <li>ABAQUS/CAE applies bolt load by specifying a <b>bolt cross-section</b>, a <b>bolt axis</b>, and the <b>bolt load</b>.</li>
-<li>The documentation for the Abaqus implementation can be found <a href="https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usb/default.htm?startat=pt07ch27s05aus102.html#usb-prc-ppretension">here</a>.</li>
+<li>The documentation for the ABAQUS implementation can be found <a href="https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/usb/default.htm?startat=pt07ch27s05aus102.html#usb-prc-ppretension">here</a>.</li>
 <li>The load is applied in the context of a constraint:
 <ul class="org-ul">
 <li>It can be a load constraint wherein the displacements/strains at the cross-section are adjusted to match the load.</li>
@@ -761,7 +761,7 @@ The following code does this through a nested loop such that <b><code>BNEQn-m</c
 Here is an image showing the constraints applied graphically.
 </p>
 
-<div id="org44b4367" class="figure">
+<div id="org10921df" class="figure">
 <p><img src="./figs/conss.png" alt="conss.png" width="400px" />
 </p>
 </div></li>
@@ -797,7 +797,7 @@ The following python code applies a tightening load of 12kN to each bolt.
 </pre>
 </div>
 
-<div id="org3018cfa" class="figure">
+<div id="org6651790" class="figure">
 <p><img src="./figs/loads.png" alt="loads.png" width="400px" />
 </p>
 </div></li>
@@ -814,8 +814,8 @@ We will now proceed with meshing.
 </div>
 </div>
 </div>
-<div id="outline-container-orgfb9ed00" class="outline-2">
-<h2 id="orgfb9ed00"><span class="section-number-2">3.</span> Meshing</h2>
+<div id="outline-container-orga14a4b5" class="outline-2">
+<h2 id="orga14a4b5"><span class="section-number-2">3.</span> Meshing</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
@@ -827,8 +827,8 @@ If such symmetry is not available, one may choose a more direct approach by usin
 Please <a href="mailto:nidish.balaji@ila.uni-stuttgart.de">write to me</a> if you'd like an example for this.
 </p>
 </div>
-<div id="outline-container-org0b58b50" class="outline-3">
-<h3 id="org0b58b50"><span class="section-number-3">3.1.</span> Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org8f06a3a" class="outline-3">
+<h3 id="org8f06a3a"><span class="section-number-3">3.1.</span> Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-3-1">
 <ol class="org-ol">
 <li><p>
@@ -836,7 +836,7 @@ Choose <code>Mesh-&gt;Assign Mesh Controls</code> and select the whole assembly 
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
 </p>
 
-<div id="org51e2871" class="figure">
+<div id="orgf470d8c" class="figure">
 <p><img src="./figs/globmesh.png" alt="globmesh.png" width="300px" />
 </p>
 </div></li>
@@ -845,7 +845,7 @@ Now choose <code>Mesh-&gt;Seed Part Instance</code> and select all the instances
 Set 0.00254 as the global mesh seed (to ensure 10 elements across thickness) and 0.05 for curvature control.
 </p>
 
-<div id="orgef756fa" class="figure">
+<div id="orga430b81" class="figure">
 <p><img src="./figs/gmeshseed.png" alt="gmeshseed.png" width="300px" />
 </p>
 </div></li>
@@ -854,7 +854,7 @@ Apply local seeds at the interface as shown here (on both interfaces).
 Use the <code>Mesh-&gt;Seed Edges</code> tool by choosing the Method as "By Number" and specify the number of elements.
 </p>
 
-<div id="orga019d1d" class="figure">
+<div id="org53400b8" class="figure">
 <p><img src="./figs/lmeshseeds.png" alt="lmeshseeds.png" width="400px" />
 </p>
 </div></li>
@@ -863,7 +863,7 @@ Now mesh the assembly using <code>Mesh-&gt;Mesh Part Instance</code> and selecti
 Here is a view of the interfacial mesh you should get after the above seeding.
 </p>
 
-<div id="orgbc25049" class="figure">
+<div id="org07aec5c" class="figure">
 <p><img src="./figs/mesh.png" alt="mesh.png" width="300px" />
 </p>
 </div></li>
@@ -871,7 +871,7 @@ Here is a view of the interfacial mesh you should get after the above seeding.
 Here is an image of the total assembly with the mesh.
 </p>
 
-<div id="org61252a7" class="figure">
+<div id="org07e3b6d" class="figure">
 <p><img src="./figs/fullmesh.png" alt="fullmesh.png" width="400px" />
 </p>
 </div></li>
@@ -882,8 +882,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </p>
 </div>
 </div>
-<div id="outline-container-orgc23fc80" class="outline-3">
-<h3 id="orgc23fc80"><span class="section-number-3">3.2.</span> (Optional, recommended) Verify correctness of model through frictionless prestress&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orgc1cfa54" class="outline-3">
+<h3 id="orgc1cfa54"><span class="section-number-3">3.2.</span> (Optional, recommended) Verify correctness of model through frictionless prestress&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
@@ -898,7 +898,7 @@ For the static prestress analysis, first a surface-to-surface contact interactio
 You can do this from CAE starting from <code>Interaction-&gt;Create Interaction</code> and following the steps in the figure below.
 </p>
 
-<div id="orgd1451dc" class="figure">
+<div id="orgb4f77e2" class="figure">
 <p><img src="./figs/setcontact.png" alt="setcontact.png" width="600px" />
 </p>
 </div></li>
@@ -907,7 +907,7 @@ Now create two linear frequency steps, one before and one after the static prest
 Request 30 eigenvalues in each case.
 </p>
 
-<div id="org39cccc6" class="figure">
+<div id="orgd39d7d8" class="figure">
 <p><img src="./figs/lfreq.png" alt="lfreq.png" width="400px" />
 </p>
 </div></li>
@@ -924,7 +924,7 @@ Optionally, field outputs for <code>FREQ2</code> (by default it will be set to n
 You can do this in <code>Step-&gt;Create Field Outputs</code>.
 </p>
 
-<div id="org119abe4" class="figure">
+<div id="orgf1b46de" class="figure">
 <p><img src="./figs/run2_fo.png" alt="run2_fo.png" width="300px" />
 </p>
 </div></li>
@@ -1010,7 +1010,7 @@ In the above, modes 1-7 are RBMs and modes 8 onwards are the elastic modes.
 Looking at the mode-shapes should make it clear that the two beams are free to move axially (the following is mode 1, for eg).
 </p>
 
-<div id="org12e037a" class="figure">
+<div id="org06fb4df" class="figure">
 <p><img src="./figs/res1.png" alt="res1.png" width="400px" />
 </p>
 </div></li>
@@ -1022,7 +1022,7 @@ If it still doesn't converge, check your model again.
 Here is a picture of the contact pressures at the interface at the end of the static prestress step.
 </p>
 
-<div id="orgefa7fce" class="figure">
+<div id="orgac83668" class="figure">
 <p><img src="./figs/res2_1.png" alt="res2_1.png" width="400px" />
 </p>
 </div></li>
@@ -1111,8 +1111,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </div>
 </div>
 </div>
-<div id="outline-container-org390f312" class="outline-2">
-<h2 id="org390f312"><span class="section-number-2">4.</span> Postprocessing</h2>
+<div id="outline-container-org287d82f" class="outline-2">
+<h2 id="org287d82f"><span class="section-number-2">4.</span> Postprocessing</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Now that the model is verified to be correct/consistent, we will proceed with the steps necessary for substructured Matrix Extraction.
@@ -1133,13 +1133,13 @@ It is also helpful to use global node and element indexing henceforth.
 This can be specified in <code>Model-&gt;Edit Attributes-&gt;Model-1</code> as follows:
 </p>
 
-<div id="org2a38bea" class="figure">
+<div id="orga027ffe" class="figure">
 <p><img src="./figs/modl.png" alt="modl.png" width="300px" />
 </p>
 </div>
 </div>
-<div id="outline-container-org5226da1" class="outline-3">
-<h3 id="org5226da1"><span class="section-number-3">4.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org347726a" class="outline-3">
+<h3 id="org347726a"><span class="section-number-3">4.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Although we have taken care to ensure that the mesh of the <code>TOPBEAM</code> and <code>BOTBEAM</code> are conformal at the interface, minor imperfections in the nodal locations may exist.
@@ -1312,8 +1312,8 @@ So we will reintroduce the bolt loads in the substructuring step in #8 below.
 </ol>
 </div>
 </div>
-<div id="outline-container-org52aebd5" class="outline-3">
-<h3 id="org52aebd5"><span class="section-number-3">4.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org56f120e" class="outline-3">
+<h3 id="org56f120e"><span class="section-number-3">4.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-4-2">
 <ol class="org-ol">
 <li><p>
@@ -1454,8 +1454,8 @@ which we introduced through the "synch" step in #3 above.
 </ol>
 </div>
 </div>
-<div id="outline-container-orgcd63574" class="outline-3">
-<h3 id="orgcd63574"><span class="section-number-3">4.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org05d9862" class="outline-3">
+<h3 id="org05d9862"><span class="section-number-3">4.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 You can now run the Job named "Job" in the GUI, or directly run the "Job.inp" file from the command line using
@@ -1471,8 +1471,8 @@ This, along with the "Nodes.dat" and "Elements.dat" files that were written out 
 </div>
 </div>
 </div>
-<div id="outline-container-org191fd51" class="outline-2">
-<h2 id="org191fd51"><span class="section-number-2">5.</span> Matrix Extraction</h2>
+<div id="outline-container-org2c3e670" class="outline-2">
+<h2 id="org2c3e670"><span class="section-number-2">5.</span> Matrix Extraction</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 By default, ABAQUS uses the <a href="https://math.nist.gov/MatrixMarket/">matrix market format</a> for the outputted matrices.
@@ -1489,8 +1489,8 @@ where \(x_{cms}\) is the vector of DOFs of the CMS model (substructure) and \(x_
 Each column of \(R\) is \(N_{out}\times 1\), and \(R\) is \(N_{out}\times N_{cms}\).</li>
 </ul>
 </div>
-<div id="outline-container-org9d775c6" class="outline-3">
-<h3 id="org9d775c6"><span class="section-number-3">5.1.</span> Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org1daafb7" class="outline-3">
+<h3 id="org1daafb7"><span class="section-number-3">5.1.</span> Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-1">
 <ol class="org-ol">
 <li>The first few lines provide the generalized coordinates of the model. The nodes are listed as positive integers and the "modal" DOFs are listed as negative integers.
@@ -1672,8 +1672,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </p>
 </div>
 </div>
-<div id="outline-container-org7b5d676" class="outline-3">
-<h3 id="org7b5d676"><span class="section-number-3">5.2.</span> Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-orgeb9dddd" class="outline-3">
+<h3 id="orgeb9dddd"><span class="section-number-3">5.2.</span> Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
@@ -1684,8 +1684,8 @@ We will conduct a <b>Nonlinear Prestress Analysis</b> for a frictionless contact
 </div>
 </div>
 
-<div id="outline-container-org556a24f" class="outline-2">
-<h2 id="org556a24f"><span class="section-number-2">6.</span> Outro/Contact Details</h2>
+<div id="outline-container-orgc9895f1" class="outline-2">
+<h2 id="orgc9895f1"><span class="section-number-2">6.</span> Outro/Contact Details</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In summary, all the scripts used in the tutorial are provided in 
@@ -1712,7 +1712,7 @@ You can contact me at <a href="mailto:nidish.balaji@ila.uni-stuttgart.de">nidish
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Nidish Narayanaa Balaji</p>
-<p class="date">Created: 2023-09-20 Wed 16:57</p>
+<p class="date">Created: 2023-09-20 Wed 17:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
