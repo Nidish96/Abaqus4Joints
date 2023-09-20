@@ -7,3 +7,5 @@
 *.log
 *.out
 *.toc
+/docs/auto/
+/docs/index.synctex.gz

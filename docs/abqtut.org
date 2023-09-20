@@ -181,13 +181,13 @@ We will do the construction through Abaqus Python code that can be imported thro
      regn = hfbm.Set(cells=hfbm.cells, name='Set-1')
      hfbm.SectionAssignment(region=regn, sectionName='Section-1')
    #+end_src
-   #+begin_Details Scripting note :background-color "#cccccc" :title-color "black"
-   You can see that certain faces and edges were used in the above.
-   A quick way to check which face is what will be to use the =highlight= command on the Abaqus python console.
-   Here is an example:
-   #+ATTR_HTML: :width 600px
-   [[./figs/highl.png]]
-   #+end_Details
+#+begin_details Scripting note :background-color "#cccccc" :title-color "black"
+You can see that certain faces and edges were used in the above.
+A quick way to check which face is what will be to use the =highlight= command on the Abaqus python console.
+Here is an example:
+#+ATTR_HTML: :width 600px
+[[./figs/highl.png]]
+#+end_details
    At the end of this step, you should have a partitioned part that looks like this.
    The partitioning is done in this way to help with the seeded meshing, constraint enforcement, etc.
    #+ATTR_HTML: :width 600px
@@ -208,12 +208,12 @@ We will do the construction through Abaqus Python code that can be imported thro
      rpt.Set(name='Set-1', referencePoints=rpt.referencePoints.values())
    #+end_src
 4. Now import the nuts, washers and bolts by importing the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py]].
-   You should be able to see the nut, washer and bolt, along with the half beam \& reference point created before, as follows after importing:
+   You should be able to see the nut, washer and bolt, along with the half beam and reference point created before, as follows after importing:
    #+ATTR_HTML: :width 600px
    [[./figs/nwb.png]]
    The Python script also assigns the material "STEEL" (see above) to the parts.
 
-The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step0.cae][model_step0.cae]] stores the CAE file at the end of the above steps (building parts, & partitioning).
+The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step0.cae][model_step0.cae]] stores the CAE file at the end of the above steps (building parts, and partitioning).
 *REGENERATE THIS AFTER THE PARTITIONED BOLT IS USED!*
 ** Creating appropriate surface sets                                   :GUI:
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
@@ -240,7 +240,7 @@ Doing this with surfaces (before meshing) is advantageous since the same scripts
    *Note the direction axes carefully.*
    #+ATTR_HTML: :width 600px
    [[./figs/nutsurfs.png]]
-5. Create two surface on the =WASHER= model and label them as =WSTOP= & =WSBOT= (short for Washer-Surface Top & Bottom).
+5. Create two surface on the =WASHER= model and label them as =WSTOP= and =WSBOT= (short for Washer-Surface Top and Bottom).
    Here is a graphical depiction of the model with the surfaces.
    #+ATTR_HTML: :width 600px
    [[./figs/wshrsurf.png]]
@@ -258,9 +258,9 @@ We will do independent meshing since it is good practice, although independent m
    The green beam in the following is renamed as =TOPBEAM= and the white beam in the following is renamed as =BOTBEAM=.
    #+ATTR_HTML: :width 600px
    [[./figs/asb1.png]]
-2. Import one instance each of the =BOLT= & =NUT= and 2 instances of the =WASHER= and assemble them as shown.
+2. Import one instance each of the =BOLT= and =NUT= and 2 instances of the =WASHER= and assemble them as shown.
    Ensure that the washer is oriented (on each side) with the =WSTOP= oriented in the ~-z~ direction and the =WSBOT= is oriented in the ~+z~ direction.
-   Rename the washer instances in the top & bottom as =TOPWASHER-1= and =BOTWASHER-1= respectively.
+   Rename the washer instances in the top and bottom as =TOPWASHER-1= and =BOTWASHER-1= respectively.
    Rename the bolt and nut as =NUT-1= and =BOLT-1= respectively.
    #+ATTR_HTML: :width 600px
    [[./figs/asbwn.png]]
@@ -348,7 +348,7 @@ We will now go through the process of specifying this.
    This can be done in CAE through ~Interaction->Create Constraint->Tie~.
    The following is python code that will do this in a loop.
    #+begin_src python +n
-     # Bolt & Nut Point Coupling
+     # Bolt and Nut Point Coupling
      for i in range(1, 4):
          mdl.Coupling(name='BPC-%d' %(i), controlPoint=ras.instances['BPT-%d' %(i)].sets['Set-1'],
                       surface=ras.instances['BOLT-%d' %(i)].surfaces['BN'],
@@ -360,7 +360,7 @@ We will now go through the process of specifying this.
                       influenceRadius=WHOLE_SURFACE, couplingType=STRUCTURAL,
                       weightingMethod=UNIFORM)
    #+end_src
-2. Now we constrain the X, Y, Rx, Ry, & Rz DOFs (all 5 DOFs other than the Z DOF, which is the bolt-axis) using equation constraints.
+2. Now we constrain the X, Y, Rx, Ry, and Rz DOFs (all 5 DOFs other than the Z DOF, which is the bolt-axis) using equation constraints.
    If the bolt axis is not a principal direction in the model, then the constraint equations must be modified appropriately.
    Note that this can also be used in the large deformation context through the use of a local coordinate system (the global CS is used here, so *applicability is restricted to small deformations*).
    This can be done in CAE through ~Interaction->Create Constraint->Coupling~.
@@ -561,7 +561,7 @@ Through some scripting, we can create node sets in such a way that the top and b
 2. Now we identify the top and bottom surface nodes, and store the top nodes and elements into separate variables.
    The node and element ordering of the top nodes will be preserved, and the nodes in the bottom will be resorted according to this in #3 below.
    #+begin_src python +n
-     # 2. Get top & bottom surfaces & nodes
+     # 2. Get top and bottom surfaces and nodes
      topsurf = ras.instances['TOPBEAM'].surfaces['INSURF']
      botsurf = ras.instances['BOTBEAM'].surfaces['INSURF']
 
@@ -569,7 +569,7 @@ Through some scripting, we can create node sets in such a way that the top and b
      botnodes = botsurf.nodes
      N = len(topnodes)  # Number of nodes
 
-     # Top Nodes & Coordinates
+     # Top Nodes and Coordinates
      Topnd_dict = dict(zip([topnodes[i].label for i in range(N)], range(N)))
      # maps original node ID (in FE model) to node ID in interface node set
      TopNdCds = np.array([topnodes[i].coordinates for i in range(N)])
@@ -590,7 +590,7 @@ Through some scripting, we can create node sets in such a way that the top and b
                                                 for k in range(4)]]
          ELS[ne, :] += 1
     
-     # Save interfacial nodes & elements to txt files
+     # Save interfacial nodes and elements to txt files
      np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
      np.savetxt('Elements.dat', ELS, fmt='%d')
    #+end_src
@@ -921,7 +921,7 @@ We will conduct a *Nonlinear Prestress Analysis* for a frictionless contact with
 In summary, all the scripts used in the tutorial are provided in 
 1. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a_steelmat.py][a_steelmat.py]]: Loading material
 3. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/b_halfbm.py][b_halfbm.py]]: Building the half-beam model
-4. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py][c_nutwasherbolt_516.py]]: Building the bolt, nut, & washer models.
+4. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py][c_nutwasherbolt_516.py]]: Building the bolt, nut, and washer models.
 5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py][d_applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
 6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py][e_nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
 7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
