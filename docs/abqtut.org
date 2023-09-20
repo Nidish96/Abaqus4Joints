@@ -10,7 +10,7 @@
 
 #+BEGIN_EXPORT html
 <!-- <script type="text/javascript" src="./collcont_clkbls.js"></script> -->
-<script>var HS_STARTUP_FOLDED = true;</script>
+<!-- <script>var HS_STARTUP_FOLDED = true;</script> -->
 #+END_EXPORT
 
 # Inkscape Stroke Size: 3
@@ -221,27 +221,27 @@ Doing this with surfaces (before meshing) is advantageous since the same scripts
    You can do this through =Tools->Surface->Create= and then selecting the appropriate faces through the GUI.
    Select the faces by holding =Shift= and deselect by holding =Ctrl=.
    Here is a picture of the surface highlighted in the viewport.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/insurf.png]]
 2. Turn to the /outside/ of the beam and select the faces around the bolts individually and name them =BmW1=, =BmW2=, and =BmW3= respectively.
    These will be tied to the washer for the analysis. (=BmWi= denotes the i^{th} Beam-Washer contact).
    Here is a picture of the relevant surfaces highlighted (using different colors for each).
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/bmwsurfs.png]]
 3. Create two surfaces on the =BOLT= model as shown in the figure below.
    Name the surface marked white as =BlW= and the surface marked green as =BN=.
    (=BlW= denotes the Bolt-Washer contact surface; =BN= denotes the Bolt-Nut contact surface)
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 200px
    [[./figs/boltsurfs.png]]
 4. Create two surfaces on the =NUT= model as shown in the figure below.
    Name the white surface as =NW= and the green surface as =NB=.
    (=NW= denotes the Nut-Washer contact surface; =NB= denotes the Nut-Bolt contact surface)
    *Note the direction axes carefully.*
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 200px
    [[./figs/nutsurfs.png]]
 5. Create two surface on the =WASHER= model and label them as =WSTOP= and =WSBOT= (short for Washer-Surface Top and Bottom).
    Here is a graphical depiction of the model with the surfaces.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 200px
    [[./figs/wshrsurf.png]]
 
 Now all the parts have been created and relevant surfaces have been identified.
@@ -255,13 +255,13 @@ We will do independent meshing since it is good practice, although independent m
    *Note that the bolt-axis has to be pointed in the +z direction.*
    This will be the convention followed throughout this tutorial.
    The green beam in the following is renamed as =TOPBEAM= and the white beam in the following is renamed as =BOTBEAM=.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/asb1.png]]
 2. Import one instance each of the =BOLT= and =NUT= and 2 instances of the =WASHER= and assemble them as shown.
    Ensure that the washer is oriented (on each side) with the =WSTOP= oriented in the ~-z~ direction and the =WSBOT= is oriented in the ~+z~ direction.
    Rename the washer instances in the top and bottom as =TOPWASHER-1= and =BOTWASHER-1= respectively.
    Rename the bolt and nut as =NUT-1= and =BOLT-1= respectively.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/asbwn.png]]
 3. Import one instance of the reference point =REFPT=.
    As mentioned before, this will be used to enforce bolt prestress.
@@ -270,7 +270,7 @@ We will do independent meshing since it is good practice, although independent m
    This can be done in the GUI by first moving it to an external point and then translating it along the axis.
    The figure below shows an example (a datum point was used for this here).
    Rename this to =BPT-1= (standing for Bolt Point 1).
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/asrpt.png]]
 4. Now import another instance of the reference point =REFPT= and translate it to be coincident with =BPT-1=.
    Rename this =NPT-1= (standing for Nut Point 1).
@@ -373,7 +373,7 @@ We will now go through the process of specifying this.
                                  (-1.0,'NPT-%d.Set-1' %(i), j)))
    #+end_src
    Here is an image showing the constraints applied graphically.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/conss.png]]
 3. We next create a static analysis step (~Step->Create Step->Static, General~) named as =PRESTRESS=.
    This can be done in CAE, but here is the Python code.
@@ -398,7 +398,7 @@ We will now go through the process of specifying this.
                                region=ras.instances['NPT-%d' %(i)].sets['Set-1'],
                                cf3=-bpmag, distributionType=UNIFORM)
    #+end_src
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/loads.png]]
 5. *Note* that the bolt load constructed in the above manner is a "linear" load - i.e., the load can be increased/decreased by scaling the resulting force vector.
    It is assumed here that all 3 bolts are loaded equally.
@@ -413,22 +413,22 @@ Switch to the =Mesh= module for this section.
 ** Meshing Instructions
 1. Choose ~Mesh->Assign Mesh Controls~ and select the whole assembly (all the instances).
    We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/globmesh.png]]
 2. Now choose ~Mesh->Seed Part Instance~ and select all the instances again.
    Set 0.00254 as the global mesh seed (to ensure 10 elements across thickness) and 0.05 for curvature control.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/gmeshseed.png]]
 3. Apply local seeds at the interface as shown here (on both interfaces).
    Use the ~Mesh->Seed Edges~ tool by choosing the Method as "By Number" and specify the number of elements.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/lmeshseeds.png]]
 4. Now mesh the assembly using ~Mesh->Mesh Part Instance~ and selecting all the part instances.
    Here is a view of the interfacial mesh you should get after the above seeding.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/mesh.png]]
 5. Here is an image of the total assembly with the mesh.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/fullmesh.png]]
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model_step1.cae]] stores the CAE-file along with the mesh.
@@ -442,7 +442,7 @@ We will now conduct a simple frictionless contact analysis to verify the correct
    [[./figs/setcontact.png]]
 2. Now create two linear frequency steps, one before and one after the static prestress step, as shown in the figure below.
    Request 30 eigenvalues in each case.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/lfreq.png]]
 3. Create 2 jobs. Suppress the interaction property in the first one and have just ~FREQ1~ active (see figure below).
    #+ATTR_HTML: :width 600px
@@ -452,7 +452,7 @@ We will now conduct a simple frictionless contact analysis to verify the correct
    [[./figs/run2.png]]
    Optionally, field outputs for ~FREQ2~ (by default it will be set to none if ~FREQ1~ is suppressed).
    You can do this in ~Step->Create Field Outputs~.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 300px
    [[./figs/run2_fo.png]]
 *Results*
 1. The first analysis should reveal that the system has *7 Rigid Body Modes* (RBMs).
@@ -473,14 +473,14 @@ We will now conduct a simple frictionless contact analysis to verify the correct
    |    10 |    609.25 |
    In the above, modes 1-7 are RBMs and modes 8 onwards are the elastic modes.
    Looking at the mode-shapes should make it clear that the two beams are free to move axially (the following is mode 1, for eg).
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/res1.png]]
 2. The second analysis should converge within a few iterations.
    If not, the "Initial Increment Size" in ~Step->PRESTRESS->Edit->Increment->Initial Increment Size~ has to be reduced.
    If it doesn't converge, try to apply a boundary condition to make the problem well-posed, and try again.
    If it still doesn't converge, check your model again.
    Here is a picture of the contact pressures at the interface at the end of the static prestress step.
-   #+ATTR_HTML: :width 600px
+   #+ATTR_HTML: :width 400px
    [[./figs/res2_1.png]]
 3. By default, ABAQUS *fuses the nodes* that are in contact at the end of the hard contact step, for the eigenvalue analysis that follows it (Linear Perturbation step).
    Since we are using frictionless tangential here, the tangential DOFs are not fused.
@@ -509,13 +509,13 @@ Now that the model is verified to be correct/consistent, we will proceed with th
 Before proceeding it is necessary to first identify nodes on the meshed model that correspond to the input and output locations.
 Choose the mid point on the right end as the output node for this tutorial.
 Create a node set called =OutNodes= by selecting ~Mesh->Tools->Set->Create->Node~ and choosing the node. Select "unsorted node set" if available.
-#+ATTR_HTML: :width 600px
+#+ATTR_HTML: :width 300px
 [[./figs/outnode.png]]
 It is possible to choose multiple nodes here if you have a MIMO case.
 
 It is also helpful to use global node and element indexing henceforth.
 This can be specified in ~Model->Edit Attributes->Model-1~ as follows:
-#+ATTR_HTML: :width 600px
+#+ATTR_HTML: :width 300px
 [[./figs/modl.png]]
 ** Reorganize Interfacial Node Sets (readjust if necessary)         :Script:
 Although we have taken care to ensure that the mesh of the =TOPBEAM= and =BOTBEAM= are conformal at the interface, minor imperfections in the nodal locations may exist.
@@ -652,7 +652,7 @@ Through some scripting, we can create node sets in such a way that the top and b
      while len(tmp) > 1:
          del tmp[tmp.keys()[-1]]
    #+end_src
-** Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps
+** Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps :Script:
 1. We are interested in *Fixed-Interface Component Mode Synthesis* with 20 retained modes.
    So we first do a fixed interface modal analysis and request $20\times3 = 60$ modes (for ensuring accuracy of the first 20 modes).
    We fix all the nodes in the nodesets =TOPS_NDS= and =BOTS_NDS=.
@@ -764,7 +764,7 @@ Through some scripting, we can create node sets in such a way that the top and b
      *Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES
      *End Step
    #+end_src   
-** Run Job and Generate the mtx file.
+** Run Job and Generate the mtx file.                            :Script:GUI:
 You can now run the Job named "Job" in the GUI, or directly run the "Job.inp" file from the command line using
 #+begin_src bash
   abaqus job=Job inp=Job.inp cpus=2 interactive
@@ -782,7 +782,7 @@ Note the following, in terms of format:
   $$ x_{out} = R x_{cms} $$
   where $x_{cms}$ is the vector of DOFs of the CMS model (substructure) and $x_{out}$ are the output DOFs.
   Each column of $R$ is $N_{out}\times 1$, and $R$ is $N_{out}\times N_{cms}$.
-** Postprocessing Exported Matrices
+** Postprocessing Exported Matrices                                 :Script:
 1. The first few lines provide the generalized coordinates of the model. The nodes are listed as positive integers and the "modal" DOFs are listed as negative integers.
    This is followed by a list of DOFs active in each set.
 2. The STIFFNESS and MASS matrices are respectively prepended by
@@ -909,7 +909,7 @@ Note the following, in terms of format:
    A MATLAB implementation might require loading the whole file into memory for speed.
    Line-parsing on MATLAB was extremely slow for me.
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step3.cae][model_step3.cae]] is the final cae file that contains all of the above.
-** Simple Analysis on MATLAB/OCTAVE
+** Simple Analysis on MATLAB/OCTAVE                                 :Script:
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
 We will conduct a *Nonlinear Prestress Analysis* for a frictionless contact with a unilateral spring on the normal direction.
 *TO BE ADDED SOON*
