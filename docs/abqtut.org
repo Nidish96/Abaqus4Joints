@@ -2,6 +2,7 @@
 #+AUTHOR: Nidish Narayanaa Balaji
 #+EXPORT_FILE_NAME: index.html
 #+OPTIONS: startup:indent
+#+HTML_HEAD: <base target="_blank">
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
 # #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+HTML: <style> summary:hover {background:pink;} </style>
