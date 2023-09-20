@@ -919,12 +919,12 @@ We will conduct a *Nonlinear Prestress Analysis* for a frictionless contact with
 
 * Outro/Contact Details
 In summary, all the scripts used in the tutorial are provided in 
-1. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a_steelmat.py]]: Loading material
-2. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/b_halfbm.py]]: Building the half-beam model
-3. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py]]: Building the bolt, nut, & washer models.
-4. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
-5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
-6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
+1. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a_steelmat.py][a_steelmat.py]]: Loading material
+3. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/b_halfbm.py][b_halfbm.py]]: Building the half-beam model
+4. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py][c_nutwasherbolt_516.py]]: Building the bolt, nut, & washer models.
+5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py][d_applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
+6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py][e_nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
+7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
    
 You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
 
