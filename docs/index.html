@@ -3,11 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-09-20 Wed 15:21 -->
+<!-- 2023-09-20 Wed 16:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>An Abaqus-MATLAB tutorial for Jointed Systems</title>
-<meta name="author" content="Nidish Narayanaa Balaji" />
+<meta name="author" content="Nidish Narayanaa Balaji and Matthew Allen and Matthew R. W. Brake" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/bigblow.css"/>
@@ -127,40 +127,40 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org78b652a">1. Preprocessing</a>
+<li><a href="#org1de53bb">1. Preprocessing</a>
 <ul>
-<li><a href="#org0b39d94">1.1. A Note on Python Scripting</a></li>
-<li><a href="#org706e46e">1.2. Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
-<li><a href="#org0b0d608">1.3. Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
-<li><a href="#orgbe7d03c">1.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#org038c1ec">1.1. A Note on Python Scripting</a></li>
+<li><a href="#org7b697da">1.2. Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org09b63f3">1.3. Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#org2299f95">1.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org25734ee">2. Constraints</a>
+<li><a href="#orgc853ef3">2. Constraints</a>
 <ul>
-<li><a href="#orgb445af0">2.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
-<li><a href="#org6d0264b">2.2. Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#orga6a9383">2.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org3b18e31">2.2. Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#orgdfaf293">3. Meshing</a>
+<li><a href="#org6af517f">3. Meshing</a>
 <ul>
-<li><a href="#orgddd985d">3.1. Meshing Instructions</a></li>
-<li><a href="#org33c648d">3.2. (Optional, recommended) Verify correctness of model through frictionless prestress</a></li>
+<li><a href="#orgb70df5e">3.1. Meshing Instructions</a></li>
+<li><a href="#orgd98dc7d">3.2. (Optional, recommended) Verify correctness of model through frictionless prestress</a></li>
 </ul>
 </li>
-<li><a href="#org8e42e32">4. Postprocessing</a>
+<li><a href="#orgbbc651a">4. Postprocessing</a>
 <ul>
-<li><a href="#org9f44c8a">4.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org14f526f">4.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org23c38c5">4.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org74f1568">4.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orgef9e0ac">4.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orge772166">4.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org7114edc">5. Matrix Extraction</a>
+<li><a href="#org0b382f3">5. Matrix Extraction</a>
 <ul>
-<li><a href="#org30224da">5.1. Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#orgd3b8e2e">5.2. Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org6b83679">5.1. Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orgff8dad9">5.2. Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
 </ul>
 </li>
-<li><a href="#org6e17bea">6. Outro/Contact Details</a></li>
+<li><a href="#org51ba660">6. Outro/Contact Details</a></li>
 </ul>
 </div>
 </div>
@@ -169,8 +169,8 @@
 <!-- <script type="text/javascript" src="./collcont_clkbls.js"></script> -->
 <!-- <script>var HS_STARTUP_FOLDED = true;</script> -->
 
-<div id="outline-container-org78b652a" class="outline-2">
-<h2 id="org78b652a"><span class="section-number-2">1.</span> Preprocessing</h2>
+<div id="outline-container-org1de53bb" class="outline-2">
+<h2 id="org1de53bb"><span class="section-number-2">1.</span> Preprocessing</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The Brake-Reuß Beam (BRB) is a 3-bolted lap-joint beam which will serve as our tutorial joint structure (read more about the benchmark <a href="https://jointmechanics.org/index.php/Benchmarks#The_Brake-Reu%C3%9F_Beams">here</a>).
@@ -179,15 +179,15 @@ Buckle up! :)
 </p>
 
 
-<div id="org17d5a9b" class="figure">
+<div id="org3b12a59" class="figure">
 <p><img src="./figs/300px-BRB.png" alt="300px-BRB.png" width="300px" />
 </p>
 <p><span class="figure-number">Figure 1: </span>Geometry of the BRB Benchmark</p>
 </div>
 
 <p>
-A picture of the parts of the BRB is shown in Fig. <a href="#org17d5a9b">1</a> and this will be used to guide the modeling here.
-Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see <a href="#orgbc131b5">2.2</a> for more details on bolt prestress modeling).
+A picture of the parts of the BRB is shown in Fig. <a href="#org3b12a59">1</a> and this will be used to guide the modeling here.
+Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see <a href="#org3c468e5">2.2</a> for more details on bolt prestress modeling).
 </p>
 
 <p>
@@ -196,8 +196,8 @@ The general principles in the modeling section are, however, recommended for all
 </p>
 </div>
 
-<div id="outline-container-org0b39d94" class="outline-3">
-<h3 id="org0b39d94"><span class="section-number-3">1.1.</span> A Note on Python Scripting</h3>
+<div id="outline-container-org038c1ec" class="outline-3">
+<h3 id="org038c1ec"><span class="section-number-3">1.1.</span> A Note on Python Scripting</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Abaqus Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
@@ -206,10 +206,10 @@ Abaqus Python scripting is quite powerful and will be used quite liberally throu
 <li>For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. Abaqus would have saved the actions in a Python file called <code>abaqus.rpy</code>. This is just python code that can be imported into abaqus to repeat the same tasks.
 All standard python commands work so this makes it very helpful.</li>
 <li>On Windows the <b>work directory</b> may be an unfamiliar concept (on Linux it is just the directory from which Abaqus is launched). This directory can be manually set by <code>File-&gt;Set Work Directory</code>, following which all the files (including the <code>abaqus.rpy</code> file) will be put in the specified folder.</li>
-<li>Fig <a href="#org79a23a4">2</a> shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.</li>
+<li>Fig <a href="#orgece54b8">2</a> shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.</li>
 </ul>
 
-<div id="org79a23a4" class="figure">
+<div id="orgece54b8" class="figure">
 <p><img src="./figs/ovw.png" alt="ovw.png" width="600px" />
 </p>
 <p><span class="figure-number">Figure 2: </span>Options in Abaqus for Scripting</p>
@@ -217,8 +217,8 @@ All standard python commands work so this makes it very helpful.</li>
 </div>
 </div>
 
-<div id="outline-container-org706e46e" class="outline-3">
-<h3 id="org706e46e"><span class="section-number-3">1.2.</span> Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org7b697da" class="outline-3">
+<h3 id="org7b697da"><span class="section-number-3">1.2.</span> Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
@@ -342,32 +342,40 @@ Now use the following to model the half beam (this can be done on CAE with the G
 <span class="linenr"> 98: </span>                                line<span class="org-operator">=</span>hfbm.edges[<span class="org-operator">-</span>1], sense<span class="org-operator">=</span>FORWARD)
 <span class="linenr"> 99: </span>
 <span class="linenr">100: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[<span class="org-operator">-</span>2], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">101: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[<span class="org-operator">-</span>2])
-<span class="linenr">102: </span>
-<span class="linenr">103: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[75], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">104: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[75])
-<span class="linenr">105: </span>
-<span class="linenr">106: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[39], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">107: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[39])
-<span class="linenr">108: </span>
-<span class="linenr">109: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[85], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">110: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[85])
+<span class="linenr">101: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">102: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[<span class="org-operator">-</span>2])
+<span class="linenr">103: </span>
+<span class="linenr">104: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[75], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">105: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">106: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[75])
+<span class="linenr">107: </span>
+<span class="linenr">108: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[39], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">109: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">110: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[39])
 <span class="linenr">111: </span>
-<span class="linenr">112: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[39], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">113: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[39])
-<span class="linenr">114: </span>
-<span class="linenr">115: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[41], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">116: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[41])
-<span class="linenr">117: </span>
-<span class="linenr">118: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[111], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">119: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[111])
-<span class="linenr">120: </span>
-<span class="linenr">121: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[135], rule<span class="org-operator">=</span>MIDDLE)
-<span class="linenr">122: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt, normal<span class="org-operator">=</span>hfbm.edges[135])
+<span class="linenr">112: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[85], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">113: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">114: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[85])
+<span class="linenr">115: </span>
+<span class="linenr">116: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[39], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">117: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">118: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[39])
+<span class="linenr">119: </span>
+<span class="linenr">120: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[41], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">121: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">122: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[41])
 <span class="linenr">123: </span>
-<span class="linenr">124: </span><span class="org-comment-delimiter"># </span><span class="org-comment">4. Assign Material</span>
-<span class="linenr">125: </span><span class="org-variable-name">regn</span> <span class="org-operator">=</span> hfbm.Set(cells<span class="org-operator">=</span>hfbm.cells, name<span class="org-operator">=</span><span class="org-string">'Set-1'</span>)
-<span class="linenr">126: </span>hfbm.SectionAssignment(region<span class="org-operator">=</span>regn, sectionName<span class="org-operator">=</span><span class="org-string">'Section-1'</span>)
+<span class="linenr">124: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[111], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">125: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">126: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[111])
+<span class="linenr">127: </span>
+<span class="linenr">128: </span><span class="org-variable-name">pt</span> <span class="org-operator">=</span> hfbm.InterestingPoint(edge<span class="org-operator">=</span>hfbm.edges[135], rule<span class="org-operator">=</span>MIDDLE)
+<span class="linenr">129: </span>hfbm.PartitionCellByPlanePointNormal(cells<span class="org-operator">=</span>hfbm.cells, point<span class="org-operator">=</span>pt,
+<span class="linenr">130: </span>                                     normal<span class="org-operator">=</span>hfbm.edges[135])
+<span class="linenr">131: </span>
+<span class="linenr">132: </span><span class="org-comment-delimiter"># </span><span class="org-comment">4. Assign Material</span>
+<span class="linenr">133: </span><span class="org-variable-name">regn</span> <span class="org-operator">=</span> hfbm.Set(cells<span class="org-operator">=</span>hfbm.cells, name<span class="org-operator">=</span><span class="org-string">'Set-1'</span>)
+<span class="linenr">134: </span>hfbm.SectionAssignment(region<span class="org-operator">=</span>regn, sectionName<span class="org-operator">=</span><span class="org-string">'Section-1'</span>)
 </pre>
 </div></li>
 </ol>
@@ -392,7 +400,7 @@ A quick way to check which face is what will be to use the <code>highlight</code
 Here is an example:
 </p>
 
-<div id="org69775b7" class="figure">
+<div id="orgc2b3c64" class="figure">
 <p><img src="./figs/highl.png" alt="highl.png" width="600px" />
 </p>
 </div>
@@ -404,7 +412,7 @@ At the end of this step, you should have a partitioned part that looks like this
 The partitioning is done in this way to help with the seeded meshing, constraint enforcement, etc.
 </p>
 
-<div id="orgef7e8b4" class="figure">
+<div id="org72f597c" class="figure">
 <p><img src="./figs/parthb.png" alt="parthb.png" width="600px" />
 </p>
 </div>
@@ -428,7 +436,7 @@ You have to ensure that the curved edges on the above are, indeed, single edges.
 If not, you will have to use the "Merge Edges" tool in the Part module and individually select each edge and merge them.
 </p>
 
-<div id="org860a4b3" class="figure">
+<div id="org3a99550" class="figure">
 <p><img src="./figs/medg.png" alt="medg.png" width="600px" />
 </p>
 </div>
@@ -438,14 +446,14 @@ If not, you will have to use the "Merge Edges" tool in the Part module and indiv
 <ol class="org-ol">
 <li><p>
 Create a Reference Point Part called <code>REFPT</code>.
-This will be necessary for the application of bolt prestress (see <a href="#orgbc131b5">2.2</a> below).
+This will be necessary for the application of bolt prestress (see <a href="#org3c468e5">2.2</a> below).
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">127: </span><span class="org-variable-name">rpt</span> <span class="org-operator">=</span> mdl.Part(name<span class="org-operator">=</span><span class="org-string">'REFPT'</span>, dimensionality<span class="org-operator">=</span>THREE_D, 
-<span class="linenr">128: </span>               <span class="org-builtin">type</span><span class="org-operator">=</span>DEFORMABLE_BODY)
-<span class="linenr">129: </span>rpt.ReferencePoint(point<span class="org-operator">=</span>(0.0, 0.0, 0.0))
-<span class="linenr">130: </span>
-<span class="linenr">131: </span>rpt.Set(name<span class="org-operator">=</span><span class="org-string">'Set-1'</span>, referencePoints<span class="org-operator">=</span>rpt.referencePoints.values())
+<pre class="src src-python"><span class="linenr">135: </span><span class="org-variable-name">rpt</span> <span class="org-operator">=</span> mdl.Part(name<span class="org-operator">=</span><span class="org-string">'REFPT'</span>, dimensionality<span class="org-operator">=</span>THREE_D, 
+<span class="linenr">136: </span>               <span class="org-builtin">type</span><span class="org-operator">=</span>DEFORMABLE_BODY)
+<span class="linenr">137: </span>rpt.ReferencePoint(point<span class="org-operator">=</span>(0.0, 0.0, 0.0))
+<span class="linenr">138: </span>
+<span class="linenr">139: </span>rpt.Set(name<span class="org-operator">=</span><span class="org-string">'Set-1'</span>, referencePoints<span class="org-operator">=</span>rpt.referencePoints.values())
 </pre>
 </div></li>
 <li><p>
@@ -463,8 +471,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </p>
 </div>
 </div>
-<div id="outline-container-org0b0d608" class="outline-3">
-<h3 id="org0b0d608"><span class="section-number-3">1.3.</span> Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org09b63f3" class="outline-3">
+<h3 id="org09b63f3"><span class="section-number-3">1.3.</span> Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
@@ -478,7 +486,7 @@ Select the faces by holding <code>Shift</code> and deselect by holding <code>Ctr
 Here is a picture of the surface highlighted in the viewport.
 </p>
 
-<div id="org4ed97c3" class="figure">
+<div id="org2322b8a" class="figure">
 <p><img src="./figs/insurf.png" alt="insurf.png" width="300px" />
 </p>
 </div></li>
@@ -488,7 +496,7 @@ These will be tied to the washer for the analysis. (<code>BmWi</code> denotes th
 Here is a picture of the relevant surfaces highlighted (using different colors for each).
 </p>
 
-<div id="org77c3440" class="figure">
+<div id="orga6a9a2a" class="figure">
 <p><img src="./figs/bmwsurfs.png" alt="bmwsurfs.png" width="300px" />
 </p>
 </div></li>
@@ -498,7 +506,7 @@ Name the surface marked white as <code>BlW</code> and the surface marked green a
 (<code>BlW</code> denotes the Bolt-Washer contact surface; <code>BN</code> denotes the Bolt-Nut contact surface)
 </p>
 
-<div id="org9486e03" class="figure">
+<div id="orgba923ea" class="figure">
 <p><img src="./figs/boltsurfs.png" alt="boltsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -509,7 +517,7 @@ Name the white surface as <code>NW</code> and the green surface as <code>NB</cod
 <b>Note the direction axes carefully.</b>
 </p>
 
-<div id="org4cde6d1" class="figure">
+<div id="org759f0f8" class="figure">
 <p><img src="./figs/nutsurfs.png" alt="nutsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -518,7 +526,7 @@ Create two surface on the <code>WASHER</code> model and label them as <code>WSTO
 Here is a graphical depiction of the model with the surfaces.
 </p>
 
-<div id="org62bf467" class="figure">
+<div id="org234368a" class="figure">
 <p><img src="./figs/wshrsurf.png" alt="wshrsurf.png" width="200px" />
 </p>
 </div></li>
@@ -530,8 +538,8 @@ Now all the parts have been created and relevant surfaces have been identified.
 </p>
 </div>
 </div>
-<div id="outline-container-orgbe7d03c" class="outline-3">
-<h3 id="orgbe7d03c"><span class="section-number-3">1.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org2299f95" class="outline-3">
+<h3 id="org2299f95"><span class="section-number-3">1.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 <b>Note</b>: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
@@ -547,7 +555,7 @@ This will be the convention followed throughout this tutorial.
 The green beam in the following is renamed as <code>TOPBEAM</code> and the white beam in the following is renamed as <code>BOTBEAM</code>.
 </p>
 
-<div id="org25a8ec8" class="figure">
+<div id="org80fe2bb" class="figure">
 <p><img src="./figs/asb1.png" alt="asb1.png" width="400px" />
 </p>
 </div></li>
@@ -558,7 +566,7 @@ Rename the washer instances in the top and bottom as <code>TOPWASHER-1</code> an
 Rename the bolt and nut as <code>NUT-1</code> and <code>BOLT-1</code> respectively.
 </p>
 
-<div id="org007129d" class="figure">
+<div id="org6e9f025" class="figure">
 <p><img src="./figs/asbwn.png" alt="asbwn.png" width="300px" />
 </p>
 </div></li>
@@ -572,13 +580,13 @@ The figure below shows an example (a datum point was used for this here).
 Rename this to <code>BPT-1</code> (standing for Bolt Point 1).
 </p>
 
-<div id="org9f149d7" class="figure">
+<div id="org12ac4b1" class="figure">
 <p><img src="./figs/asrpt.png" alt="asrpt.png" width="400px" />
 </p>
 </div></li>
 <li>Now import another instance of the reference point <code>REFPT</code> and translate it to be coincident with <code>BPT-1</code>.
 Rename this <code>NPT-1</code> (standing for Nut Point 1).
-These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see <a href="#orgbc131b5">2.2</a> below for those steps).
+These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see <a href="#org3c468e5">2.2</a> below for those steps).
 The point <code>BPT-1</code> will be coupled to the bolt surface <code>BN</code> and <code>NPT-1</code> will be tied to the nut surface <code>NB</code> through RBE3 elements.</li>
 <li><p>
 Use the "Linear Pattern" dialog and copy the bolt-washer-washer-nut assembly thrice along the beam such that the assembly is complete.
@@ -586,7 +594,7 @@ The figure below shows the final assembly along with a representation of the nam
 Recall that  the beam shown in the figure below is <code>TOPBEAM</code> and the hidden one is <code>BOTBEAM</code>.
 </p>
 
-<div id="orgd3a408a" class="figure">
+<div id="org5a39fd6" class="figure">
 <p><img src="./figs/as3bwn.png" alt="as3bwn.png" width="600px" />
 </p>
 </div></li>
@@ -598,12 +606,12 @@ Now that the assembly is complete, the relevant constraints will have to be enfo
 </div>
 </div>
 </div>
-<div id="outline-container-org25734ee" class="outline-2">
-<h2 id="org25734ee"><span class="section-number-2">2.</span> Constraints</h2>
+<div id="outline-container-orgc853ef3" class="outline-2">
+<h2 id="orgc853ef3"><span class="section-number-2">2.</span> Constraints</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgb445af0" class="outline-3">
-<h3 id="orgb445af0"><span class="section-number-3">2.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orga6a9383" class="outline-3">
+<h3 id="orga6a9383"><span class="section-number-3">2.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 All the following operations can be conducted in the <code>Interaction</code> module in CAE.
@@ -618,33 +626,41 @@ So <code>WASHER-1</code> is tied to <code>BmW3</code> of the bottom beam (and so
 <span class="linenr"> 3: </span>
 <span class="linenr"> 4: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
 <span class="linenr"> 5: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Bolt-Washer Constraints</span>
-<span class="linenr"> 6: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'BW-%d'</span> <span class="org-operator">%</span>(i), main<span class="org-operator">=</span>ras.instances[<span class="org-string">'TOPWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSTOP'</span>],
-<span class="linenr"> 7: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOLT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'BlW'</span>],
-<span class="linenr"> 8: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON, tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
-<span class="linenr"> 9: </span>
-<span class="linenr">10: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Nut-Washer Constraints</span>
-<span class="linenr">11: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'NW-%d'</span> <span class="org-operator">%</span>(i), main<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOTWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSBOT'</span>],
-<span class="linenr">12: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'NUT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'NW'</span>],
-<span class="linenr">13: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON, tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
-<span class="linenr">14: </span>
-<span class="linenr">15: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">TopWasher-Beam Constraints</span>
-<span class="linenr">16: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'BmTW-%d'</span> <span class="org-operator">%</span>(i), main<span class="org-operator">=</span>ras.instances[<span class="org-string">'TOPBEAM'</span>].surfaces[<span class="org-string">'BmW%d'</span> <span class="org-operator">%</span>(i)],
-<span class="linenr">17: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'TOPWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSBOT'</span>],
-<span class="linenr">18: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON, tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
-<span class="linenr">19: </span>
-<span class="linenr">20: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">BotWasher-Beam Constraints</span>
-<span class="linenr">21: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'BmBW-%d'</span> <span class="org-operator">%</span>(i), main<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOTBEAM'</span>].surfaces[<span class="org-string">'BmW%d'</span> <span class="org-operator">%</span>((3<span class="org-operator">-</span>i)<span class="org-operator">%</span>3<span class="org-operator">+</span>1)],
-<span class="linenr">22: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOTWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSTOP'</span>],
-<span class="linenr">23: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON, tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
+<span class="linenr"> 6: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'BW-%d'</span> <span class="org-operator">%</span>(i),
+<span class="linenr"> 7: </span>            main<span class="org-operator">=</span>ras.instances[<span class="org-string">'TOPWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSTOP'</span>],
+<span class="linenr"> 8: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOLT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'BlW'</span>],
+<span class="linenr"> 9: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON,
+<span class="linenr">10: </span>            tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
+<span class="linenr">11: </span>
+<span class="linenr">12: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Nut-Washer Constraints</span>
+<span class="linenr">13: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'NW-%d'</span> <span class="org-operator">%</span>(i),
+<span class="linenr">14: </span>            main<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOTWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSBOT'</span>],
+<span class="linenr">15: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'NUT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'NW'</span>],
+<span class="linenr">16: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON,
+<span class="linenr">17: </span>            tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
+<span class="linenr">18: </span>
+<span class="linenr">19: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">TopWasher-Beam Constraints</span>
+<span class="linenr">20: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'BmTW-%d'</span> <span class="org-operator">%</span>(i),
+<span class="linenr">21: </span>            main<span class="org-operator">=</span>ras.instances[<span class="org-string">'TOPBEAM'</span>].surfaces[<span class="org-string">'BmW%d'</span> <span class="org-operator">%</span>(i)],
+<span class="linenr">22: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'TOPWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSBOT'</span>],
+<span class="linenr">23: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON,
+<span class="linenr">24: </span>            tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
+<span class="linenr">25: </span>
+<span class="linenr">26: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">BotWasher-Beam Constraints</span>
+<span class="linenr">27: </span>    mdl.Tie(name<span class="org-operator">=</span><span class="org-string">'BmBW-%d'</span> <span class="org-operator">%</span>(i),
+<span class="linenr">28: </span>            main<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOTBEAM'</span>].surfaces[<span class="org-string">'BmW%d'</span> <span class="org-operator">%</span>((3<span class="org-operator">-</span>i)<span class="org-operator">%</span>3<span class="org-operator">+</span>1)],
+<span class="linenr">29: </span>            secondary<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOTWASHER-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'WSTOP'</span>],
+<span class="linenr">30: </span>            positionToleranceMethod<span class="org-operator">=</span>COMPUTED, adjust<span class="org-operator">=</span>ON,
+<span class="linenr">31: </span>            tieRotations<span class="org-operator">=</span>ON, thickness<span class="org-operator">=</span>ON)
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org6d0264b" class="outline-3">
-<h3 id="org6d0264b"><span class="section-number-3">2.2.</span> Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org3b18e31" class="outline-3">
+<h3 id="org3b18e31"><span class="section-number-3">2.2.</span> Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
-<a id="orgbc131b5"></a>
+<a id="org3c468e5"></a>
 You might already have encountered the different parts of the model above that were carefully constructed for the bolt preload application (bolt-shank partitioning, reference points, etc.).
 </p>
 <details class="code-details"
@@ -709,17 +725,19 @@ This can be done in CAE through <code>Interaction-&gt;Create Constraint-&gt;Tie<
 The following is python code that will do this in a loop.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">24: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Bolt and Nut Point Coupling</span>
-<span class="linenr">25: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
-<span class="linenr">26: </span>    mdl.Coupling(name<span class="org-operator">=</span><span class="org-string">'BPC-%d'</span> <span class="org-operator">%</span>(i), controlPoint<span class="org-operator">=</span>ras.instances[<span class="org-string">'BPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
-<span class="linenr">27: </span>                 surface<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOLT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'BN'</span>],
-<span class="linenr">28: </span>                 influenceRadius<span class="org-operator">=</span>WHOLE_SURFACE, couplingType<span class="org-operator">=</span>STRUCTURAL,
-<span class="linenr">29: </span>                 weightingMethod<span class="org-operator">=</span>UNIFORM)
-<span class="linenr">30: </span>
-<span class="linenr">31: </span>    mdl.Coupling(name<span class="org-operator">=</span><span class="org-string">'NPC-%d'</span> <span class="org-operator">%</span>(i), controlPoint<span class="org-operator">=</span>ras.instances[<span class="org-string">'NPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
-<span class="linenr">32: </span>                 surface<span class="org-operator">=</span>ras.instances[<span class="org-string">'NUT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'NB'</span>],
-<span class="linenr">33: </span>                 influenceRadius<span class="org-operator">=</span>WHOLE_SURFACE, couplingType<span class="org-operator">=</span>STRUCTURAL,
-<span class="linenr">34: </span>                 weightingMethod<span class="org-operator">=</span>UNIFORM)
+<pre class="src src-python"><span class="linenr">32: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Bolt and Nut Point Coupling</span>
+<span class="linenr">33: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
+<span class="linenr">34: </span>    mdl.Coupling(name<span class="org-operator">=</span><span class="org-string">'BPC-%d'</span> <span class="org-operator">%</span>(i),
+<span class="linenr">35: </span>                 controlPoint<span class="org-operator">=</span>ras.instances[<span class="org-string">'BPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
+<span class="linenr">36: </span>                 surface<span class="org-operator">=</span>ras.instances[<span class="org-string">'BOLT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'BN'</span>],
+<span class="linenr">37: </span>                 influenceRadius<span class="org-operator">=</span>WHOLE_SURFACE, couplingType<span class="org-operator">=</span>STRUCTURAL,
+<span class="linenr">38: </span>                 weightingMethod<span class="org-operator">=</span>UNIFORM)
+<span class="linenr">39: </span>
+<span class="linenr">40: </span>    mdl.Coupling(name<span class="org-operator">=</span><span class="org-string">'NPC-%d'</span> <span class="org-operator">%</span>(i),
+<span class="linenr">41: </span>                 controlPoint<span class="org-operator">=</span>ras.instances[<span class="org-string">'NPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
+<span class="linenr">42: </span>                 surface<span class="org-operator">=</span>ras.instances[<span class="org-string">'NUT-%d'</span> <span class="org-operator">%</span>(i)].surfaces[<span class="org-string">'NB'</span>],
+<span class="linenr">43: </span>                 influenceRadius<span class="org-operator">=</span>WHOLE_SURFACE, couplingType<span class="org-operator">=</span>STRUCTURAL,
+<span class="linenr">44: </span>                 weightingMethod<span class="org-operator">=</span>UNIFORM)
 </pre>
 </div></li>
 <li><p>
@@ -730,19 +748,19 @@ This can be done in CAE through <code>Interaction-&gt;Create Constraint-&gt;Coup
 The following code does this through a nested loop such that <b><code>BNEQn-m</code>  represents the m<sup>th</sup> DOF constraint at the n<sup>th</sup> location</b>.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">35: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Equation Constraints constraining bolt and nut ref-points to each other</span>
-<span class="linenr">36: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
-<span class="linenr">37: </span>    <span class="org-keyword">for</span> j <span class="org-keyword">in</span> [1, 2, 4, 5, 6]:
-<span class="linenr">38: </span>        mdl.Equation(name<span class="org-operator">=</span><span class="org-string">'BNEQ%d-%d'</span> <span class="org-operator">%</span>(i, j),
-<span class="linenr">39: </span>                     terms<span class="org-operator">=</span>((1.0, <span class="org-string">'BPT-%d.Set-1'</span> <span class="org-operator">%</span>(i), j),
-<span class="linenr">40: </span>                            (<span class="org-operator">-</span>1.0,<span class="org-string">'NPT-%d.Set-1'</span> <span class="org-operator">%</span>(i), j)))
+<pre class="src src-python"><span class="linenr">45: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Equation Constraints constraining bolt and nut ref-points to each other</span>
+<span class="linenr">46: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
+<span class="linenr">47: </span>    <span class="org-keyword">for</span> j <span class="org-keyword">in</span> [1, 2, 4, 5, 6]:
+<span class="linenr">48: </span>        mdl.Equation(name<span class="org-operator">=</span><span class="org-string">'BNEQ%d-%d'</span> <span class="org-operator">%</span>(i, j),
+<span class="linenr">49: </span>                     terms<span class="org-operator">=</span>((1.0, <span class="org-string">'BPT-%d.Set-1'</span> <span class="org-operator">%</span>(i), j),
+<span class="linenr">50: </span>                            (<span class="org-operator">-</span>1.0,<span class="org-string">'NPT-%d.Set-1'</span> <span class="org-operator">%</span>(i), j)))
 </pre>
 </div>
 <p>
 Here is an image showing the constraints applied graphically.
 </p>
 
-<div id="orgbafe837" class="figure">
+<div id="orgc4f0a61" class="figure">
 <p><img src="./figs/conss.png" alt="conss.png" width="400px" />
 </p>
 </div></li>
@@ -751,7 +769,7 @@ We next create a static analysis step (<code>Step-&gt;Create Step-&gt;Static, Ge
 This can be done in CAE, but here is the Python code.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">41: </span>mdl.StaticStep(name<span class="org-operator">=</span><span class="org-string">'PRESTRESS'</span>, previous<span class="org-operator">=</span><span class="org-string">'Initial'</span>, nlgeom<span class="org-operator">=</span>ON)
+<pre class="src src-python"><span class="linenr">51: </span>mdl.StaticStep(name<span class="org-operator">=</span><span class="org-string">'PRESTRESS'</span>, previous<span class="org-operator">=</span><span class="org-string">'Initial'</span>, nlgeom<span class="org-operator">=</span>ON)
 </pre>
 </div>
 <p>
@@ -763,22 +781,22 @@ Switch to the <code>Load</code> module to do this from CAE.
 The following python code applies a tightening load of 12kN to each bolt.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">42: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Apply forces</span>
-<span class="linenr">43: </span><span class="org-variable-name">bpmag</span> <span class="org-operator">=</span> 12e3  <span class="org-comment-delimiter"># </span><span class="org-comment">12kN bolt-load</span>
-<span class="linenr">44: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
-<span class="linenr">45: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Force in +z on bolt-points</span>
-<span class="linenr">46: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">'PRESTRESS'</span>,
-<span class="linenr">47: </span>                          region<span class="org-operator">=</span>ras.instances[<span class="org-string">'BPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
-<span class="linenr">48: </span>                          cf3<span class="org-operator">=</span>bpmag, distributionType<span class="org-operator">=</span>UNIFORM)
-<span class="linenr">49: </span>
-<span class="linenr">50: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Force in -z on bolt-points</span>
-<span class="linenr">51: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">'PRESTRESS'</span>,
-<span class="linenr">52: </span>                          region<span class="org-operator">=</span>ras.instances[<span class="org-string">'NPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
-<span class="linenr">53: </span>                          cf3<span class="org-operator">=-</span>bpmag, distributionType<span class="org-operator">=</span>UNIFORM)
+<pre class="src src-python"><span class="linenr">52: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Apply forces</span>
+<span class="linenr">53: </span><span class="org-variable-name">bpmag</span> <span class="org-operator">=</span> 12e3  <span class="org-comment-delimiter"># </span><span class="org-comment">12kN bolt-load</span>
+<span class="linenr">54: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
+<span class="linenr">55: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Force in +z on bolt-points</span>
+<span class="linenr">56: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">'PRESTRESS'</span>,
+<span class="linenr">57: </span>                          region<span class="org-operator">=</span>ras.instances[<span class="org-string">'BPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
+<span class="linenr">58: </span>                          cf3<span class="org-operator">=</span>bpmag, distributionType<span class="org-operator">=</span>UNIFORM)
+<span class="linenr">59: </span>
+<span class="linenr">60: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Force in -z on bolt-points</span>
+<span class="linenr">61: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">'PRESTRESS'</span>,
+<span class="linenr">62: </span>                          region<span class="org-operator">=</span>ras.instances[<span class="org-string">'NPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>],
+<span class="linenr">63: </span>                          cf3<span class="org-operator">=-</span>bpmag, distributionType<span class="org-operator">=</span>UNIFORM)
 </pre>
 </div>
 
-<div id="org4b945ce" class="figure">
+<div id="org140cfb2" class="figure">
 <p><img src="./figs/loads.png" alt="loads.png" width="400px" />
 </p>
 </div></li>
@@ -795,16 +813,16 @@ We will now proceed with meshing.
 </div>
 </div>
 </div>
-<div id="outline-container-orgdfaf293" class="outline-2">
-<h2 id="orgdfaf293"><span class="section-number-2">3.</span> Meshing</h2>
+<div id="outline-container-org6af517f" class="outline-2">
+<h2 id="org6af517f"><span class="section-number-2">3.</span> Meshing</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the <code>Mesh</code> module for this section.
 </p>
 </div>
-<div id="outline-container-orgddd985d" class="outline-3">
-<h3 id="orgddd985d"><span class="section-number-3">3.1.</span> Meshing Instructions</h3>
+<div id="outline-container-orgb70df5e" class="outline-3">
+<h3 id="orgb70df5e"><span class="section-number-3">3.1.</span> Meshing Instructions</h3>
 <div class="outline-text-3" id="text-3-1">
 <ol class="org-ol">
 <li><p>
@@ -812,7 +830,7 @@ Choose <code>Mesh-&gt;Assign Mesh Controls</code> and select the whole assembly 
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
 </p>
 
-<div id="org99589d3" class="figure">
+<div id="org68f5aec" class="figure">
 <p><img src="./figs/globmesh.png" alt="globmesh.png" width="300px" />
 </p>
 </div></li>
@@ -821,7 +839,7 @@ Now choose <code>Mesh-&gt;Seed Part Instance</code> and select all the instances
 Set 0.00254 as the global mesh seed (to ensure 10 elements across thickness) and 0.05 for curvature control.
 </p>
 
-<div id="org0636d15" class="figure">
+<div id="org58887d2" class="figure">
 <p><img src="./figs/gmeshseed.png" alt="gmeshseed.png" width="300px" />
 </p>
 </div></li>
@@ -830,7 +848,7 @@ Apply local seeds at the interface as shown here (on both interfaces).
 Use the <code>Mesh-&gt;Seed Edges</code> tool by choosing the Method as "By Number" and specify the number of elements.
 </p>
 
-<div id="org470f6c2" class="figure">
+<div id="org2e56b09" class="figure">
 <p><img src="./figs/lmeshseeds.png" alt="lmeshseeds.png" width="400px" />
 </p>
 </div></li>
@@ -839,7 +857,7 @@ Now mesh the assembly using <code>Mesh-&gt;Mesh Part Instance</code> and selecti
 Here is a view of the interfacial mesh you should get after the above seeding.
 </p>
 
-<div id="org847fb25" class="figure">
+<div id="org3ec30d7" class="figure">
 <p><img src="./figs/mesh.png" alt="mesh.png" width="300px" />
 </p>
 </div></li>
@@ -847,7 +865,7 @@ Here is a view of the interfacial mesh you should get after the above seeding.
 Here is an image of the total assembly with the mesh.
 </p>
 
-<div id="org60d0cf6" class="figure">
+<div id="orge2ed43a" class="figure">
 <p><img src="./figs/fullmesh.png" alt="fullmesh.png" width="400px" />
 </p>
 </div></li>
@@ -858,8 +876,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </p>
 </div>
 </div>
-<div id="outline-container-org33c648d" class="outline-3">
-<h3 id="org33c648d"><span class="section-number-3">3.2.</span> (Optional, recommended) Verify correctness of model through frictionless prestress</h3>
+<div id="outline-container-orgd98dc7d" class="outline-3">
+<h3 id="orgd98dc7d"><span class="section-number-3">3.2.</span> (Optional, recommended) Verify correctness of model through frictionless prestress</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
@@ -874,7 +892,7 @@ For the static prestress analysis, first a surface-to-surface contact interactio
 You can do this from CAE starting from <code>Interaction-&gt;Create Interaction</code> and following the steps in the figure below.
 </p>
 
-<div id="orga75bd43" class="figure">
+<div id="org88a23b5" class="figure">
 <p><img src="./figs/setcontact.png" alt="setcontact.png" width="600px" />
 </p>
 </div></li>
@@ -883,7 +901,7 @@ Now create two linear frequency steps, one before and one after the static prest
 Request 30 eigenvalues in each case.
 </p>
 
-<div id="org14b057a" class="figure">
+<div id="org0468c07" class="figure">
 <p><img src="./figs/lfreq.png" alt="lfreq.png" width="400px" />
 </p>
 </div></li>
@@ -900,7 +918,7 @@ Optionally, field outputs for <code>FREQ2</code> (by default it will be set to n
 You can do this in <code>Step-&gt;Create Field Outputs</code>.
 </p>
 
-<div id="orge67e2b8" class="figure">
+<div id="org474b834" class="figure">
 <p><img src="./figs/run2_fo.png" alt="run2_fo.png" width="300px" />
 </p>
 </div></li>
@@ -986,7 +1004,7 @@ In the above, modes 1-7 are RBMs and modes 8 onwards are the elastic modes.
 Looking at the mode-shapes should make it clear that the two beams are free to move axially (the following is mode 1, for eg).
 </p>
 
-<div id="org7f76510" class="figure">
+<div id="org2911aed" class="figure">
 <p><img src="./figs/res1.png" alt="res1.png" width="400px" />
 </p>
 </div></li>
@@ -998,7 +1016,7 @@ If it still doesn't converge, check your model again.
 Here is a picture of the contact pressures at the interface at the end of the static prestress step.
 </p>
 
-<div id="org0fcf131" class="figure">
+<div id="org517a03b" class="figure">
 <p><img src="./figs/res2_1.png" alt="res2_1.png" width="400px" />
 </p>
 </div></li>
@@ -1087,8 +1105,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </div>
 </div>
 </div>
-<div id="outline-container-org8e42e32" class="outline-2">
-<h2 id="org8e42e32"><span class="section-number-2">4.</span> Postprocessing</h2>
+<div id="outline-container-orgbbc651a" class="outline-2">
+<h2 id="orgbbc651a"><span class="section-number-2">4.</span> Postprocessing</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Now that the model is verified to be correct/consistent, we will proceed with the steps necessary for substructured Matrix Extraction.
@@ -1109,13 +1127,13 @@ It is also helpful to use global node and element indexing henceforth.
 This can be specified in <code>Model-&gt;Edit Attributes-&gt;Model-1</code> as follows:
 </p>
 
-<div id="org1ce245d" class="figure">
+<div id="orgf90f0ed" class="figure">
 <p><img src="./figs/modl.png" alt="modl.png" width="300px" />
 </p>
 </div>
 </div>
-<div id="outline-container-org9f44c8a" class="outline-3">
-<h3 id="org9f44c8a"><span class="section-number-3">4.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org74f1568" class="outline-3">
+<h3 id="org74f1568"><span class="section-number-3">4.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Although we have taken care to ensure that the mesh of the <code>TOPBEAM</code> and <code>BOTBEAM</code> are conformal at the interface, minor imperfections in the nodal locations may exist.
@@ -1174,80 +1192,91 @@ The node and element ordering of the top nodes will be preserved, and the nodes 
 <span class="linenr">38: </span><span class="org-variable-name">N</span> <span class="org-operator">=</span> <span class="org-builtin">len</span>(topnodes)  <span class="org-comment-delimiter"># </span><span class="org-comment">Number of nodes</span>
 <span class="linenr">39: </span>
 <span class="linenr">40: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Top Nodes and Coordinates</span>
-<span class="linenr">41: </span><span class="org-variable-name">Topnd_dict</span> <span class="org-operator">=</span> <span class="org-builtin">dict</span>(<span class="org-builtin">zip</span>([topnodes[i].label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N)], <span class="org-builtin">range</span>(N)))
-<span class="linenr">42: </span><span class="org-comment-delimiter"># </span><span class="org-comment">maps original node ID (in FE model) to node ID in interface node set</span>
-<span class="linenr">43: </span><span class="org-variable-name">TopNdCds</span> <span class="org-operator">=</span> np.array([topnodes[i].coordinates <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N)])
-<span class="linenr">44: </span>
-<span class="linenr">45: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Top Elements</span>
-<span class="linenr">46: </span><span class="org-variable-name">TopEls</span> <span class="org-operator">=</span> np.array([topsurf.elements[i].connectivity <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(topsurf.elements))])
-<span class="linenr">47: </span><span class="org-variable-name">ELS</span> <span class="org-operator">=</span> np.zeros((TopEls.shape[0], 5), dtype<span class="org-operator">=</span><span class="org-builtin">int</span>)
-<span class="linenr">48: </span><span class="org-keyword">for</span> ne <span class="org-keyword">in</span> <span class="org-builtin">range</span>(TopEls.shape[0]):
-<span class="linenr">49: </span>    <span class="org-variable-name">elefac</span> <span class="org-operator">=</span> topsurf.elements[ne].getElemFaces()
-<span class="linenr">50: </span>
-<span class="linenr">51: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Gives you the list of faces on the interface (we only expect a single face)</span>
-<span class="linenr">52: </span>    <span class="org-variable-name">fe</span> <span class="org-operator">=</span> np.argwhere([<span class="org-builtin">all</span>([Topnd_dict.has_key(x) <span class="org-keyword">for</span> x <span class="org-keyword">in</span> 
-<span class="linenr">53: </span>                           [elefac[k].getNodes()[i].label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(4)]])
-<span class="linenr">54: </span>                      <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(6)])[0,0]
-<span class="linenr">55: </span>    <span class="org-variable-name">ELS</span>[ne, 0] <span class="org-operator">=</span> ne
-<span class="linenr">56: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Searches for the face where all the nodes are in the interface and returns those nodes</span>
-<span class="linenr">57: </span>    <span class="org-variable-name">ELS</span>[ne, 1:] <span class="org-operator">=</span> [Topnd_dict[x] <span class="org-keyword">for</span> x <span class="org-keyword">in</span> [elefac[fe].getNodes()[k].label
-<span class="linenr">58: </span>                                           <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(4)]]
-<span class="linenr">59: </span>    <span class="org-variable-name">ELS</span>[ne, :] <span class="org-operator">+=</span> 1
-<span class="linenr">60: </span>
-<span class="linenr">61: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Save interfacial nodes and elements to txt files</span>
-<span class="linenr">62: </span>np.savetxt(<span class="org-string">'Nodes.dat'</span>, TopNdCds) <span class="org-comment-delimiter"># </span><span class="org-comment">Save to dat file</span>
-<span class="linenr">63: </span>np.savetxt(<span class="org-string">'Elements.dat'</span>, ELS, fmt<span class="org-operator">=</span><span class="org-string">'%d'</span>)
+<span class="linenr">41: </span><span class="org-variable-name">Topnd_dict</span> <span class="org-operator">=</span> <span class="org-builtin">dict</span>(<span class="org-builtin">zip</span>([topnodes[i].label
+<span class="linenr">42: </span>                       <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N)], <span class="org-builtin">range</span>(N)))
+<span class="linenr">43: </span><span class="org-comment-delimiter"># </span><span class="org-comment">maps original node ID (in FE model) to</span>
+<span class="linenr">44: </span><span class="org-comment-delimiter"># </span><span class="org-comment">node ID in interface node set</span>
+<span class="linenr">45: </span><span class="org-variable-name">TopNdCds</span> <span class="org-operator">=</span> np.array([topnodes[i].coordinates
+<span class="linenr">46: </span>                     <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N)])
+<span class="linenr">47: </span>
+<span class="linenr">48: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Top Elements</span>
+<span class="linenr">49: </span><span class="org-variable-name">TopEls</span> <span class="org-operator">=</span> np.array([topsurf.elements[i].connectivity
+<span class="linenr">50: </span>                   <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(topsurf.elements))])
+<span class="linenr">51: </span><span class="org-variable-name">ELS</span> <span class="org-operator">=</span> np.zeros((TopEls.shape[0], 5), dtype<span class="org-operator">=</span><span class="org-builtin">int</span>)
+<span class="linenr">52: </span><span class="org-keyword">for</span> ne <span class="org-keyword">in</span> <span class="org-builtin">range</span>(TopEls.shape[0]):
+<span class="linenr">53: </span>    <span class="org-variable-name">elefac</span> <span class="org-operator">=</span> topsurf.elements[ne].getElemFaces()
+<span class="linenr">54: </span>
+<span class="linenr">55: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Gives you the list of faces on the interface</span>
+<span class="linenr">56: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">(we only expect a single face here)</span>
+<span class="linenr">57: </span>    <span class="org-variable-name">fe</span> <span class="org-operator">=</span> np.argwhere([<span class="org-builtin">all</span>([Topnd_dict.has_key(x) <span class="org-keyword">for</span> x <span class="org-keyword">in</span> 
+<span class="linenr">58: </span>                           [elefac[k].getNodes()[i].label
+<span class="linenr">59: </span>                            <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(4)]])
+<span class="linenr">60: </span>                      <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(6)])[0,0]
+<span class="linenr">61: </span>    <span class="org-variable-name">ELS</span>[ne, 0] <span class="org-operator">=</span> ne
+<span class="linenr">62: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Searches for the face where all the nodes are in the interface</span>
+<span class="linenr">63: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">and returns those nodes</span>
+<span class="linenr">64: </span>    <span class="org-variable-name">ELS</span>[ne, 1:] <span class="org-operator">=</span> [Topnd_dict[x] <span class="org-keyword">for</span> x <span class="org-keyword">in</span>
+<span class="linenr">65: </span>                   [elefac[fe].getNodes()[k].label
+<span class="linenr">66: </span>                    <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(4)]]
+<span class="linenr">67: </span>    <span class="org-variable-name">ELS</span>[ne, :] <span class="org-operator">+=</span> 1
+<span class="linenr">68: </span>
+<span class="linenr">69: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Save interfacial nodes and elements to txt files</span>
+<span class="linenr">70: </span>np.savetxt(<span class="org-string">'Nodes.dat'</span>, TopNdCds) <span class="org-comment-delimiter"># </span><span class="org-comment">Save to dat file</span>
+<span class="linenr">71: </span>np.savetxt(<span class="org-string">'Elements.dat'</span>, ELS, fmt<span class="org-operator">=</span><span class="org-string">'%d'</span>)
 </pre>
 </div></li>
 <li><p>
 Now we extract the bottom nodes and sort them.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">64: </span><span class="org-comment-delimiter"># </span><span class="org-comment">3. Node Pairing. We assume len(botnodes)=len(topnodes).</span>
-<span class="linenr">65: </span><span class="org-variable-name">botleft</span> <span class="org-operator">=</span> <span class="org-builtin">range</span>(N)
-<span class="linenr">66: </span><span class="org-variable-name">bts</span> <span class="org-operator">=</span> []
-<span class="linenr">67: </span><span class="org-variable-name">tmi</span> <span class="org-operator">=</span> 0
-<span class="linenr">68: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N):
-<span class="linenr">69: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Calculates deviation of selected node coordinate on bottom to each</span>
-<span class="linenr">70: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">node coordinate on top and "assigns" the closest one to the index.</span>
-<span class="linenr">71: </span>    bts.append(
-<span class="linenr">72: </span>        botleft.pop(
-<span class="linenr">73: </span>            np.argmin(
-<span class="linenr">74: </span>                np.linalg.norm(
-<span class="linenr">75: </span>                    topnodes[i].coordinates<span class="org-operator">-</span>np.array([botnodes[j].coordinates <span class="org-keyword">for</span> j <span class="org-keyword">in</span> botleft]),
-<span class="linenr">76: </span>                    axis<span class="org-operator">=</span>1)
-<span class="linenr">77: </span>            )
-<span class="linenr">78: </span>        )
-<span class="linenr">79: </span>    )
+<pre class="src src-python"><span class="linenr">72: </span><span class="org-comment-delimiter"># </span><span class="org-comment">3. Node Pairing. We assume len(botnodes)=len(topnodes).</span>
+<span class="linenr">73: </span><span class="org-variable-name">botleft</span> <span class="org-operator">=</span> <span class="org-builtin">range</span>(N)
+<span class="linenr">74: </span><span class="org-variable-name">bts</span> <span class="org-operator">=</span> []
+<span class="linenr">75: </span><span class="org-variable-name">tmi</span> <span class="org-operator">=</span> 0
+<span class="linenr">76: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N):
+<span class="linenr">77: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Calculates deviation of selected node coordinate on bottom to each</span>
+<span class="linenr">78: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">node coordinate on top and "assigns" the closest one to the index.</span>
+<span class="linenr">79: </span>    <span class="org-variable-name">devns</span> <span class="org-operator">=</span> topnodes[i].coordinates <span class="org-operator">-</span> np.array([botnodes[j].coordinates
+<span class="linenr">80: </span>                                                <span class="org-keyword">for</span> j <span class="org-keyword">in</span> botleft])
+<span class="linenr">81: </span>    bts.append(
+<span class="linenr">82: </span>        botleft.pop(
+<span class="linenr">83: </span>            np.argmin(
+<span class="linenr">84: </span>                np.linalg.norm(
+<span class="linenr">85: </span>                    devns, axis<span class="org-operator">=</span>1)
+<span class="linenr">86: </span>            )
+<span class="linenr">87: </span>        )
+<span class="linenr">88: </span>    )
 </pre>
 </div></li>
 <li><p>
 We now adjust the nodes on the bottom (this affects the FE mesh directly!)
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">80: </span><span class="org-comment-delimiter"># </span><span class="org-comment">4. Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly</span>
-<span class="linenr">81: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N):
-<span class="linenr">82: </span>    ras.editNode(nodes<span class="org-operator">=</span>botnodes[bts[i]:bts[i]<span class="org-operator">+</span>1],
-<span class="linenr">83: </span>                 coordinates<span class="org-operator">=</span>(topnodes[i].coordinates,))
+<pre class="src src-python"><span class="linenr">89: </span><span class="org-comment-delimiter"># </span><span class="org-comment">4. Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly</span>
+<span class="linenr">90: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N):
+<span class="linenr">91: </span>    ras.editNode(nodes<span class="org-operator">=</span>botnodes[bts[i]:bts[i]<span class="org-operator">+</span>1],
+<span class="linenr">92: </span>                 coordinates<span class="org-operator">=</span>(topnodes[i].coordinates,))
 </pre>
 </div></li>
 <li><p>
 We now create nodesets for the top (<code>TOPS_NDS</code>) and bottom (<code>BOTS_NDS</code>).
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">84: </span><span class="org-comment-delimiter"># </span><span class="org-comment">5. Create Node Sets</span>
-<span class="linenr">85: </span><span class="org-variable-name">botpairednds</span> <span class="org-operator">=</span> botnodes.sequenceFromLabels(<span class="org-builtin">tuple</span>([botnodes[i].label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> bts]))
-<span class="linenr">86: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Reordering from the sorting above</span>
-<span class="linenr">87: </span>
-<span class="linenr">88: </span>ras.SetFromNodeLabels(name<span class="org-operator">=</span><span class="org-string">"TOPS_NDS"</span>, 
-<span class="linenr">89: </span>                      nodeLabels<span class="org-operator">=</span>((topnodes[0].instanceName, 
-<span class="linenr">90: </span>                                   <span class="org-builtin">tuple</span>([topnodes[i].label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N)])),),
-<span class="linenr">91: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span>)
-<span class="linenr">92: </span>ras.SetFromNodeLabels(name<span class="org-operator">=</span><span class="org-string">"BOTS_NDS"</span>, 
-<span class="linenr">93: </span>                      nodeLabels<span class="org-operator">=</span>((botpairednds[0].instanceName, 
-<span class="linenr">94: </span>                                   [botpairednds[i].label
-<span class="linenr">95: </span>                                    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(botpairednds))]),),
-<span class="linenr">96: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span>)
+<pre class="src src-python"><span class="linenr"> 93: </span><span class="org-comment-delimiter"># </span><span class="org-comment">5. Create Node Sets</span>
+<span class="linenr"> 94: </span><span class="org-variable-name">botpairednds</span> <span class="org-operator">=</span> botnodes.sequenceFromLabels(<span class="org-builtin">tuple</span>([botnodes[i].label
+<span class="linenr"> 95: </span>                                                  <span class="org-keyword">for</span> i <span class="org-keyword">in</span> bts]))
+<span class="linenr"> 96: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Reordering from the sorting above</span>
+<span class="linenr"> 97: </span>
+<span class="linenr"> 98: </span>ras.SetFromNodeLabels(name<span class="org-operator">=</span><span class="org-string">"TOPS_NDS"</span>, 
+<span class="linenr"> 99: </span>                      nodeLabels<span class="org-operator">=</span>((topnodes[0].instanceName, 
+<span class="linenr">100: </span>                                   <span class="org-builtin">tuple</span>([topnodes[i].label
+<span class="linenr">101: </span>                                          <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(N)])),),
+<span class="linenr">102: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span>)
+<span class="linenr">103: </span>ras.SetFromNodeLabels(name<span class="org-operator">=</span><span class="org-string">"BOTS_NDS"</span>, 
+<span class="linenr">104: </span>                      nodeLabels<span class="org-operator">=</span>((botpairednds[0].instanceName, 
+<span class="linenr">105: </span>                                   [botpairednds[i].label
+<span class="linenr">106: </span>                                    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(botpairednds))]),),
+<span class="linenr">107: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span>)
 </pre>
 </div>
 <p>
@@ -1259,26 +1288,26 @@ One side-effect of doing this is that this removes the bolt loads also, since lo
 So we will reintroduce the bolt loads in the substructuring step in #8 below.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr"> 97: </span><span class="org-comment-delimiter"># </span><span class="org-comment">6. Simplify model (remove interactions, all steps, etc.)</span>
-<span class="linenr"> 98: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactions
-<span class="linenr"> 99: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span>(tmp) <span class="org-operator">&gt;</span> 0:
-<span class="linenr">100: </span>    <span class="org-keyword">del</span> tmp[tmp.keys()[<span class="org-operator">-</span>1]]
-<span class="linenr">101: </span>
-<span class="linenr">102: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactionProperties
-<span class="linenr">103: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span>(tmp) <span class="org-operator">&gt;</span> 0:
-<span class="linenr">104: </span>    <span class="org-keyword">del</span> tmp[tmp.keys()[<span class="org-operator">-</span>1]]
-<span class="linenr">105: </span>
-<span class="linenr">106: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Remove all steps except initial</span>
-<span class="linenr">107: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.steps
-<span class="linenr">108: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span>(tmp) <span class="org-operator">&gt;</span> 1:
-<span class="linenr">109: </span>    <span class="org-keyword">del</span> tmp[tmp.keys()[<span class="org-operator">-</span>1]]
+<pre class="src src-python"><span class="linenr">108: </span><span class="org-comment-delimiter"># </span><span class="org-comment">6. Simplify model (remove interactions, all steps, etc.)</span>
+<span class="linenr">109: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactions
+<span class="linenr">110: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span>(tmp) <span class="org-operator">&gt;</span> 0:
+<span class="linenr">111: </span>    <span class="org-keyword">del</span> tmp[tmp.keys()[<span class="org-operator">-</span>1]]
+<span class="linenr">112: </span>
+<span class="linenr">113: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactionProperties
+<span class="linenr">114: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span>(tmp) <span class="org-operator">&gt;</span> 0:
+<span class="linenr">115: </span>    <span class="org-keyword">del</span> tmp[tmp.keys()[<span class="org-operator">-</span>1]]
+<span class="linenr">116: </span>
+<span class="linenr">117: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Remove all steps except initial</span>
+<span class="linenr">118: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.steps
+<span class="linenr">119: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span>(tmp) <span class="org-operator">&gt;</span> 1:
+<span class="linenr">120: </span>    <span class="org-keyword">del</span> tmp[tmp.keys()[<span class="org-operator">-</span>1]]
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org14f526f" class="outline-3">
-<h3 id="org14f526f"><span class="section-number-3">4.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-orgef9e0ac" class="outline-3">
+<h3 id="orgef9e0ac"><span class="section-number-3">4.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-4-2">
 <ol class="org-ol">
 <li><p>
@@ -1287,14 +1316,14 @@ So we first do a fixed interface modal analysis and request \(20\times3 = 60\) m
 We fix all the nodes in the nodesets <code>TOPS_NDS</code> and <code>BOTS_NDS</code>.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">110: </span><span class="org-comment-delimiter"># </span><span class="org-comment">7. Create a Frequency Step for fixed interface modal analysis</span>
-<span class="linenr">111: </span>mdl.FrequencyStep(name<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>, previous<span class="org-operator">=</span><span class="org-string">"Initial"</span>,
-<span class="linenr">112: </span>                  normalization<span class="org-operator">=</span>MASS, eigensolver<span class="org-operator">=</span>LANCZOS,
-<span class="linenr">113: </span>                  numEigen<span class="org-operator">=</span>60)
-<span class="linenr">114: </span>mdl.EncastreBC(name<span class="org-operator">=</span><span class="org-string">"TOPFIX"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
-<span class="linenr">115: </span>               region<span class="org-operator">=</span>ras.sets[<span class="org-string">'TOPS_NDS'</span>])
-<span class="linenr">116: </span>mdl.EncastreBC(name<span class="org-operator">=</span><span class="org-string">"BOTFIX"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
-<span class="linenr">117: </span>               region<span class="org-operator">=</span>ras.sets[<span class="org-string">'BOTS_NDS'</span>])
+<pre class="src src-python"><span class="linenr">121: </span><span class="org-comment-delimiter"># </span><span class="org-comment">7. Create a Frequency Step for fixed interface modal analysis</span>
+<span class="linenr">122: </span>mdl.FrequencyStep(name<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>, previous<span class="org-operator">=</span><span class="org-string">"Initial"</span>,
+<span class="linenr">123: </span>                  normalization<span class="org-operator">=</span>MASS, eigensolver<span class="org-operator">=</span>LANCZOS,
+<span class="linenr">124: </span>                  numEigen<span class="org-operator">=</span>60)
+<span class="linenr">125: </span>mdl.EncastreBC(name<span class="org-operator">=</span><span class="org-string">"TOPFIX"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
+<span class="linenr">126: </span>               region<span class="org-operator">=</span>ras.sets[<span class="org-string">'TOPS_NDS'</span>])
+<span class="linenr">127: </span>mdl.EncastreBC(name<span class="org-operator">=</span><span class="org-string">"BOTFIX"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
+<span class="linenr">128: </span>               region<span class="org-operator">=</span>ras.sets[<span class="org-string">'BOTS_NDS'</span>])
 </pre>
 </div></li>
 <li><p>
@@ -1303,30 +1332,35 @@ The bolt loads are specified of unit magnitude and can be scaled during analysis
 <b>This by default uses the mode shapes from the previous step and calculates static constraint modes automatically.</b>
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">118: </span><span class="org-comment-delimiter"># </span><span class="org-comment">8. Create a substructuring step, specify the modes and retained DOFs</span>
-<span class="linenr">119: </span>mdl.SubstructureGenerateStep(name<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, previous<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
-<span class="linenr">120: </span>                             substructureIdentifier<span class="org-operator">=</span>1, 
-<span class="linenr">121: </span>                             retainedEigenmodesMethod<span class="org-operator">=</span>MODE_RANGE, modeRange<span class="org-operator">=</span>((1, 20, 1),),
-<span class="linenr">122: </span>                             recoveryMatrix<span class="org-operator">=</span>REGION, recoveryRegion<span class="org-operator">=</span>ras.sets[<span class="org-string">'OutNodes'</span>],
-<span class="linenr">123: </span>                             computeReducedMassMatrix<span class="org-operator">=</span><span class="org-constant">True</span>)
-<span class="linenr">124: </span>
-<span class="linenr">125: </span>mdl.RetainedNodalDofsBC(name<span class="org-operator">=</span><span class="org-string">"TOPRET"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, 
-<span class="linenr">126: </span>                        region<span class="org-operator">=</span>ras.sets[<span class="org-string">'TOPS_NDS'</span>], 
-<span class="linenr">127: </span>                        u1<span class="org-operator">=</span>ON, u2<span class="org-operator">=</span>ON, u3<span class="org-operator">=</span>ON)
-<span class="linenr">128: </span>mdl.RetainedNodalDofsBC(name<span class="org-operator">=</span><span class="org-string">"BOTRET"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, 
-<span class="linenr">129: </span>                        region<span class="org-operator">=</span>ras.sets[<span class="org-string">'BOTS_NDS'</span>], 
-<span class="linenr">130: </span>                        u1<span class="org-operator">=</span>ON, u2<span class="org-operator">=</span>ON, u3<span class="org-operator">=</span>ON)
-<span class="linenr">131: </span>
-<span class="linenr">132: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Apply Bolt Loads (1N magnitude)</span>
-<span class="linenr">133: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
-<span class="linenr">134: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
-<span class="linenr">135: </span>                          cf3<span class="org-operator">=</span>1.0, region<span class="org-operator">=</span>ras.instances[<span class="org-string">'BPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>])
-<span class="linenr">136: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
-<span class="linenr">137: </span>                          cf3<span class="org-operator">=-</span>1.0, region<span class="org-operator">=</span>ras.instances[<span class="org-string">'NPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>])
-<span class="linenr">138: </span>
-<span class="linenr">139: </span><span class="org-variable-name">sbs</span> <span class="org-operator">=</span> mdl.steps[<span class="org-string">'HCBCMS'</span>]
-<span class="linenr">140: </span>sbs.LoadCase(name<span class="org-operator">=</span><span class="org-string">"LCASE"</span>, loads<span class="org-operator">=</span><span class="org-builtin">tuple</span>((<span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span>(i), 1.0) <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4)) <span class="org-operator">+</span>
-<span class="linenr">141: </span>             <span class="org-builtin">tuple</span>((<span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span>(i), 1.0) <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4)))
+<pre class="src src-python"><span class="linenr">129: </span><span class="org-comment-delimiter"># </span><span class="org-comment">8. Create a substructuring step, specify the modes and retained DOFs</span>
+<span class="linenr">130: </span>mdl.SubstructureGenerateStep(name<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, previous<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
+<span class="linenr">131: </span>                             substructureIdentifier<span class="org-operator">=</span>1, 
+<span class="linenr">132: </span>                             retainedEigenmodesMethod<span class="org-operator">=</span>MODE_RANGE,
+<span class="linenr">133: </span>                             modeRange<span class="org-operator">=</span>((1, 20, 1),),
+<span class="linenr">134: </span>                             recoveryMatrix<span class="org-operator">=</span>REGION,
+<span class="linenr">135: </span>                             recoveryRegion<span class="org-operator">=</span>ras.sets[<span class="org-string">'OutNodes'</span>],
+<span class="linenr">136: </span>                             computeReducedMassMatrix<span class="org-operator">=</span><span class="org-constant">True</span>)
+<span class="linenr">137: </span>
+<span class="linenr">138: </span>mdl.RetainedNodalDofsBC(name<span class="org-operator">=</span><span class="org-string">"TOPRET"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, 
+<span class="linenr">139: </span>                        region<span class="org-operator">=</span>ras.sets[<span class="org-string">'TOPS_NDS'</span>], 
+<span class="linenr">140: </span>                        u1<span class="org-operator">=</span>ON, u2<span class="org-operator">=</span>ON, u3<span class="org-operator">=</span>ON)
+<span class="linenr">141: </span>mdl.RetainedNodalDofsBC(name<span class="org-operator">=</span><span class="org-string">"BOTRET"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, 
+<span class="linenr">142: </span>                        region<span class="org-operator">=</span>ras.sets[<span class="org-string">'BOTS_NDS'</span>], 
+<span class="linenr">143: </span>                        u1<span class="org-operator">=</span>ON, u2<span class="org-operator">=</span>ON, u3<span class="org-operator">=</span>ON)
+<span class="linenr">144: </span>
+<span class="linenr">145: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Apply Bolt Loads (1N magnitude)</span>
+<span class="linenr">146: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4):
+<span class="linenr">147: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
+<span class="linenr">148: </span>                          cf3<span class="org-operator">=</span>1.0,
+<span class="linenr">149: </span>                          region<span class="org-operator">=</span>ras.instances[<span class="org-string">'BPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>])
+<span class="linenr">150: </span>    mdl.ConcentratedForce(name<span class="org-operator">=</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span>(i), createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
+<span class="linenr">151: </span>                          cf3<span class="org-operator">=-</span>1.0,
+<span class="linenr">152: </span>                          region<span class="org-operator">=</span>ras.instances[<span class="org-string">'NPT-%d'</span> <span class="org-operator">%</span>(i)].sets[<span class="org-string">'Set-1'</span>])
+<span class="linenr">153: </span>
+<span class="linenr">154: </span><span class="org-variable-name">sbs</span> <span class="org-operator">=</span> mdl.steps[<span class="org-string">'HCBCMS'</span>]
+<span class="linenr">155: </span>sbs.LoadCase(name<span class="org-operator">=</span><span class="org-string">"LCASE"</span>,
+<span class="linenr">156: </span>             loads<span class="org-operator">=</span><span class="org-builtin">tuple</span>((<span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span>(i), 1.0) <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4)) <span class="org-operator">+</span>
+<span class="linenr">157: </span>             <span class="org-builtin">tuple</span>((<span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span>(i), 1.0) <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, 4)))
 </pre>
 </div></li>
 <li><p>
@@ -1339,27 +1373,29 @@ Go to <code>Model-&gt;Edit Keywords-&gt;Model-1</code> to do this in the GUI.
 In scripting, this is known as a "synch" operation, which is done as follows:
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">142: </span><span class="org-comment-delimiter"># </span><span class="org-comment">9. Request substructure matrix outputs</span>
-<span class="linenr">143: </span><span class="org-comment-delimiter"># </span><span class="org-comment">ABAQUS CAE doesn't support this yet (GUI or scripting),</span>
-<span class="linenr">144: </span><span class="org-comment-delimiter"># </span><span class="org-comment">so the keywords need to be manually modified.</span>
-<span class="linenr">145: </span>mdl.keywordBlock.synchVersions(storeNodesAndElements<span class="org-operator">=</span><span class="org-constant">False</span>)
-<span class="linenr">146: </span>
-<span class="linenr">147: </span><span class="org-variable-name">li</span> <span class="org-operator">=</span> np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] <span class="org-operator">==</span> <span class="org-string">"*Retained Nodal Dofs"</span>
-<span class="linenr">148: </span>                  <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(mdl.keywordBlock.sieBlocks))])[0][0]
-<span class="linenr">149: </span><span class="org-variable-name">txi</span> <span class="org-operator">=</span> mdl.keywordBlock.sieBlocks[li]
-<span class="linenr">150: </span>mdl.keywordBlock.replace(li, <span class="org-string">"*Retained Nodal Dofs, sorted=NO"</span><span class="org-operator">+</span>txi[20:])
-<span class="linenr">151: </span>
-<span class="linenr">152: </span>mdl.keywordBlock.insert(<span class="org-builtin">len</span>(mdl.keywordBlock.sieBlocks)<span class="org-operator">-</span>2, 
-<span class="linenr">153: </span>                        <span class="org-string">"*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES"</span>)
+<pre class="src src-python"><span class="linenr">158: </span><span class="org-comment-delimiter"># </span><span class="org-comment">9. Request substructure matrix outputs</span>
+<span class="linenr">159: </span><span class="org-comment-delimiter"># </span><span class="org-comment">ABAQUS CAE doesn't support this yet (GUI or scripting),</span>
+<span class="linenr">160: </span><span class="org-comment-delimiter"># </span><span class="org-comment">so the keywords need to be manually modified.</span>
+<span class="linenr">161: </span>mdl.keywordBlock.synchVersions(storeNodesAndElements<span class="org-operator">=</span><span class="org-constant">False</span>)
+<span class="linenr">162: </span>
+<span class="linenr">163: </span><span class="org-variable-name">li</span> <span class="org-operator">=</span> np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] <span class="org-operator">==</span> <span class="org-string">"*Retained Nodal Dofs"</span>
+<span class="linenr">164: </span>                  <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(mdl.keywordBlock.sieBlocks))])[0][0]
+<span class="linenr">165: </span><span class="org-variable-name">txi</span> <span class="org-operator">=</span> mdl.keywordBlock.sieBlocks[li]
+<span class="linenr">166: </span>mdl.keywordBlock.replace(li, <span class="org-string">"*Retained Nodal Dofs, sorted=NO"</span><span class="org-operator">+</span>txi[20:])
+<span class="linenr">167: </span>
+<span class="linenr">168: </span>mdl.keywordBlock.insert(<span class="org-builtin">len</span>(mdl.keywordBlock.sieBlocks)<span class="org-operator">-</span>2, 
+<span class="linenr">169: </span>                        <span class="org-string">"*Substructure Matrix Output, FILE NAME=Modelmats, "</span> <span class="org-operator">+</span>
+<span class="linenr">170: </span>                        <span class="org-string">"MASS=YES, STIFFNESS=YES, SLOAD=YES, "</span> <span class="org-operator">+</span>
+<span class="linenr">171: </span>                        <span class="org-string">"RECOVERY MATRIX=YES"</span>)
 </pre>
 </div></li>
 <li><p>
 We then create a job and write it to an "inp" file that can be run from ABAQUS.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">154: </span><span class="org-comment-delimiter"># </span><span class="org-comment">10. Create a job and write an inp file</span>
-<span class="linenr">155: </span>mdb.Job(name<span class="org-operator">=</span><span class="org-string">"Job"</span>, model<span class="org-operator">=</span><span class="org-string">'Model-1'</span>)
-<span class="linenr">156: </span>mdb.jobs[<span class="org-string">'Job'</span>].writeInput()
+<pre class="src src-python"><span class="linenr">172: </span><span class="org-comment-delimiter"># </span><span class="org-comment">10. Create a job and write an inp file</span>
+<span class="linenr">173: </span>mdb.Job(name<span class="org-operator">=</span><span class="org-string">"Job"</span>, model<span class="org-operator">=</span><span class="org-string">'Model-1'</span>)
+<span class="linenr">174: </span>mdb.jobs[<span class="org-string">'Job'</span>].writeInput()
 </pre>
 </div></li>
 <li><p>
@@ -1369,49 +1405,51 @@ which we introduced through the "synch" step in #3 above.
 <a href="https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/key/default.htm?startat=ch18abk43.html">Here</a> is the ABAQUS documentation for the <code>*Substructure Matrix Output</code> card.
 </p>
 <div class="org-src-container">
-<pre class="src src-fortran"><span class="org-comment-delimiter">*</span><span class="org-comment">* ----------------------------------------------------------------</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">* STEP: HCBCMS</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Step, name=HCBCMS, nlgeom=NO</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Substructure Generate, overwrite, type=Z1, recovery matrix=YES, nset=OutNodes, mass matrix=YES</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Select Eigenmodes, generate</span>
-<span class="org-constant">1</span>, 20, 1
-<span class="org-comment-delimiter">*</span><span class="org-comment">Damping Controls, structural=COMBINED, viscous=COMBINED</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Retained Nodal Dofs, sorted=NO</span>
-BOTS_NDS, 1, 3
-TOPS_NDS, 1, 3
-<span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">* LOAD CASES</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Substructure Load Case, name=LCASE</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">* Name: BoltLoad-1   Type: Concentrated force   Scale factor: 1</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
-BPT-1_Set-1, 3, 1.
-<span class="org-comment-delimiter">*</span><span class="org-comment">* Name: BoltLoad-2   Type: Concentrated force   Scale factor: 1</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
-BPT-2_Set-1, 3, 1.
-<span class="org-comment-delimiter">*</span><span class="org-comment">* Name: BoltLoad-3   Type: Concentrated force   Scale factor: 1</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
-BPT-3_Set-1, 3, 1.
-<span class="org-comment-delimiter">*</span><span class="org-comment">* Name: NutLoad-1   Type: Concentrated force   Scale factor: 1</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
-NPT-1_Set-1, 3, -1.
-<span class="org-comment-delimiter">*</span><span class="org-comment">* Name: NutLoad-2   Type: Concentrated force   Scale factor: 1</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
-NPT-2_Set-1, 3, -1.
-<span class="org-comment-delimiter">*</span><span class="org-comment">* Name: NutLoad-3   Type: Concentrated force   Scale factor: 1</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
-NPT-3_Set-1, 3, -1.
-<span class="org-comment-delimiter">*</span><span class="org-comment">Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES</span>
-<span class="org-comment-delimiter">*</span><span class="org-comment">End Step</span>
+<pre class="src src-fortran"><span class="linenr"> 1: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* ----------------------------------------------------------------</span>
+<span class="linenr"> 2: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
+<span class="linenr"> 3: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* STEP: HCBCMS</span>
+<span class="linenr"> 4: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
+<span class="linenr"> 5: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Step, name=HCBCMS, nlgeom=NO</span>
+<span class="linenr"> 6: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Substructure Generate, overwrite, type=Z1, recovery matrix=YES,</span>
+<span class="linenr"> 7: </span>      nset=OutNodes, mass matrix=YES
+<span class="linenr"> 8: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Select Eigenmodes, generate</span>
+<span class="linenr"> 9: </span><span class="org-constant">1</span>, 20, 1
+<span class="linenr">10: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Damping Controls, structural=COMBINED, viscous=COMBINED</span>
+<span class="linenr">11: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Retained Nodal Dofs, sorted=NO</span>
+<span class="linenr">12: </span>BOTS_NDS, 1, 3
+<span class="linenr">13: </span>TOPS_NDS, 1, 3
+<span class="linenr">14: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
+<span class="linenr">15: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* LOAD CASES</span>
+<span class="linenr">16: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* </span>
+<span class="linenr">17: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Substructure Load Case, name=LCASE</span>
+<span class="linenr">18: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* Name: BoltLoad-1   Type: Concentrated force   Scale factor: 1</span>
+<span class="linenr">19: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
+<span class="linenr">20: </span>BPT-1_Set-1, 3, 1.
+<span class="linenr">21: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* Name: BoltLoad-2   Type: Concentrated force   Scale factor: 1</span>
+<span class="linenr">22: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
+<span class="linenr">23: </span>BPT-2_Set-1, 3, 1.
+<span class="linenr">24: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* Name: BoltLoad-3   Type: Concentrated force   Scale factor: 1</span>
+<span class="linenr">25: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
+<span class="linenr">26: </span>BPT-3_Set-1, 3, 1.
+<span class="linenr">27: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* Name: NutLoad-1   Type: Concentrated force   Scale factor: 1</span>
+<span class="linenr">28: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
+<span class="linenr">29: </span>NPT-1_Set-1, 3, -1.
+<span class="linenr">30: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* Name: NutLoad-2   Type: Concentrated force   Scale factor: 1</span>
+<span class="linenr">31: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
+<span class="linenr">32: </span>NPT-2_Set-1, 3, -1.
+<span class="linenr">33: </span><span class="org-comment-delimiter">*</span><span class="org-comment">* Name: NutLoad-3   Type: Concentrated force   Scale factor: 1</span>
+<span class="linenr">34: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Cload</span>
+<span class="linenr">35: </span>NPT-3_Set-1, 3, -1.
+<span class="linenr">36: </span><span class="org-comment-delimiter">*</span><span class="org-comment">Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES,</span>
+<span class="linenr">37: </span>      STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES
+<span class="linenr">38: </span><span class="org-comment-delimiter">*</span><span class="org-comment">End Step</span>
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org23c38c5" class="outline-3">
-<h3 id="org23c38c5"><span class="section-number-3">4.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orge772166" class="outline-3">
+<h3 id="orge772166"><span class="section-number-3">4.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 You can now run the Job named "Job" in the GUI, or directly run the "Job.inp" file from the command line using
@@ -1427,8 +1465,8 @@ This, along with the "Nodes.dat" and "Elements.dat" files that were written out 
 </div>
 </div>
 </div>
-<div id="outline-container-org7114edc" class="outline-2">
-<h2 id="org7114edc"><span class="section-number-2">5.</span> Matrix Extraction</h2>
+<div id="outline-container-org0b382f3" class="outline-2">
+<h2 id="org0b382f3"><span class="section-number-2">5.</span> Matrix Extraction</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 By default, ABAQUS uses the <a href="https://math.nist.gov/MatrixMarket/">matrix market format</a> for the outputted matrices.
@@ -1445,8 +1483,8 @@ where \(x_{cms}\) is the vector of DOFs of the CMS model (substructure) and \(x_
 Each column of \(R\) is \(N_{out}\times 1\), and \(R\) is \(N_{out}\times N_{cms}\).</li>
 </ul>
 </div>
-<div id="outline-container-org30224da" class="outline-3">
-<h3 id="org30224da"><span class="section-number-3">5.1.</span> Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org6b83679" class="outline-3">
+<h3 id="org6b83679"><span class="section-number-3">5.1.</span> Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-1">
 <ol class="org-ol">
 <li>The first few lines provide the generalized coordinates of the model. The nodes are listed as positive integers and the "modal" DOFs are listed as negative integers.
@@ -1494,85 +1532,116 @@ Finally, the recovery matrix is provided row-by-row as
 The following Bash script processes the output (a stiffness, a mass, a load case, and recovery entries are expected)
 </p>
 <div class="org-src-container">
-<pre class="src src-bash"><span class="org-comment-delimiter">#</span><span class="org-comment">!/bin/</span><span class="org-keyword">sh</span>
-
-<span class="org-keyword">if</span> [ $<span class="org-variable-name">#</span> = 2 ]
-<span class="org-keyword">then</span> 
-    <span class="org-builtin">echo</span> <span class="org-string">"Correct call!"</span>
-    <span class="org-variable-name">OUT</span>=$<span class="org-variable-name">2</span>
-<span class="org-keyword">elif</span> [ $<span class="org-variable-name">#</span> = 1 ]
-<span class="org-keyword">then</span>
-    <span class="org-builtin">echo</span> <span class="org-string">"Acceptable call!"</span>
-    <span class="org-variable-name">a</span>=<span class="org-string">"$1"</span>
-    <span class="org-variable-name">OUT</span>=<span class="org-string">"${a%.*}.mat"</span>
-<span class="org-keyword">else</span>
-    <span class="org-builtin">echo</span> <span class="org-string">"Wrong call - quitting!"</span>
-<span class="org-keyword">fi</span>
-<span class="org-builtin">echo</span> <span class="org-string">"Preprocessing mtx files"</span>
-gawk <span class="org-string">'BEGIN{mstart=0;} ($1~/^\*M/){mstart++; next} (mstart==1){if($1!~/^\*/){print}else{exit}}'</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">'BEGIN{RS=",";ORS="\n"}{print}'</span>|gawk <span class="org-string">'(NF!=0){print}'</span> &gt; ./.STIFFNESS.mtx
-gawk <span class="org-string">'BEGIN{mstart=0;} ($1~/^\*M/){mstart++; next} (mstart==2){if($1!~/^\*/){print}else{exit}}'</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">'BEGIN{RS=",";ORS="\n"}{print}'</span>|gawk <span class="org-string">'(NF!=0){print}'</span> &gt; ./.MASS.mtx
-gawk <span class="org-string">'BEGIN{vstart=0;} ($0~/^\*\*\*C/){vstart++; next} (vstart&gt;0){print $2,$3,$4} (vstart&gt;0 &amp;&amp; $1!~/^\*\*/){exit}'</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">'BEGIN{FS=","}{for(i=1;i&lt;=NF;i++)printf("%s ", $i);printf("\n")}'</span> &gt; ./.FVEC.mtx
-gawk <span class="org-string">'BEGIN{rstart=0} ($0~/^\*\* SUBSTRUCTURE REC/){rstart++; if(rstart&gt;1){printf("\n")}next} (rstart!=0 &amp;&amp; $1~/\*\*/){for(i=2;i&lt;=NF;i++)printf("%s",$i);}'</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">'BEGIN{FS=","}{for(i=1;i&lt;=NF;i++)printf("%s ",$i); printf("\n");}'</span> &gt; .RECOV.mtx
-<span class="org-builtin">echo</span> <span class="org-string">"Preprocessing mtx files done"</span>
-
-python &lt;&lt;EOF
-<span class="org-sh-heredoc">import numpy as np</span>
-<span class="org-sh-heredoc">import scipy.io as io</span>
-
-<span class="org-sh-heredoc">print("Reading Mass Matrix from mtx file.");</span>
-<span class="org-sh-heredoc">Mv = np.loadtxt('.MASS.mtx');</span>
-<span class="org-sh-heredoc">print("Done.");</span>
-
-<span class="org-sh-heredoc">print("Reading Stiffness Matrix from mtx file.");</span>
-<span class="org-sh-heredoc">Kv = np.loadtxt('.STIFFNESS.mtx');</span>
-<span class="org-sh-heredoc">print("Done.");</span>
-
-<span class="org-sh-heredoc">print("Reading Recovery Matrix from mtx file.");</span>
-<span class="org-sh-heredoc">R = np.loadtxt('.RECOV.mtx');</span>
-<span class="org-sh-heredoc">print("Done.");</span>
-
-<span class="org-sh-heredoc">print("Processing Matrices.")</span>
-
-<span class="org-sh-heredoc">Nelm = len(Mv);</span>
-<span class="org-sh-heredoc">Nelk = len(Kv);</span>
-<span class="org-sh-heredoc">if (Nelm!=Nelk):</span>
-<span class="org-sh-heredoc">        sys.exit("GIGO - Mass &amp; Stiffness not of same length.");</span>
-<span class="org-sh-heredoc">Nel = Nelm;</span>
-
-<span class="org-sh-heredoc">Nd = ((np.sqrt(1+8*Nel)-1)/2).astype(int); # Solution of Nd(Nd+1)/2-Nel = 0</span>
-
-<span class="org-sh-heredoc">M = np.zeros((Nd,Nd));</span>
-<span class="org-sh-heredoc">K = np.zeros((Nd,Nd));</span>
-
-<span class="org-sh-heredoc">(xi,yi) = np.tril_indices(Nd);</span>
-<span class="org-sh-heredoc">M[xi,yi] = Mv;</span>
-<span class="org-sh-heredoc">M[yi,xi] = Mv;</span>
-<span class="org-sh-heredoc">K[xi,yi] = Kv;</span>
-<span class="org-sh-heredoc">K[yi,xi] = Kv;</span>
-
-<span class="org-sh-heredoc">print("Done.")</span>
-
-<span class="org-sh-heredoc">print("Reading Forcing Vector from mtx file.");</span>
-<span class="org-sh-heredoc">Fvdat = np.loadtxt('.FVEC.mtx');</span>
-<span class="org-sh-heredoc">print("Done.");</span>
-
-<span class="org-sh-heredoc">print("Processing Force Vector.");</span>
-<span class="org-sh-heredoc">Fv = np.zeros(M.shape[0]);</span>
-<span class="org-sh-heredoc">ids = range(np.where(np.diff(Fvdat[:, 1])==0)[0][0], Fvdat.shape[0])</span>
-<span class="org-sh-heredoc">n1dofnds = Fvdat[ids, 0].astype(int)</span>
-<span class="org-sh-heredoc">n3dofnds = Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 0].astype(int)</span>
-<span class="org-sh-heredoc">Fv[((n3dofnds-1)*3+np.kron(np.ones(int(len(n3dofnds)/3)),[0, 1, 2])).astype(int)] = Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 2]</span>
-<span class="org-sh-heredoc">print("Whew.")</span>
-<span class="org-sh-heredoc">Fv[range(-len(n1dofnds), 0)] = Fvdat[ids, 2]</span>
-<span class="org-sh-heredoc">print("Done.")</span>
-
-<span class="org-sh-heredoc">print("Matrix extraction complete - writing mat file")</span>
-<span class="org-sh-heredoc">dict = {"M": M, "K": K, "R": R, "Fv": Fv};</span>
-<span class="org-sh-heredoc">io.savemat(".out.mat",dict);</span>
-<span class="org-sh-heredoc">print("Processing Over")</span>
-<span class="org-sh-heredoc">EOF</span>
-mv .out.mat $<span class="org-variable-name">OUT</span>
-rm .STIFFNESS.mtx .MASS.mtx .RECOV.mtx .FVEC.mtx
+<pre class="src src-bash"><span class="linenr">  1: </span><span class="org-comment-delimiter">#</span><span class="org-comment">!/bin/</span><span class="org-keyword">sh</span>
+<span class="linenr">  2: </span>
+<span class="linenr">  3: </span><span class="org-keyword">if</span> [ $<span class="org-variable-name">#</span> = 2 ]
+<span class="linenr">  4: </span><span class="org-keyword">then</span> 
+<span class="linenr">  5: </span>    <span class="org-builtin">echo</span> <span class="org-string">"Correct call!"</span>
+<span class="linenr">  6: </span>    <span class="org-variable-name">OUT</span>=$<span class="org-variable-name">2</span>
+<span class="linenr">  7: </span><span class="org-keyword">elif</span> [ $<span class="org-variable-name">#</span> = 1 ]
+<span class="linenr">  8: </span><span class="org-keyword">then</span>
+<span class="linenr">  9: </span>    <span class="org-builtin">echo</span> <span class="org-string">"Acceptable call!"</span>
+<span class="linenr"> 10: </span>    <span class="org-variable-name">a</span>=<span class="org-string">"$1"</span>
+<span class="linenr"> 11: </span>    <span class="org-variable-name">OUT</span>=<span class="org-string">"${a%.*}.mat"</span>
+<span class="linenr"> 12: </span><span class="org-keyword">else</span>
+<span class="linenr"> 13: </span>    <span class="org-builtin">echo</span> <span class="org-string">"Wrong call - quitting!"</span>
+<span class="linenr"> 14: </span><span class="org-keyword">fi</span>
+<span class="linenr"> 15: </span><span class="org-builtin">echo</span> <span class="org-string">"Preprocessing mtx files"</span>
+<span class="linenr"> 16: </span><span class="org-variable-name">awkcmd1</span>=<span class="org-string">'BEGIN{mstart=0;}</span>
+<span class="linenr"> 17: </span><span class="org-string">  ($1~/^\*M/){mstart++; next}</span>
+<span class="linenr"> 18: </span><span class="org-string">  (mstart==1){if($1!~/^\*/){print}else{exit}}'</span>
+<span class="linenr"> 19: </span><span class="org-variable-name">awkcmd2</span>=<span class="org-string">'BEGIN{RS=",";ORS="\n"}{print}'</span>
+<span class="linenr"> 20: </span>gawk <span class="org-string">"$awkcmd1"</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">"$awkcmd2"</span>|gawk <span class="org-string">'(NF!=0){print}'</span> &gt; ./.STIFFNESS.mtx
+<span class="linenr"> 21: </span>
+<span class="linenr"> 22: </span><span class="org-variable-name">awkcmd1</span>=<span class="org-string">'BEGIN{mstart=0;}</span>
+<span class="linenr"> 23: </span><span class="org-string">  ($1~/^\*M/){mstart++; next}</span>
+<span class="linenr"> 24: </span><span class="org-string">  (mstart==2){if($1!~/^\*/){print}else{exit}}'</span>
+<span class="linenr"> 25: </span><span class="org-variable-name">awkcmd2</span>=<span class="org-string">'BEGIN{RS=",";ORS="\n"}{print}'</span>
+<span class="linenr"> 26: </span>gawk <span class="org-string">"$awkcmd1"</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">"$awkcmd2"</span>|gawk <span class="org-string">'(NF!=0){print}'</span> &gt; ./.MASS.mtx
+<span class="linenr"> 27: </span>
+<span class="linenr"> 28: </span><span class="org-variable-name">awkcmd1</span>=<span class="org-string">'BEGIN{vstart=0;}</span>
+<span class="linenr"> 29: </span><span class="org-string">  ($0~/^\*\*\*C/){vstart++; next}</span>
+<span class="linenr"> 30: </span><span class="org-string">  (vstart&gt;0){print $2,$3,$4}</span>
+<span class="linenr"> 31: </span><span class="org-string">  (vstart&gt;0 &amp;&amp; $1!~/^\*\*/){exit}'</span>
+<span class="linenr"> 32: </span><span class="org-variable-name">awkcmd2</span>=<span class="org-string">'BEGIN{FS=","}</span>
+<span class="linenr"> 33: </span><span class="org-string">  {for(i=1;i&lt;=NF;i++)</span>
+<span class="linenr"> 34: </span><span class="org-string">    printf("%s ", $i);</span>
+<span class="linenr"> 35: </span><span class="org-string">    printf("\n")}'</span>
+<span class="linenr"> 36: </span>gawk <span class="org-string">"$awkcmd1"</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">"$awkcmd2"</span> &gt; ./.FVEC.mtx
+<span class="linenr"> 37: </span>
+<span class="linenr"> 38: </span><span class="org-variable-name">awkcmd1</span>=<span class="org-string">'BEGIN{rstart=0}</span>
+<span class="linenr"> 39: </span><span class="org-string"> ($0~/^\*\* SUBSTRUCTURE REC/){rstart++;</span>
+<span class="linenr"> 40: </span><span class="org-string"> if(rstart&gt;1){printf("\n")}</span>
+<span class="linenr"> 41: </span><span class="org-string"> next}</span>
+<span class="linenr"> 42: </span><span class="org-string"> (rstart!=0 &amp;&amp; $1~/\*\*/){</span>
+<span class="linenr"> 43: </span><span class="org-string"> for(i=2;i&lt;=NF;i++)printf("%s",$i);}'</span>
+<span class="linenr"> 44: </span><span class="org-variable-name">awkcmd2</span>=<span class="org-string">'BEGIN{FS=","}</span>
+<span class="linenr"> 45: </span><span class="org-string">  {for(i=1;i&lt;=NF;i++)</span>
+<span class="linenr"> 46: </span><span class="org-string">    printf("%s ",$i);</span>
+<span class="linenr"> 47: </span><span class="org-string">    printf("\n");}'</span>
+<span class="linenr"> 48: </span>gawk <span class="org-string">"$awkcmd1"</span> $<span class="org-variable-name">1</span>|gawk <span class="org-string">"$awkcmd2"</span> &gt; .RECOV.mtx
+<span class="linenr"> 49: </span>
+<span class="linenr"> 50: </span><span class="org-builtin">echo</span> <span class="org-string">"Preprocessing mtx files done"</span>
+<span class="linenr"> 51: </span>
+<span class="linenr"> 52: </span>python &lt;&lt;EOF
+<span class="linenr"> 53: </span><span class="org-sh-heredoc">import numpy as np</span>
+<span class="linenr"> 54: </span><span class="org-sh-heredoc">import scipy.io as io</span>
+<span class="linenr"> 55: </span>
+<span class="linenr"> 56: </span><span class="org-sh-heredoc">print("Reading Mass Matrix from mtx file.");</span>
+<span class="linenr"> 57: </span><span class="org-sh-heredoc">Mv = np.loadtxt('.MASS.mtx');</span>
+<span class="linenr"> 58: </span><span class="org-sh-heredoc">print("Done.");</span>
+<span class="linenr"> 59: </span>
+<span class="linenr"> 60: </span><span class="org-sh-heredoc">print("Reading Stiffness Matrix from mtx file.");</span>
+<span class="linenr"> 61: </span><span class="org-sh-heredoc">Kv = np.loadtxt('.STIFFNESS.mtx');</span>
+<span class="linenr"> 62: </span><span class="org-sh-heredoc">print("Done.");</span>
+<span class="linenr"> 63: </span>
+<span class="linenr"> 64: </span><span class="org-sh-heredoc">print("Reading Recovery Matrix from mtx file.");</span>
+<span class="linenr"> 65: </span><span class="org-sh-heredoc">R = np.loadtxt('.RECOV.mtx');</span>
+<span class="linenr"> 66: </span><span class="org-sh-heredoc">print("Done.");</span>
+<span class="linenr"> 67: </span>
+<span class="linenr"> 68: </span><span class="org-sh-heredoc">print("Processing Matrices.")</span>
+<span class="linenr"> 69: </span>
+<span class="linenr"> 70: </span><span class="org-sh-heredoc">Nelm = len(Mv);</span>
+<span class="linenr"> 71: </span><span class="org-sh-heredoc">Nelk = len(Kv);</span>
+<span class="linenr"> 72: </span><span class="org-sh-heredoc">if (Nelm!=Nelk):</span>
+<span class="linenr"> 73: </span><span class="org-sh-heredoc">        sys.exit("GIGO - Mass &amp; Stiffness not of same length.");</span>
+<span class="linenr"> 74: </span><span class="org-sh-heredoc">Nel = Nelm;</span>
+<span class="linenr"> 75: </span>
+<span class="linenr"> 76: </span><span class="org-sh-heredoc">Nd = ((np.sqrt(1+8*Nel)-1)/2).astype(int); # Solution of Nd(Nd+1)/2-Nel = 0</span>
+<span class="linenr"> 77: </span>
+<span class="linenr"> 78: </span><span class="org-sh-heredoc">M = np.zeros((Nd,Nd));</span>
+<span class="linenr"> 79: </span><span class="org-sh-heredoc">K = np.zeros((Nd,Nd));</span>
+<span class="linenr"> 80: </span>
+<span class="linenr"> 81: </span><span class="org-sh-heredoc">(xi,yi) = np.tril_indices(Nd);</span>
+<span class="linenr"> 82: </span><span class="org-sh-heredoc">M[xi,yi] = Mv;</span>
+<span class="linenr"> 83: </span><span class="org-sh-heredoc">M[yi,xi] = Mv;</span>
+<span class="linenr"> 84: </span><span class="org-sh-heredoc">K[xi,yi] = Kv;</span>
+<span class="linenr"> 85: </span><span class="org-sh-heredoc">K[yi,xi] = Kv;</span>
+<span class="linenr"> 86: </span>
+<span class="linenr"> 87: </span><span class="org-sh-heredoc">print("Done.")</span>
+<span class="linenr"> 88: </span>
+<span class="linenr"> 89: </span><span class="org-sh-heredoc">print("Reading Forcing Vector from mtx file.");</span>
+<span class="linenr"> 90: </span><span class="org-sh-heredoc">Fvdat = np.loadtxt('.FVEC.mtx');</span>
+<span class="linenr"> 91: </span><span class="org-sh-heredoc">print("Done.");</span>
+<span class="linenr"> 92: </span>
+<span class="linenr"> 93: </span><span class="org-sh-heredoc">print("Processing Force Vector.");</span>
+<span class="linenr"> 94: </span><span class="org-sh-heredoc">Fv = np.zeros(M.shape[0]);</span>
+<span class="linenr"> 95: </span><span class="org-sh-heredoc">ids = range(np.where(np.diff(Fvdat[:, 1])==0)[0][0], Fvdat.shape[0])</span>
+<span class="linenr"> 96: </span><span class="org-sh-heredoc">n1dofnds = Fvdat[ids, 0].astype(int)</span>
+<span class="linenr"> 97: </span><span class="org-sh-heredoc">n3dofnds = Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 0].astype(int)</span>
+<span class="linenr"> 98: </span><span class="org-sh-heredoc">Fv[((n3dofnds-1)*3+np.kron(np.ones(int(len(n3dofnds)/3)),[0, 1, 2])).astype(int)] = \</span>
+<span class="linenr"> 99: </span><span class="org-sh-heredoc">Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 2]</span>
+<span class="linenr">100: </span><span class="org-sh-heredoc">print("Whew.")</span>
+<span class="linenr">101: </span><span class="org-sh-heredoc">Fv[range(-len(n1dofnds), 0)] = Fvdat[ids, 2]</span>
+<span class="linenr">102: </span><span class="org-sh-heredoc">print("Done.")</span>
+<span class="linenr">103: </span>
+<span class="linenr">104: </span><span class="org-sh-heredoc">print("Matrix extraction complete - writing mat file")</span>
+<span class="linenr">105: </span><span class="org-sh-heredoc">dict = {"M": M, "K": K, "R": R.T, "Fv": Fv.reshape((len(Fv),1))};</span>
+<span class="linenr">106: </span><span class="org-sh-heredoc">io.savemat(".out.mat",dict);</span>
+<span class="linenr">107: </span><span class="org-sh-heredoc">print("Processing Over")</span>
+<span class="linenr">108: </span><span class="org-sh-heredoc">EOF</span>
+<span class="linenr">109: </span>mv .out.mat $<span class="org-variable-name">OUT</span>
+<span class="linenr">110: </span>rm .STIFFNESS.mtx .MASS.mtx .RECOV.mtx .FVEC.mtx
 </pre>
 </div>
 <ul class="org-ul">
@@ -1597,8 +1666,8 @@ The file <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/ass
 </p>
 </div>
 </div>
-<div id="outline-container-orgd3b8e2e" class="outline-3">
-<h3 id="orgd3b8e2e"><span class="section-number-3">5.2.</span> Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-orgff8dad9" class="outline-3">
+<h3 id="orgff8dad9"><span class="section-number-3">5.2.</span> Simple Analysis on MATLAB/OCTAVE&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
@@ -1609,8 +1678,8 @@ We will conduct a <b>Nonlinear Prestress Analysis</b> for a frictionless contact
 </div>
 </div>
 
-<div id="outline-container-org6e17bea" class="outline-2">
-<h2 id="org6e17bea"><span class="section-number-2">6.</span> Outro/Contact Details</h2>
+<div id="outline-container-org51ba660" class="outline-2">
+<h2 id="org51ba660"><span class="section-number-2">6.</span> Outro/Contact Details</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In summary, all the scripts used in the tutorial are provided in 
@@ -1636,8 +1705,8 @@ You can contact me at <a href="mailto:nidish.balaji@ila.uni-stuttgart.de">nidish
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Nidish Narayanaa Balaji</p>
-<p class="date">Created: 2023-09-20 Wed 15:21</p>
+<p class="author">Author: Nidish Narayanaa Balaji and Matthew Allen and Matthew R. W. Brake</p>
+<p class="date">Created: 2023-09-20 Wed 16:28</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

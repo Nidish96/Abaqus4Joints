@@ -1,4 +1,4 @@
-% Created 2023-09-20 Wed 15:22
+% Created 2023-09-20 Wed 16:29
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -16,11 +16,11 @@
 \usepackage{minted}
 \usepackage[margin=1in]{geometry}
 \usepackage{xcolor}
-\author{Nidish Narayanaa Balaji}
+\author{Nidish Narayanaa Balaji, Matthew Allen, and Matthew R. W. Brake}
 \date{\today}
 \title{An Abaqus-MATLAB tutorial for Jointed Systems}
 \hypersetup{
- pdfauthor={Nidish Narayanaa Balaji},
+ pdfauthor={Nidish Narayanaa Balaji, Matthew Allen, and Matthew R. W. Brake},
  pdftitle={An Abaqus-MATLAB tutorial for Jointed Systems},
  pdfkeywords={},
  pdfsubject={},
@@ -31,9 +31,10 @@
 \maketitle
 \tableofcontents
 
+\pagebreak
 
 \section{Preprocessing}
-\label{sec:orgb7b3f30}
+\label{sec:orgf97811d}
 
 The Brake-Reuß Beam (BRB) is a 3-bolted lap-joint beam which will serve as our tutorial joint structure (read more about the benchmark \href{https://jointmechanics.org/index.php/Benchmarks\#The\_Brake-Reu\%C3\%9F\_Beams}{here}).
 To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in Abaqus and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
@@ -41,33 +42,33 @@ Buckle up! :)
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{./figs/300px-BRB.png}
-\caption{\label{fig:org44074c3}Geometry of the BRB Benchmark}
+\includegraphics[width=0.5\textwidth]{./figs/300px-BRB.png}
+\caption{\label{fig:orge29a531}Geometry of the BRB Benchmark}
 \end{figure}
 
-A picture of the parts of the BRB is shown in Fig. \ref{fig:org44074c3} and this will be used to guide the modeling here.
-Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see \ref{orge010a9c} for more details on bolt prestress modeling).
+A picture of the parts of the BRB is shown in Fig. \ref{fig:orge29a531} and this will be used to guide the modeling here.
+Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see \ref{org4ae3e7f} for more details on bolt prestress modeling).
 
 \textbf{Note}: If you already have a model of your structure and want to just apply the node-selection/matrix extraction, you can safely ignore the sections particular to the modeling of the BRB and just go through the remaining, whose instructions are quite general.
 The general principles in the modeling section are, however, recommended for all jointed structure modeling.
 
 \subsection{A Note on Python Scripting}
-\label{sec:org1b3bdf4}
+\label{sec:orga99fcd6}
 Abaqus Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
 \begin{itemize}
 \item For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. Abaqus would have saved the actions in a Python file called \texttt{abaqus.rpy}. This is just python code that can be imported into abaqus to repeat the same tasks.
 All standard python commands work so this makes it very helpful.
 \item On Windows the \textbf{work directory} may be an unfamiliar concept (on Linux it is just the directory from which Abaqus is launched). This directory can be manually set by \texttt{File->Set Work Directory}, following which all the files (including the \texttt{abaqus.rpy} file) will be put in the specified folder.
-\item Fig \ref{fig:orgbcc063a} shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.
+\item Fig \ref{fig:org8ea3e6b} shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.
 \end{itemize}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{./figs/ovw.png}
-\caption{\label{fig:orgbcc063a}Options in Abaqus for Scripting}
+\includegraphics[width=\textwidth]{./figs/ovw.png}
+\caption{\label{fig:org8ea3e6b}Options in Abaqus for Scripting}
 \end{figure}
 
 \subsection{Modeling Parts\hfill{}\textsc{Script:GUI}}
-\label{sec:org32bd273}
+\label{sec:orgdc9ec13}
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
 
 We will do the construction through Abaqus Python code that can be imported through \texttt{File->Run Script} or just typed into the command line.
@@ -179,32 +180,40 @@ The above code creates a new material called "STEEL", with Young's Modulus 200GP
  98                                  line=hfbm.edges[-1], sense=FORWARD)
  99  
 100  pt = hfbm.InterestingPoint(edge=hfbm.edges[-2], rule=MIDDLE)
-101  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[-2])
-102  
-103  pt = hfbm.InterestingPoint(edge=hfbm.edges[75], rule=MIDDLE)
-104  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[75])
-105  
-106  pt = hfbm.InterestingPoint(edge=hfbm.edges[39], rule=MIDDLE)
-107  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[39])
-108  
-109  pt = hfbm.InterestingPoint(edge=hfbm.edges[85], rule=MIDDLE)
-110  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[85])
+101  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+102                                       normal=hfbm.edges[-2])
+103  
+104  pt = hfbm.InterestingPoint(edge=hfbm.edges[75], rule=MIDDLE)
+105  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+106                                       normal=hfbm.edges[75])
+107  
+108  pt = hfbm.InterestingPoint(edge=hfbm.edges[39], rule=MIDDLE)
+109  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+110                                       normal=hfbm.edges[39])
 111  
-112  pt = hfbm.InterestingPoint(edge=hfbm.edges[39], rule=MIDDLE)
-113  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[39])
-114  
-115  pt = hfbm.InterestingPoint(edge=hfbm.edges[41], rule=MIDDLE)
-116  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[41])
-117  
-118  pt = hfbm.InterestingPoint(edge=hfbm.edges[111], rule=MIDDLE)
-119  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[111])
-120  
-121  pt = hfbm.InterestingPoint(edge=hfbm.edges[135], rule=MIDDLE)
-122  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt, normal=hfbm.edges[135])
+112  pt = hfbm.InterestingPoint(edge=hfbm.edges[85], rule=MIDDLE)
+113  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+114                                       normal=hfbm.edges[85])
+115  
+116  pt = hfbm.InterestingPoint(edge=hfbm.edges[39], rule=MIDDLE)
+117  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+118                                       normal=hfbm.edges[39])
+119  
+120  pt = hfbm.InterestingPoint(edge=hfbm.edges[41], rule=MIDDLE)
+121  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+122                                       normal=hfbm.edges[41])
 123  
-124  # 4. Assign Material
-125  regn = hfbm.Set(cells=hfbm.cells, name='Set-1')
-126  hfbm.SectionAssignment(region=regn, sectionName='Section-1')
+124  pt = hfbm.InterestingPoint(edge=hfbm.edges[111], rule=MIDDLE)
+125  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+126                                       normal=hfbm.edges[111])
+127  
+128  pt = hfbm.InterestingPoint(edge=hfbm.edges[135], rule=MIDDLE)
+129  hfbm.PartitionCellByPlanePointNormal(cells=hfbm.cells, point=pt,
+130                                       normal=hfbm.edges[135])
+131  
+132  # 4. Assign Material
+133  regn = hfbm.Set(cells=hfbm.cells, name='Set-1')
+134  hfbm.SectionAssignment(region=regn, sectionName='Section-1')
 \end{verbatim}
 \end{enumerate}
 \definecolor{osbe-bg}{HTML}{cccccc}\colorlet{osbe-fg}{black}\begin{quote}
@@ -237,13 +246,13 @@ If not, you will have to use the "Merge Edges" tool in the Part module and indiv
 \end{quote}
 \begin{enumerate}
 \item Create a Reference Point Part called \texttt{REFPT}.
-This will be necessary for the application of bolt prestress (see \ref{orge010a9c} below).
+This will be necessary for the application of bolt prestress (see \ref{org4ae3e7f} below).
 \begin{verbatim}
-127  rpt = mdl.Part(name='REFPT', dimensionality=THREE_D, 
-128                 type=DEFORMABLE_BODY)
-129  rpt.ReferencePoint(point=(0.0, 0.0, 0.0))
-130  
-131  rpt.Set(name='Set-1', referencePoints=rpt.referencePoints.values())
+135  rpt = mdl.Part(name='REFPT', dimensionality=THREE_D, 
+136                 type=DEFORMABLE_BODY)
+137  rpt.ReferencePoint(point=(0.0, 0.0, 0.0))
+138  
+139  rpt.Set(name='Set-1', referencePoints=rpt.referencePoints.values())
 \end{verbatim}
 \item Now import the nuts, washers and bolts by importing the file \url{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c\_nutwasherbolt\_516.py}.
 You should be able to see the nut, washer and bolt, along with the half beam and reference point created before, as follows after importing:
@@ -255,7 +264,7 @@ The Python script also assigns the material "STEEL" (see above) to the parts.
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step0.cae}{model\textsubscript{step0.cae}} stores the CAE file at the end of the above steps (building parts, and partitioning).
 \subsection{Creating appropriate surface sets\hfill{}\textsc{GUI}}
-\label{sec:orgc485cb7}
+\label{sec:orgb666b26}
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
 Doing this with surfaces (before meshing) is advantageous since the same scripts can be reused even if the model is remeshed.
 \begin{enumerate}
@@ -264,38 +273,38 @@ You can do this through \texttt{Tools->Surface->Create} and then selecting the a
 Select the faces by holding \texttt{Shift} and deselect by holding \texttt{Ctrl}.
 Here is a picture of the surface highlighted in the viewport.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/insurf.png}
+\includegraphics[width=0.5\textwidth]{./figs/insurf.png}
 \end{center}
 \item Turn to the \emph{outside} of the beam and select the faces around the bolts individually and name them \texttt{BmW1}, \texttt{BmW2}, and \texttt{BmW3} respectively.
 These will be tied to the washer for the analysis. (\texttt{BmWi} denotes the i\textsuperscript{th} Beam-Washer contact).
 Here is a picture of the relevant surfaces highlighted (using different colors for each).
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/bmwsurfs.png}
+\includegraphics[width=0.5\textwidth]{./figs/bmwsurfs.png}
 \end{center}
 \item Create two surfaces on the \texttt{BOLT} model as shown in the figure below.
 Name the surface marked white as \texttt{BlW} and the surface marked green as \texttt{BN}.
 (\texttt{BlW} denotes the Bolt-Washer contact surface; \texttt{BN} denotes the Bolt-Nut contact surface)
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/boltsurfs.png}
+\includegraphics[width=0.4\textwidth]{./figs/boltsurfs.png}
 \end{center}
 \item Create two surfaces on the \texttt{NUT} model as shown in the figure below.
 Name the white surface as \texttt{NW} and the green surface as \texttt{NB}.
 (\texttt{NW} denotes the Nut-Washer contact surface; \texttt{NB} denotes the Nut-Bolt contact surface)
 \textbf{Note the direction axes carefully.}
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/nutsurfs.png}
+\includegraphics[width=0.4\textwidth]{./figs/nutsurfs.png}
 \end{center}
 \item Create two surface on the \texttt{WASHER} model and label them as \texttt{WSTOP} and \texttt{WSBOT} (short for Washer-Surface Top and Bottom).
 Here is a graphical depiction of the model with the surfaces.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/wshrsurf.png}
+\includegraphics[width=0.4\textwidth]{./figs/wshrsurf.png}
 \end{center}
 \end{enumerate}
 
 Now all the parts have been created and relevant surfaces have been identified.
 \textbf{Note}: It is important to have traceable but short names so that a lot of the repetitive tasks can be sped up considerably using scripting.
 \subsection{Create Assembly\hfill{}\textsc{GUI}}
-\label{sec:org04a95bb}
+\label{sec:org5f918c2}
 \textbf{Note}: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
 This will be advantageous if we want to modify the meshes just at the interface for mirror symmetry.
 We will do independent meshing since it is good practice, although independent meshes are not a requirement for this example (dependent meshes can be used due to symmetry).
@@ -306,14 +315,14 @@ We will do independent meshing since it is good practice, although independent m
 This will be the convention followed throughout this tutorial.
 The green beam in the following is renamed as \texttt{TOPBEAM} and the white beam in the following is renamed as \texttt{BOTBEAM}.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/asb1.png}
+\includegraphics[width=0.55\textwidth]{./figs/asb1.png}
 \end{center}
 \item Import one instance each of the \texttt{BOLT} and \texttt{NUT} and 2 instances of the \texttt{WASHER} and assemble them as shown.
 Ensure that the washer is oriented (on each side) with the \texttt{WSTOP} oriented in the \texttt{-z} direction and the \texttt{WSBOT} is oriented in the \texttt{+z} direction.
 Rename the washer instances in the top and bottom as \texttt{TOPWASHER-1} and \texttt{BOTWASHER-1} respectively.
 Rename the bolt and nut as \texttt{NUT-1} and \texttt{BOLT-1} respectively.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/asbwn.png}
+\includegraphics[width=0.5\textwidth]{./figs/asbwn.png}
 \end{center}
 \item Import one instance of the reference point \texttt{REFPT}.
 As mentioned before, this will be used to enforce bolt prestress.
@@ -323,11 +332,11 @@ This can be done in the GUI by first moving it to an external point and then tra
 The figure below shows an example (a datum point was used for this here).
 Rename this to \texttt{BPT-1} (standing for Bolt Point 1).
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/asrpt.png}
+\includegraphics[width=0.55\textwidth]{./figs/asrpt.png}
 \end{center}
 \item Now import another instance of the reference point \texttt{REFPT} and translate it to be coincident with \texttt{BPT-1}.
 Rename this \texttt{NPT-1} (standing for Nut Point 1).
-These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see \ref{orge010a9c} below for those steps).
+These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see \ref{org4ae3e7f} below for those steps).
 The point \texttt{BPT-1} will be coupled to the bolt surface \texttt{BN} and \texttt{NPT-1} will be tied to the nut surface \texttt{NB} through RBE3 elements.
 \item Use the "Linear Pattern" dialog and copy the bolt-washer-washer-nut assembly thrice along the beam such that the assembly is complete.
 The figure below shows the final assembly along with a representation of the names of the different parts.
@@ -339,9 +348,9 @@ Recall that  the beam shown in the figure below is \texttt{TOPBEAM} and the hidd
 
 Now that the assembly is complete, the relevant constraints will have to be enforced, followed by a realization of the bolt preload.
 \section{Constraints}
-\label{sec:orgc4dd88c}
+\label{sec:orgb901195}
 \subsection{Tie-Constraint Enforcement\hfill{}\textsc{Script:GUI}}
-\label{sec:orgc72b460}
+\label{sec:org4bcdb79}
 All the following operations can be conducted in the \texttt{Interaction} module in CAE.
 But since selecting each surface can be a time-consuming process, we use the following for-loop in Abaqus-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
 Specifically, it ties the Bolt-Washer, Nut-Washer, and Washer-Beam surfaces.
@@ -353,28 +362,36 @@ So \texttt{WASHER-1} is tied to \texttt{BmW3} of the bottom beam (and so on for 
  3  
  4  for i in range(1, 4):
  5      # Bolt-Washer Constraints
- 6      mdl.Tie(name='BW-%d' %(i), main=ras.instances['TOPWASHER-%d' %(i)].surfaces['WSTOP'],
- 7              secondary=ras.instances['BOLT-%d' %(i)].surfaces['BlW'],
- 8              positionToleranceMethod=COMPUTED, adjust=ON, tieRotations=ON, thickness=ON)
- 9  
-10      # Nut-Washer Constraints
-11      mdl.Tie(name='NW-%d' %(i), main=ras.instances['BOTWASHER-%d' %(i)].surfaces['WSBOT'],
-12              secondary=ras.instances['NUT-%d' %(i)].surfaces['NW'],
-13              positionToleranceMethod=COMPUTED, adjust=ON, tieRotations=ON, thickness=ON)
-14  
-15      # TopWasher-Beam Constraints
-16      mdl.Tie(name='BmTW-%d' %(i), main=ras.instances['TOPBEAM'].surfaces['BmW%d' %(i)],
-17              secondary=ras.instances['TOPWASHER-%d' %(i)].surfaces['WSBOT'],
-18              positionToleranceMethod=COMPUTED, adjust=ON, tieRotations=ON, thickness=ON)
-19  
-20      # BotWasher-Beam Constraints
-21      mdl.Tie(name='BmBW-%d' %(i), main=ras.instances['BOTBEAM'].surfaces['BmW%d' %((3-i)%3+1)],
-22              secondary=ras.instances['BOTWASHER-%d' %(i)].surfaces['WSTOP'],
-23              positionToleranceMethod=COMPUTED, adjust=ON, tieRotations=ON, thickness=ON)
+ 6      mdl.Tie(name='BW-%d' %(i),
+ 7              main=ras.instances['TOPWASHER-%d' %(i)].surfaces['WSTOP'],
+ 8              secondary=ras.instances['BOLT-%d' %(i)].surfaces['BlW'],
+ 9              positionToleranceMethod=COMPUTED, adjust=ON,
+10              tieRotations=ON, thickness=ON)
+11  
+12      # Nut-Washer Constraints
+13      mdl.Tie(name='NW-%d' %(i),
+14              main=ras.instances['BOTWASHER-%d' %(i)].surfaces['WSBOT'],
+15              secondary=ras.instances['NUT-%d' %(i)].surfaces['NW'],
+16              positionToleranceMethod=COMPUTED, adjust=ON,
+17              tieRotations=ON, thickness=ON)
+18  
+19      # TopWasher-Beam Constraints
+20      mdl.Tie(name='BmTW-%d' %(i),
+21              main=ras.instances['TOPBEAM'].surfaces['BmW%d' %(i)],
+22              secondary=ras.instances['TOPWASHER-%d' %(i)].surfaces['WSBOT'],
+23              positionToleranceMethod=COMPUTED, adjust=ON,
+24              tieRotations=ON, thickness=ON)
+25  
+26      # BotWasher-Beam Constraints
+27      mdl.Tie(name='BmBW-%d' %(i),
+28              main=ras.instances['BOTBEAM'].surfaces['BmW%d' %((3-i)%3+1)],
+29              secondary=ras.instances['BOTWASHER-%d' %(i)].surfaces['WSTOP'],
+30              positionToleranceMethod=COMPUTED, adjust=ON,
+31              tieRotations=ON, thickness=ON)
 \end{verbatim}
 \subsection{Bolt Preload Realization\hfill{}\textsc{Script:GUI}}
-\label{sec:org3a6e433}
-\label{orge010a9c}
+\label{sec:orgc32234c}
+\label{org4ae3e7f}
 You might already have encountered the different parts of the model above that were carefully constructed for the bolt preload application (bolt-shank partitioning, reference points, etc.).
 \definecolor{osbe-bg}{HTML}{cccccc}\colorlet{osbe-fg}{black}\begin{quote}
                               \begin{tcolorbox}[colback=osbe-bg,colframe=osbe-fg,title={What 's wrong with the inbuilt Bolt Pretension in ABAQUS?},sharp corners,boxrule=0.4pt]
@@ -418,17 +435,19 @@ We will now go through the process of specifying this.
 This can be done in CAE through \texttt{Interaction->Create Constraint->Tie}.
 The following is python code that will do this in a loop.
 \begin{verbatim}
-24  # Bolt and Nut Point Coupling
-25  for i in range(1, 4):
-26      mdl.Coupling(name='BPC-%d' %(i), controlPoint=ras.instances['BPT-%d' %(i)].sets['Set-1'],
-27                   surface=ras.instances['BOLT-%d' %(i)].surfaces['BN'],
-28                   influenceRadius=WHOLE_SURFACE, couplingType=STRUCTURAL,
-29                   weightingMethod=UNIFORM)
-30  
-31      mdl.Coupling(name='NPC-%d' %(i), controlPoint=ras.instances['NPT-%d' %(i)].sets['Set-1'],
-32                   surface=ras.instances['NUT-%d' %(i)].surfaces['NB'],
-33                   influenceRadius=WHOLE_SURFACE, couplingType=STRUCTURAL,
-34                   weightingMethod=UNIFORM)
+32  # Bolt and Nut Point Coupling
+33  for i in range(1, 4):
+34      mdl.Coupling(name='BPC-%d' %(i),
+35                   controlPoint=ras.instances['BPT-%d' %(i)].sets['Set-1'],
+36                   surface=ras.instances['BOLT-%d' %(i)].surfaces['BN'],
+37                   influenceRadius=WHOLE_SURFACE, couplingType=STRUCTURAL,
+38                   weightingMethod=UNIFORM)
+39  
+40      mdl.Coupling(name='NPC-%d' %(i),
+41                   controlPoint=ras.instances['NPT-%d' %(i)].sets['Set-1'],
+42                   surface=ras.instances['NUT-%d' %(i)].surfaces['NB'],
+43                   influenceRadius=WHOLE_SURFACE, couplingType=STRUCTURAL,
+44                   weightingMethod=UNIFORM)
 \end{verbatim}
 \item Now we constrain the X, Y, Rx, Ry, and Rz DOFs (all 5 DOFs other than the Z DOF, which is the bolt-axis) using equation constraints.
 If the bolt axis is not a principal direction in the model, then the constraint equations must be modified appropriately.
@@ -436,42 +455,42 @@ Note that this can also be used in the large deformation context through the use
 This can be done in CAE through \texttt{Interaction->Create Constraint->Coupling}.
 The following code does this through a nested loop such that \textbf{\texttt{BNEQn-m}  represents the m\textsuperscript{th} DOF constraint at the n\textsuperscript{th} location}.
 \begin{verbatim}
-35  # Equation Constraints constraining bolt and nut ref-points to each other
-36  for i in range(1, 4):
-37      for j in [1, 2, 4, 5, 6]:
-38          mdl.Equation(name='BNEQ%d-%d' %(i, j),
-39                       terms=((1.0, 'BPT-%d.Set-1' %(i), j),
-40                              (-1.0,'NPT-%d.Set-1' %(i), j)))
+45  # Equation Constraints constraining bolt and nut ref-points to each other
+46  for i in range(1, 4):
+47      for j in [1, 2, 4, 5, 6]:
+48          mdl.Equation(name='BNEQ%d-%d' %(i, j),
+49                       terms=((1.0, 'BPT-%d.Set-1' %(i), j),
+50                              (-1.0,'NPT-%d.Set-1' %(i), j)))
 \end{verbatim}
 Here is an image showing the constraints applied graphically.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/conss.png}
+\includegraphics[width=0.55\textwidth]{./figs/conss.png}
 \end{center}
 \item We next create a static analysis step (\texttt{Step->Create Step->Static, General}) named as \texttt{PRESTRESS}.
 This can be done in CAE, but here is the Python code.
 \begin{verbatim}
-41  mdl.StaticStep(name='PRESTRESS', previous='Initial', nlgeom=ON)
+51  mdl.StaticStep(name='PRESTRESS', previous='Initial', nlgeom=ON)
 \end{verbatim}
 \textbf{Note}: Nonlinear Geometric effects (nlgeom) is set to ON since this was found to be helpful for convergence of prestress analysis.
 \item We finally apply bolt forces as concentrated forces at the \texttt{BPT-n} and \texttt{NPT-n} reference points.
 Switch to the \texttt{Load} module to do this from CAE.
 The following python code applies a tightening load of 12kN to each bolt.
 \begin{verbatim}
-42  # Apply forces
-43  bpmag = 12e3  # 12kN bolt-load
-44  for i in range(1, 4):
-45      # Force in +z on bolt-points
-46      mdl.ConcentratedForce(name='BoltLoad-%d' %(i), createStepName='PRESTRESS',
-47                            region=ras.instances['BPT-%d' %(i)].sets['Set-1'],
-48                            cf3=bpmag, distributionType=UNIFORM)
-49  
-50      # Force in -z on bolt-points
-51      mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName='PRESTRESS',
-52                            region=ras.instances['NPT-%d' %(i)].sets['Set-1'],
-53                            cf3=-bpmag, distributionType=UNIFORM)
+52  # Apply forces
+53  bpmag = 12e3  # 12kN bolt-load
+54  for i in range(1, 4):
+55      # Force in +z on bolt-points
+56      mdl.ConcentratedForce(name='BoltLoad-%d' %(i), createStepName='PRESTRESS',
+57                            region=ras.instances['BPT-%d' %(i)].sets['Set-1'],
+58                            cf3=bpmag, distributionType=UNIFORM)
+59  
+60      # Force in -z on bolt-points
+61      mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName='PRESTRESS',
+62                            region=ras.instances['NPT-%d' %(i)].sets['Set-1'],
+63                            cf3=-bpmag, distributionType=UNIFORM)
 \end{verbatim}
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/loads.png}
+\includegraphics[width=0.55\textwidth]{./figs/loads.png}
 \end{center}
 \item \textbf{Note} that the bolt load constructed in the above manner is a "linear" load - i.e., the load can be increased/decreased by scaling the resulting force vector.
 It is assumed here that all 3 bolts are loaded equally.
@@ -482,41 +501,41 @@ It is, however, a physical requirement for equilibrium that \texttt{BoltLoad-n} 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\textsubscript{step1.cae}} stores the CAE-file generated after the end of the above steps.
 We will now proceed with meshing.
 \section{Meshing}
-\label{sec:org96b6ccd}
+\label{sec:org8647633}
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the \texttt{Mesh} module for this section.
 \subsection{Meshing Instructions}
-\label{sec:orgaee93d2}
+\label{sec:org51040d4}
 \begin{enumerate}
 \item Choose \texttt{Mesh->Assign Mesh Controls} and select the whole assembly (all the instances).
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/globmesh.png}
+\includegraphics[width=0.5\textwidth]{./figs/globmesh.png}
 \end{center}
 \item Now choose \texttt{Mesh->Seed Part Instance} and select all the instances again.
 Set 0.00254 as the global mesh seed (to ensure 10 elements across thickness) and 0.05 for curvature control.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/gmeshseed.png}
+\includegraphics[width=0.5\textwidth]{./figs/gmeshseed.png}
 \end{center}
 \item Apply local seeds at the interface as shown here (on both interfaces).
 Use the \texttt{Mesh->Seed Edges} tool by choosing the Method as "By Number" and specify the number of elements.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/lmeshseeds.png}
+\includegraphics[width=0.55\textwidth]{./figs/lmeshseeds.png}
 \end{center}
 \item Now mesh the assembly using \texttt{Mesh->Mesh Part Instance} and selecting all the part instances.
 Here is a view of the interfacial mesh you should get after the above seeding.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/mesh.png}
+\includegraphics[width=0.5\textwidth]{./figs/mesh.png}
 \end{center}
 \item Here is an image of the total assembly with the mesh.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/fullmesh.png}
+\includegraphics[width=0.55\textwidth]{./figs/fullmesh.png}
 \end{center}
 \end{enumerate}
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\textsubscript{step1.cae}} stores the CAE-file along with the mesh.
 \subsection{(Optional, recommended) Verify correctness of model through frictionless prestress}
-\label{sec:orgdd43433}
+\label{sec:org2b30b18}
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
 
 \textbf{Setup}
@@ -529,7 +548,7 @@ You can do this from CAE starting from \texttt{Interaction->Create Interaction} 
 \item Now create two linear frequency steps, one before and one after the static prestress step, as shown in the figure below.
 Request 30 eigenvalues in each case.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/lfreq.png}
+\includegraphics[width=0.55\textwidth]{./figs/lfreq.png}
 \end{center}
 \item Create 2 jobs. Suppress the interaction property in the first one and have just \texttt{FREQ1} active (see figure below).
 \begin{center}
@@ -542,7 +561,7 @@ For the second job, suppress \texttt{FREQ1} and resume the other steps. Resume t
 Optionally, field outputs for \texttt{FREQ2} (by default it will be set to none if \texttt{FREQ1} is suppressed).
 You can do this in \texttt{Step->Create Field Outputs}.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/run2_fo.png}
+\includegraphics[width=0.5\textwidth]{./figs/run2_fo.png}
 \end{center}
 \end{enumerate}
 \textbf{Results}
@@ -570,7 +589,7 @@ Index & Frequency\\[0pt]
 In the above, modes 1-7 are RBMs and modes 8 onwards are the elastic modes.
 Looking at the mode-shapes should make it clear that the two beams are free to move axially (the following is mode 1, for eg).
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/res1.png}
+\includegraphics[width=0.55\textwidth]{./figs/res1.png}
 \end{center}
 \item The second analysis should converge within a few iterations.
 If not, the "Initial Increment Size" in \texttt{Step->PRESTRESS->Edit->Increment->Initial Increment Size} has to be reduced.
@@ -578,7 +597,7 @@ If it doesn't converge, try to apply a boundary condition to make the problem we
 If it still doesn't converge, check your model again.
 Here is a picture of the contact pressures at the interface at the end of the static prestress step.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/res2_1.png}
+\includegraphics[width=0.55\textwidth]{./figs/res2_1.png}
 \end{center}
 \item By default, ABAQUS \textbf{fuses the nodes} that are in contact at the end of the hard contact step, for the eigenvalue analysis that follows it (Linear Perturbation step).
 Since we are using frictionless tangential here, the tangential DOFs are not fused.
@@ -607,24 +626,24 @@ In other words, the bolt-axial direction has now been fixed due to the fact that
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step2.cae}{model\textsubscript{step2.cae}} is the cae file containing the model with the above tests included.
 \section{Postprocessing}
-\label{sec:org4cb2b56}
+\label{sec:org735100d}
 Now that the model is verified to be correct/consistent, we will proceed with the steps necessary for substructured Matrix Extraction.
 
 Before proceeding it is necessary to first identify nodes on the meshed model that correspond to the input and output locations.
 Choose the mid point on the right end as the output node for this tutorial.
 Create a node set called \texttt{OutNodes} by selecting \texttt{Mesh->Tools->Set->Create->Node} and choosing the node. Select "unsorted node set" if available.
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/outnode.png}
+\includegraphics[width=0.5\textwidth]{./figs/outnode.png}
 \end{center}
 It is possible to choose multiple nodes here if you have a MIMO case.
 
 It is also helpful to use global node and element indexing henceforth.
 This can be specified in \texttt{Model->Edit Attributes->Model-1} as follows:
 \begin{center}
-\includegraphics[width=.9\linewidth]{./figs/modl.png}
+\includegraphics[width=0.5\textwidth]{./figs/modl.png}
 \end{center}
 \subsection{Reorganize Interfacial Node Sets (readjust if necessary)\hfill{}\textsc{Script}}
-\label{sec:orgafa563e}
+\label{sec:orgcbc9497}
 Although we have taken care to ensure that the mesh of the \texttt{TOPBEAM} and \texttt{BOTBEAM} are conformal at the interface, minor imperfections in the nodal locations may exist.
 Furthermore, the ordering of the nodes on the top interface will be different from that on the bottom interface.
 Through some scripting, we can create node sets in such a way that the top and bottom interface nodesets are ordered in a convenient fashion.
@@ -675,136 +694,152 @@ The node and element ordering of the top nodes will be preserved, and the nodes 
 38  N = len(topnodes)  # Number of nodes
 39  
 40  # Top Nodes and Coordinates
-41  Topnd_dict = dict(zip([topnodes[i].label for i in range(N)], range(N)))
-42  # maps original node ID (in FE model) to node ID in interface node set
-43  TopNdCds = np.array([topnodes[i].coordinates for i in range(N)])
-44  
-45  # Top Elements
-46  TopEls = np.array([topsurf.elements[i].connectivity for i in range(len(topsurf.elements))])
-47  ELS = np.zeros((TopEls.shape[0], 5), dtype=int)
-48  for ne in range(TopEls.shape[0]):
-49      elefac = topsurf.elements[ne].getElemFaces()
-50  
-51      # Gives you the list of faces on the interface (we only expect a single face)
-52      fe = np.argwhere([all([Topnd_dict.has_key(x) for x in 
-53                             [elefac[k].getNodes()[i].label for i in range(4)]])
-54                        for k in range(6)])[0,0]
-55      ELS[ne, 0] = ne
-56      # Searches for the face where all the nodes are in the interface and returns those nodes
-57      ELS[ne, 1:] = [Topnd_dict[x] for x in [elefac[fe].getNodes()[k].label
-58                                             for k in range(4)]]
-59      ELS[ne, :] += 1
-60  
-61  # Save interfacial nodes and elements to txt files
-62  np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
-63  np.savetxt('Elements.dat', ELS, fmt='%d')
+41  Topnd_dict = dict(zip([topnodes[i].label
+42                         for i in range(N)], range(N)))
+43  # maps original node ID (in FE model) to
+44  # node ID in interface node set
+45  TopNdCds = np.array([topnodes[i].coordinates
+46                       for i in range(N)])
+47  
+48  # Top Elements
+49  TopEls = np.array([topsurf.elements[i].connectivity
+50                     for i in range(len(topsurf.elements))])
+51  ELS = np.zeros((TopEls.shape[0], 5), dtype=int)
+52  for ne in range(TopEls.shape[0]):
+53      elefac = topsurf.elements[ne].getElemFaces()
+54  
+55      # Gives you the list of faces on the interface
+56      # (we only expect a single face here)
+57      fe = np.argwhere([all([Topnd_dict.has_key(x) for x in 
+58                             [elefac[k].getNodes()[i].label
+59                              for i in range(4)]])
+60                        for k in range(6)])[0,0]
+61      ELS[ne, 0] = ne
+62      # Searches for the face where all the nodes are in the interface
+63      # and returns those nodes
+64      ELS[ne, 1:] = [Topnd_dict[x] for x in
+65                     [elefac[fe].getNodes()[k].label
+66                      for k in range(4)]]
+67      ELS[ne, :] += 1
+68  
+69  # Save interfacial nodes and elements to txt files
+70  np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
+71  np.savetxt('Elements.dat', ELS, fmt='%d')
 \end{verbatim}
 \item Now we extract the bottom nodes and sort them.
 \begin{verbatim}
-64  # 3. Node Pairing. We assume len(botnodes)=len(topnodes).
-65  botleft = range(N)
-66  bts = []
-67  tmi = 0
-68  for i in range(N):
-69      # Calculates deviation of selected node coordinate on bottom to each
-70      # node coordinate on top and "assigns" the closest one to the index.
-71      bts.append(
-72          botleft.pop(
-73              np.argmin(
-74                  np.linalg.norm(
-75                      topnodes[i].coordinates-np.array([botnodes[j].coordinates for j in botleft]),
-76                      axis=1)
-77              )
-78          )
-79      )
+72  # 3. Node Pairing. We assume len(botnodes)=len(topnodes).
+73  botleft = range(N)
+74  bts = []
+75  tmi = 0
+76  for i in range(N):
+77      # Calculates deviation of selected node coordinate on bottom to each
+78      # node coordinate on top and "assigns" the closest one to the index.
+79      devns = topnodes[i].coordinates - np.array([botnodes[j].coordinates
+80                                                  for j in botleft])
+81      bts.append(
+82          botleft.pop(
+83              np.argmin(
+84                  np.linalg.norm(
+85                      devns, axis=1)
+86              )
+87          )
+88      )
 \end{verbatim}
 \item We now adjust the nodes on the bottom (this affects the FE mesh directly!)
 \begin{verbatim}
-80  # 4. Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly
-81  for i in range(N):
-82      ras.editNode(nodes=botnodes[bts[i]:bts[i]+1],
-83                   coordinates=(topnodes[i].coordinates,))
+89  # 4. Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly
+90  for i in range(N):
+91      ras.editNode(nodes=botnodes[bts[i]:bts[i]+1],
+92                   coordinates=(topnodes[i].coordinates,))
 \end{verbatim}
 \item We now create nodesets for the top (\texttt{TOPS\_NDS}) and bottom (\texttt{BOTS\_NDS}).
 \begin{verbatim}
-84  # 5. Create Node Sets
-85  botpairednds = botnodes.sequenceFromLabels(tuple([botnodes[i].label for i in bts]))
-86  # Reordering from the sorting above
-87  
-88  ras.SetFromNodeLabels(name="TOPS_NDS", 
-89                        nodeLabels=((topnodes[0].instanceName, 
-90                                     tuple([topnodes[i].label for i in range(N)])),),
-91                        unsorted=True)
-92  ras.SetFromNodeLabels(name="BOTS_NDS", 
-93                        nodeLabels=((botpairednds[0].instanceName, 
-94                                     [botpairednds[i].label
-95                                      for i in range(len(botpairednds))]),),
-96                        unsorted=True)
+ 93  # 5. Create Node Sets
+ 94  botpairednds = botnodes.sequenceFromLabels(tuple([botnodes[i].label
+ 95                                                    for i in bts]))
+ 96  # Reordering from the sorting above
+ 97  
+ 98  ras.SetFromNodeLabels(name="TOPS_NDS", 
+ 99                        nodeLabels=((topnodes[0].instanceName, 
+100                                     tuple([topnodes[i].label
+101                                            for i in range(N)])),),
+102                        unsorted=True)
+103  ras.SetFromNodeLabels(name="BOTS_NDS", 
+104                        nodeLabels=((botpairednds[0].instanceName, 
+105                                     [botpairednds[i].label
+106                                      for i in range(len(botpairednds))]),),
+107                        unsorted=True)
 \end{verbatim}
 Note that we've used the unsorted keyword to ensure that ABAQUS does not reorder the nodesets (default behavior).
 \item We now simplify the model by removing all interaction properties and steps (except initial).
 One side-effect of doing this is that this removes the bolt loads also, since loads can only be saved when there is a corresponding step!
 So we will reintroduce the bolt loads in the substructuring step in \#8 below.
 \begin{verbatim}
- 97  # 6. Simplify model (remove interactions, all steps, etc.)
- 98  tmp = mdl.interactions
- 99  while len(tmp) > 0:
-100      del tmp[tmp.keys()[-1]]
-101  
-102  tmp = mdl.interactionProperties
-103  while len(tmp) > 0:
-104      del tmp[tmp.keys()[-1]]
-105  
-106  # Remove all steps except initial
-107  tmp = mdl.steps
-108  while len(tmp) > 1:
-109      del tmp[tmp.keys()[-1]]
+108  # 6. Simplify model (remove interactions, all steps, etc.)
+109  tmp = mdl.interactions
+110  while len(tmp) > 0:
+111      del tmp[tmp.keys()[-1]]
+112  
+113  tmp = mdl.interactionProperties
+114  while len(tmp) > 0:
+115      del tmp[tmp.keys()[-1]]
+116  
+117  # Remove all steps except initial
+118  tmp = mdl.steps
+119  while len(tmp) > 1:
+120      del tmp[tmp.keys()[-1]]
 \end{verbatim}
 \end{enumerate}
 \subsection{Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps\hfill{}\textsc{Script}}
-\label{sec:org2371e4c}
+\label{sec:org03437ed}
 \begin{enumerate}
 \item We are interested in \textbf{Fixed-Interface Component Mode Synthesis} with 20 retained modes.
 So we first do a fixed interface modal analysis and request \(20\times3 = 60\) modes (for ensuring accuracy of the first 20 modes).
 We fix all the nodes in the nodesets \texttt{TOPS\_NDS} and \texttt{BOTS\_NDS}.
 \begin{verbatim}
-110  # 7. Create a Frequency Step for fixed interface modal analysis
-111  mdl.FrequencyStep(name="Fixed-Int-Modal", previous="Initial",
-112                    normalization=MASS, eigensolver=LANCZOS,
-113                    numEigen=60)
-114  mdl.EncastreBC(name="TOPFIX", createStepName="Fixed-Int-Modal",
-115                 region=ras.sets['TOPS_NDS'])
-116  mdl.EncastreBC(name="BOTFIX", createStepName="Fixed-Int-Modal",
-117                 region=ras.sets['BOTS_NDS'])
+121  # 7. Create a Frequency Step for fixed interface modal analysis
+122  mdl.FrequencyStep(name="Fixed-Int-Modal", previous="Initial",
+123                    normalization=MASS, eigensolver=LANCZOS,
+124                    numEigen=60)
+125  mdl.EncastreBC(name="TOPFIX", createStepName="Fixed-Int-Modal",
+126                 region=ras.sets['TOPS_NDS'])
+127  mdl.EncastreBC(name="BOTFIX", createStepName="Fixed-Int-Modal",
+128                 region=ras.sets['BOTS_NDS'])
 \end{verbatim}
 \item Next, we create the substructuring step and re-specify the bolt loads (these were removed in \#6 above).
 The bolt loads are specified of unit magnitude and can be scaled during analysis.
 \textbf{This by default uses the mode shapes from the previous step and calculates static constraint modes automatically.}
 \begin{verbatim}
-118  # 8. Create a substructuring step, specify the modes and retained DOFs
-119  mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
-120                               substructureIdentifier=1, 
-121                               retainedEigenmodesMethod=MODE_RANGE, modeRange=((1, 20, 1),),
-122                               recoveryMatrix=REGION, recoveryRegion=ras.sets['OutNodes'],
-123                               computeReducedMassMatrix=True)
-124  
-125  mdl.RetainedNodalDofsBC(name="TOPRET", createStepName="HCBCMS", 
-126                          region=ras.sets['TOPS_NDS'], 
-127                          u1=ON, u2=ON, u3=ON)
-128  mdl.RetainedNodalDofsBC(name="BOTRET", createStepName="HCBCMS", 
-129                          region=ras.sets['BOTS_NDS'], 
-130                          u1=ON, u2=ON, u3=ON)
-131  
-132  # Apply Bolt Loads (1N magnitude)
-133  for i in range(1, 4):
-134      mdl.ConcentratedForce(name='BoltLoad-%d' %(i), createStepName="HCBCMS",
-135                            cf3=1.0, region=ras.instances['BPT-%d' %(i)].sets['Set-1'])
-136      mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName="HCBCMS",
-137                            cf3=-1.0, region=ras.instances['NPT-%d' %(i)].sets['Set-1'])
-138  
-139  sbs = mdl.steps['HCBCMS']
-140  sbs.LoadCase(name="LCASE", loads=tuple(('BoltLoad-%d' %(i), 1.0) for i in range(1, 4)) +
-141               tuple(('NutLoad-%d' %(i), 1.0) for i in range(1, 4)))
+129  # 8. Create a substructuring step, specify the modes and retained DOFs
+130  mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
+131                               substructureIdentifier=1, 
+132                               retainedEigenmodesMethod=MODE_RANGE,
+133                               modeRange=((1, 20, 1),),
+134                               recoveryMatrix=REGION,
+135                               recoveryRegion=ras.sets['OutNodes'],
+136                               computeReducedMassMatrix=True)
+137  
+138  mdl.RetainedNodalDofsBC(name="TOPRET", createStepName="HCBCMS", 
+139                          region=ras.sets['TOPS_NDS'], 
+140                          u1=ON, u2=ON, u3=ON)
+141  mdl.RetainedNodalDofsBC(name="BOTRET", createStepName="HCBCMS", 
+142                          region=ras.sets['BOTS_NDS'], 
+143                          u1=ON, u2=ON, u3=ON)
+144  
+145  # Apply Bolt Loads (1N magnitude)
+146  for i in range(1, 4):
+147      mdl.ConcentratedForce(name='BoltLoad-%d' %(i), createStepName="HCBCMS",
+148                            cf3=1.0,
+149                            region=ras.instances['BPT-%d' %(i)].sets['Set-1'])
+150      mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName="HCBCMS",
+151                            cf3=-1.0,
+152                            region=ras.instances['NPT-%d' %(i)].sets['Set-1'])
+153  
+154  sbs = mdl.steps['HCBCMS']
+155  sbs.LoadCase(name="LCASE",
+156               loads=tuple(('BoltLoad-%d' %(i), 1.0) for i in range(1, 4)) +
+157               tuple(('NutLoad-%d' %(i), 1.0) for i in range(1, 4)))
 \end{verbatim}
 \item We finally need to request matrix output.
 \href{https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/key/default.htm?startat=ch18abk43.html}{Here} is the ABAQUS documentation for the \texttt{*Substructure Matrix Output} card.
@@ -814,70 +849,74 @@ Thankfully we can write to the keywords directly from CAE.
 Go to \texttt{Model->Edit Keywords->Model-1} to do this in the GUI.
 In scripting, this is known as a "synch" operation, which is done as follows:
 \begin{verbatim}
-142  # 9. Request substructure matrix outputs
-143  # ABAQUS CAE doesn't support this yet (GUI or scripting),
-144  # so the keywords need to be manually modified.
-145  mdl.keywordBlock.synchVersions(storeNodesAndElements=False)
-146  
-147  li = np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] == "*Retained Nodal Dofs"
-148                    for i in range(len(mdl.keywordBlock.sieBlocks))])[0][0]
-149  txi = mdl.keywordBlock.sieBlocks[li]
-150  mdl.keywordBlock.replace(li, "*Retained Nodal Dofs, sorted=NO"+txi[20:])
-151  
-152  mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2, 
-153                          "*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES")
+158  # 9. Request substructure matrix outputs
+159  # ABAQUS CAE doesn't support this yet (GUI or scripting),
+160  # so the keywords need to be manually modified.
+161  mdl.keywordBlock.synchVersions(storeNodesAndElements=False)
+162  
+163  li = np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] == "*Retained Nodal Dofs"
+164                    for i in range(len(mdl.keywordBlock.sieBlocks))])[0][0]
+165  txi = mdl.keywordBlock.sieBlocks[li]
+166  mdl.keywordBlock.replace(li, "*Retained Nodal Dofs, sorted=NO"+txi[20:])
+167  
+168  mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2, 
+169                          "*Substructure Matrix Output, FILE NAME=Modelmats, " +
+170                          "MASS=YES, STIFFNESS=YES, SLOAD=YES, " +
+171                          "RECOVERY MATRIX=YES")
 \end{verbatim}
 \item We then create a job and write it to an "inp" file that can be run from ABAQUS.
 \begin{verbatim}
-154  # 10. Create a job and write an inp file
-155  mdb.Job(name="Job", model='Model-1')
-156  mdb.jobs['Job'].writeInput()
+172  # 10. Create a job and write an inp file
+173  mdb.Job(name="Job", model='Model-1')
+174  mdb.jobs['Job'].writeInput()
 \end{verbatim}
 \item Here is what the final HCBCMS step looks like in this case.
 The most important part is the \texttt{*Substructure Matrix Output} card in the bottom,
 which we introduced through the "synch" step in \#3 above.
 \href{https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/key/default.htm?startat=ch18abk43.html}{Here} is the ABAQUS documentation for the \texttt{*Substructure Matrix Output} card.
 \begin{verbatim}
-** ----------------------------------------------------------------
-** 
-** STEP: HCBCMS
-** 
-*Step, name=HCBCMS, nlgeom=NO
-*Substructure Generate, overwrite, type=Z1, recovery matrix=YES, nset=OutNodes, mass matrix=YES
-*Select Eigenmodes, generate
-1, 20, 1
-*Damping Controls, structural=COMBINED, viscous=COMBINED
-*Retained Nodal Dofs, sorted=NO
-BOTS_NDS, 1, 3
-TOPS_NDS, 1, 3
-** 
-** LOAD CASES
-** 
-*Substructure Load Case, name=LCASE
-** Name: BoltLoad-1   Type: Concentrated force   Scale factor: 1
-*Cload
-BPT-1_Set-1, 3, 1.
-** Name: BoltLoad-2   Type: Concentrated force   Scale factor: 1
-*Cload
-BPT-2_Set-1, 3, 1.
-** Name: BoltLoad-3   Type: Concentrated force   Scale factor: 1
-*Cload
-BPT-3_Set-1, 3, 1.
-** Name: NutLoad-1   Type: Concentrated force   Scale factor: 1
-*Cload
-NPT-1_Set-1, 3, -1.
-** Name: NutLoad-2   Type: Concentrated force   Scale factor: 1
-*Cload
-NPT-2_Set-1, 3, -1.
-** Name: NutLoad-3   Type: Concentrated force   Scale factor: 1
-*Cload
-NPT-3_Set-1, 3, -1.
-*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES
-*End Step
+ 1  ** ----------------------------------------------------------------
+ 2  ** 
+ 3  ** STEP: HCBCMS
+ 4  ** 
+ 5  *Step, name=HCBCMS, nlgeom=NO
+ 6  *Substructure Generate, overwrite, type=Z1, recovery matrix=YES,
+ 7        nset=OutNodes, mass matrix=YES
+ 8  *Select Eigenmodes, generate
+ 9  1, 20, 1
+10  *Damping Controls, structural=COMBINED, viscous=COMBINED
+11  *Retained Nodal Dofs, sorted=NO
+12  BOTS_NDS, 1, 3
+13  TOPS_NDS, 1, 3
+14  ** 
+15  ** LOAD CASES
+16  ** 
+17  *Substructure Load Case, name=LCASE
+18  ** Name: BoltLoad-1   Type: Concentrated force   Scale factor: 1
+19  *Cload
+20  BPT-1_Set-1, 3, 1.
+21  ** Name: BoltLoad-2   Type: Concentrated force   Scale factor: 1
+22  *Cload
+23  BPT-2_Set-1, 3, 1.
+24  ** Name: BoltLoad-3   Type: Concentrated force   Scale factor: 1
+25  *Cload
+26  BPT-3_Set-1, 3, 1.
+27  ** Name: NutLoad-1   Type: Concentrated force   Scale factor: 1
+28  *Cload
+29  NPT-1_Set-1, 3, -1.
+30  ** Name: NutLoad-2   Type: Concentrated force   Scale factor: 1
+31  *Cload
+32  NPT-2_Set-1, 3, -1.
+33  ** Name: NutLoad-3   Type: Concentrated force   Scale factor: 1
+34  *Cload
+35  NPT-3_Set-1, 3, -1.
+36  *Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES,
+37        STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES
+38  *End Step
 \end{verbatim}
 \end{enumerate}
 \subsection{Run Job and Generate the mtx file.\hfill{}\textsc{Script:GUI}}
-\label{sec:org924ef0c}
+\label{sec:org600eef8}
 You can now run the Job named "Job" in the GUI, or directly run the "Job.inp" file from the command line using
 \begin{verbatim}
 abaqus job=Job inp=Job.inp cpus=2 interactive
@@ -885,7 +924,7 @@ abaqus job=Job inp=Job.inp cpus=2 interactive
 Once the job is done, it will output the matrix file "Modelmats.mtx" into the working directory.
 This, along with the "Nodes.dat" and "Elements.dat" files that were written out earlier, are all we need for external analyses.
 \section{Matrix Extraction}
-\label{sec:org21508a7}
+\label{sec:org258317d}
 By default, ABAQUS uses the \href{https://math.nist.gov/MatrixMarket/}{matrix market format} for the outputted matrices.
 Note the following, in terms of format:
 \begin{itemize}
@@ -899,7 +938,7 @@ where \(x_{cms}\) is the vector of DOFs of the CMS model (substructure) and \(x_
 Each column of \(R\) is \(N_{out}\times 1\), and \(R\) is \(N_{out}\times N_{cms}\).
 \end{itemize}
 \subsection{Postprocessing Exported Matrices\hfill{}\textsc{Script}}
-\label{sec:orgf2797a8}
+\label{sec:org71c6f0a}
 \begin{enumerate}
 \item The first few lines provide the generalized coordinates of the model. The nodes are listed as positive integers and the "modal" DOFs are listed as negative integers.
 This is followed by a list of DOFs active in each set.
@@ -935,85 +974,116 @@ This is followed by a list of DOFs active in each set.
 \item In the actual file, the order is STIFFNESS, LOAD, MASS, then SUBSTRUCTURE.
 \item The following Bash script processes the output (a stiffness, a mass, a load case, and recovery entries are expected)
 \begin{verbatim}
-#!/bin/sh
-
-if [ $# = 2 ]
-then 
-    echo "Correct call!"
-    OUT=$2
-elif [ $# = 1 ]
-then
-    echo "Acceptable call!"
-    a="$1"
-    OUT="${a%.*}.mat"
-else
-    echo "Wrong call - quitting!"
-fi
-echo "Preprocessing mtx files"
-gawk 'BEGIN{mstart=0;} ($1~/^\*M/){mstart++; next} (mstart==1){if($1!~/^\*/){print}else{exit}}' $1|gawk 'BEGIN{RS=",";ORS="\n"}{print}'|gawk '(NF!=0){print}' > ./.STIFFNESS.mtx
-gawk 'BEGIN{mstart=0;} ($1~/^\*M/){mstart++; next} (mstart==2){if($1!~/^\*/){print}else{exit}}' $1|gawk 'BEGIN{RS=",";ORS="\n"}{print}'|gawk '(NF!=0){print}' > ./.MASS.mtx
-gawk 'BEGIN{vstart=0;} ($0~/^\*\*\*C/){vstart++; next} (vstart>0){print $2,$3,$4} (vstart>0 && $1!~/^\*\*/){exit}' $1|gawk 'BEGIN{FS=","}{for(i=1;i<=NF;i++)printf("%s ", $i);printf("\n")}' > ./.FVEC.mtx
-gawk 'BEGIN{rstart=0} ($0~/^\*\* SUBSTRUCTURE REC/){rstart++; if(rstart>1){printf("\n")}next} (rstart!=0 && $1~/\*\*/){for(i=2;i<=NF;i++)printf("%s",$i);}' $1|gawk 'BEGIN{FS=","}{for(i=1;i<=NF;i++)printf("%s ",$i); printf("\n");}' > .RECOV.mtx
-echo "Preprocessing mtx files done"
-
-python <<EOF
-import numpy as np
-import scipy.io as io
-
-print("Reading Mass Matrix from mtx file.");
-Mv = np.loadtxt('.MASS.mtx');
-print("Done.");
-
-print("Reading Stiffness Matrix from mtx file.");
-Kv = np.loadtxt('.STIFFNESS.mtx');
-print("Done.");
-
-print("Reading Recovery Matrix from mtx file.");
-R = np.loadtxt('.RECOV.mtx');
-print("Done.");
-
-print("Processing Matrices.")
-
-Nelm = len(Mv);
-Nelk = len(Kv);
-if (Nelm!=Nelk):
-        sys.exit("GIGO - Mass & Stiffness not of same length.");
-Nel = Nelm;
-
-Nd = ((np.sqrt(1+8*Nel)-1)/2).astype(int); # Solution of Nd(Nd+1)/2-Nel = 0
-
-M = np.zeros((Nd,Nd));
-K = np.zeros((Nd,Nd));
-
-(xi,yi) = np.tril_indices(Nd);
-M[xi,yi] = Mv;
-M[yi,xi] = Mv;
-K[xi,yi] = Kv;
-K[yi,xi] = Kv;
-
-print("Done.")
-
-print("Reading Forcing Vector from mtx file.");
-Fvdat = np.loadtxt('.FVEC.mtx');
-print("Done.");
-
-print("Processing Force Vector.");
-Fv = np.zeros(M.shape[0]);
-ids = range(np.where(np.diff(Fvdat[:, 1])==0)[0][0], Fvdat.shape[0])
-n1dofnds = Fvdat[ids, 0].astype(int)
-n3dofnds = Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 0].astype(int)
-Fv[((n3dofnds-1)*3+np.kron(np.ones(int(len(n3dofnds)/3)),[0, 1, 2])).astype(int)] = Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 2]
-print("Whew.")
-Fv[range(-len(n1dofnds), 0)] = Fvdat[ids, 2]
-print("Done.")
-
-print("Matrix extraction complete - writing mat file")
-dict = {"M": M, "K": K, "R": R, "Fv": Fv};
-io.savemat(".out.mat",dict);
-print("Processing Over")
-EOF
-mv .out.mat $OUT
-rm .STIFFNESS.mtx .MASS.mtx .RECOV.mtx .FVEC.mtx
+  1  #!/bin/sh
+  2  
+  3  if [ $# = 2 ]
+  4  then 
+  5      echo "Correct call!"
+  6      OUT=$2
+  7  elif [ $# = 1 ]
+  8  then
+  9      echo "Acceptable call!"
+ 10      a="$1"
+ 11      OUT="${a%.*}.mat"
+ 12  else
+ 13      echo "Wrong call - quitting!"
+ 14  fi
+ 15  echo "Preprocessing mtx files"
+ 16  awkcmd1='BEGIN{mstart=0;}
+ 17    ($1~/^\*M/){mstart++; next}
+ 18    (mstart==1){if($1!~/^\*/){print}else{exit}}'
+ 19  awkcmd2='BEGIN{RS=",";ORS="\n"}{print}'
+ 20  gawk "$awkcmd1" $1|gawk "$awkcmd2"|gawk '(NF!=0){print}' > ./.STIFFNESS.mtx
+ 21  
+ 22  awkcmd1='BEGIN{mstart=0;}
+ 23    ($1~/^\*M/){mstart++; next}
+ 24    (mstart==2){if($1!~/^\*/){print}else{exit}}'
+ 25  awkcmd2='BEGIN{RS=",";ORS="\n"}{print}'
+ 26  gawk "$awkcmd1" $1|gawk "$awkcmd2"|gawk '(NF!=0){print}' > ./.MASS.mtx
+ 27  
+ 28  awkcmd1='BEGIN{vstart=0;}
+ 29    ($0~/^\*\*\*C/){vstart++; next}
+ 30    (vstart>0){print $2,$3,$4}
+ 31    (vstart>0 && $1!~/^\*\*/){exit}'
+ 32  awkcmd2='BEGIN{FS=","}
+ 33    {for(i=1;i<=NF;i++)
+ 34      printf("%s ", $i);
+ 35      printf("\n")}'
+ 36  gawk "$awkcmd1" $1|gawk "$awkcmd2" > ./.FVEC.mtx
+ 37  
+ 38  awkcmd1='BEGIN{rstart=0}
+ 39   ($0~/^\*\* SUBSTRUCTURE REC/){rstart++;
+ 40   if(rstart>1){printf("\n")}
+ 41   next}
+ 42   (rstart!=0 && $1~/\*\*/){
+ 43   for(i=2;i<=NF;i++)printf("%s",$i);}'
+ 44  awkcmd2='BEGIN{FS=","}
+ 45    {for(i=1;i<=NF;i++)
+ 46      printf("%s ",$i);
+ 47      printf("\n");}'
+ 48  gawk "$awkcmd1" $1|gawk "$awkcmd2" > .RECOV.mtx
+ 49  
+ 50  echo "Preprocessing mtx files done"
+ 51  
+ 52  python <<EOF
+ 53  import numpy as np
+ 54  import scipy.io as io
+ 55  
+ 56  print("Reading Mass Matrix from mtx file.");
+ 57  Mv = np.loadtxt('.MASS.mtx');
+ 58  print("Done.");
+ 59  
+ 60  print("Reading Stiffness Matrix from mtx file.");
+ 61  Kv = np.loadtxt('.STIFFNESS.mtx');
+ 62  print("Done.");
+ 63  
+ 64  print("Reading Recovery Matrix from mtx file.");
+ 65  R = np.loadtxt('.RECOV.mtx');
+ 66  print("Done.");
+ 67  
+ 68  print("Processing Matrices.")
+ 69  
+ 70  Nelm = len(Mv);
+ 71  Nelk = len(Kv);
+ 72  if (Nelm!=Nelk):
+ 73          sys.exit("GIGO - Mass & Stiffness not of same length.");
+ 74  Nel = Nelm;
+ 75  
+ 76  Nd = ((np.sqrt(1+8*Nel)-1)/2).astype(int); # Solution of Nd(Nd+1)/2-Nel = 0
+ 77  
+ 78  M = np.zeros((Nd,Nd));
+ 79  K = np.zeros((Nd,Nd));
+ 80  
+ 81  (xi,yi) = np.tril_indices(Nd);
+ 82  M[xi,yi] = Mv;
+ 83  M[yi,xi] = Mv;
+ 84  K[xi,yi] = Kv;
+ 85  K[yi,xi] = Kv;
+ 86  
+ 87  print("Done.")
+ 88  
+ 89  print("Reading Forcing Vector from mtx file.");
+ 90  Fvdat = np.loadtxt('.FVEC.mtx');
+ 91  print("Done.");
+ 92  
+ 93  print("Processing Force Vector.");
+ 94  Fv = np.zeros(M.shape[0]);
+ 95  ids = range(np.where(np.diff(Fvdat[:, 1])==0)[0][0], Fvdat.shape[0])
+ 96  n1dofnds = Fvdat[ids, 0].astype(int)
+ 97  n3dofnds = Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 0].astype(int)
+ 98  Fv[((n3dofnds-1)*3+np.kron(np.ones(int(len(n3dofnds)/3)),[0, 1, 2])).astype(int)] = \
+ 99  Fvdat[list(set(range(Fvdat.shape[0]))-set(ids)), 2]
+100  print("Whew.")
+101  Fv[range(-len(n1dofnds), 0)] = Fvdat[ids, 2]
+102  print("Done.")
+103  
+104  print("Matrix extraction complete - writing mat file")
+105  dict = {"M": M, "K": K, "R": R.T, "Fv": Fv.reshape((len(Fv),1))};
+106  io.savemat(".out.mat",dict);
+107  print("Processing Over")
+108  EOF
+109  mv .out.mat $OUT
+110  rm .STIFFNESS.mtx .MASS.mtx .RECOV.mtx .FVEC.mtx
 \end{verbatim}
 \begin{itemize}
 \item This bash script first uses \href{https://www.gnu.org/software/gawk/manual/gawk.html}{GNU Awk}, a simple but powerful utility that allows line-by-line parsing of files.
@@ -1031,13 +1101,13 @@ Line-parsing on MATLAB was extremely slow for me.
 \end{enumerate}
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step3.cae}{model\textsubscript{step3.cae}} is the final cae file that contains all of the above.
 \subsection{Simple Analysis on MATLAB/OCTAVE\hfill{}\textsc{Script}}
-\label{sec:orgc178edd}
+\label{sec:org97462bf}
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
 We will conduct a \textbf{Nonlinear Prestress Analysis} for a frictionless contact with a unilateral spring on the normal direction.
 \textbf{TO BE ADDED SOON}
 
 \section{Outro/Contact Details}
-\label{sec:org7c956ab}
+\label{sec:org5ca61b4}
 In summary, all the scripts used in the tutorial are provided in 
 \begin{enumerate}
 \item \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a\_steelmat.py}{a\textsubscript{steelmat.py}}: Loading material
