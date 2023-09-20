@@ -128,10 +128,11 @@ mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
                              recoveryMatrix=REGION, recoveryRegion=ras.sets['OutNodes'],
                              computeReducedMassMatrix=True)
 
-mdl.RetainedNodalDofsBC(name="TOPRET", createStepName="HCBCMS", 
+# The name dictates ordering. A comes before B.
+mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS", 
                         region=ras.sets['TOPS_NDS'], 
                         u1=ON, u2=ON, u3=ON)
-mdl.RetainedNodalDofsBC(name="BOTRET", createStepName="HCBCMS", 
+mdl.RetainedNodalDofsBC(name="B", createStepName="HCBCMS", 
                         region=ras.sets['BOTS_NDS'], 
                         u1=ON, u2=ON, u3=ON)
 

@@ -9,8 +9,6 @@ N = size(Nodes,1);  % Number of nodes per side
 %% Load Matrices
 fname = './Modelmats.mat';
 load(fname, 'M', 'K', 'R', 'Fv');
-R = R';
-Fv = -Fv';
 
 Nint = size(M,1)-(2*N)*3;
 
@@ -28,8 +26,11 @@ Nn = size(Ln, 2);  % Null-reduced DOFs
 
 %% Evaluate RESFUN
 bpmag = 10e3;
-knl = 1e6;
-% U0 = (Ln'*K*Ln + (Lrel*Ln)'*(Lrel*Ln)*knl)\(Ln'*Fv*bpmag);
+knl = 1e12;
+U0 = (Ln'*K*Ln + (Lrel*Ln)'*(Lrel*Ln)*knl)\(Ln'*Fv*bpmag);
 
-opt = optimoptions('fsolve', 'specifyObjectiveGradient', true, 'Display', 'iter');
-U0 = fsolve(@(U) RESFUN([U; bpmag], Ln'*K*Ln, Ln'*Fv, Lrel*Ln, knl), U0, opt);
+% opt = optimoptions('fsolve', 'specifyObjectiveGradient', true, 'Display', 'iter');
+% U0 = fsolve(@(U) RESFUN([U; bpmag], Ln'*K*Ln, Ln'*Fv, Lrel*Ln, knl), U0, opt);
+
+%%
+Uls = (K+Lrel'*Lrel*knl)\(12e3*Fv);

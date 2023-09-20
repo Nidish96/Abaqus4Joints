@@ -4,22 +4,10 @@
 #+OPTIONS: startup:indent
 #+HTML_HEAD: <base target="_blank">
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
-# #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+HTML: <style> summary:hover {background:pink;} </style>
-# #+HTML_HEAD: <style> #content{max-width:2000px;}</style>
-# #+HTML_HEAD_EXTRA: <style>*{font-size: large;}</style>
-# #+LATEX_HEADER: \usepackage[inkscapelatex=false]{svg}
-
-#+BEGIN_EXPORT html
-<!-- <script type="text/javascript" src="./collcont_clkbls.js"></script> -->
-<script>var HS_STARTUP_FOLDED = true;</script>
-#+END_EXPORT
-
-# Inkscape Stroke Size: 3
-
-#+BEGIN_EXPORT latex
-\pagebreak
-#+END_EXPORT
+#+HTML: <script>var HS_STARTUP_FOLDED = true;</script>
+# #+HTML_HEAD: <style> #content{max-width:2000px;} *{font-size: large;}</style>
+#+LATEX: \pagebreak
 
 * Preprocessing
 
@@ -29,7 +17,7 @@ Buckle up! :)
 
 #+CAPTION: Geometry of the BRB Benchmark
 #+NAME: fig:brbgeom
-#+ATTR_HTML: :width 300px
+#+ATTR_HTML: :width 300px :class zoomable-image
 #+ATTR_LATEX: :width 0.5\textwidth
 [[./figs/300px-BRB.png]]
 
@@ -46,7 +34,7 @@ ABAQUS Python scripting is quite powerful and will be used quite liberally throu
 + On Windows the *work directory* may be an unfamiliar concept (on Linux it is just the directory from which ABAQUS is launched). This directory can be manually set by ~File->Set Work Directory~, following which all the files (including the =ABAQUS.rpy= file) will be put in the specified folder.
 + Fig [[fig:ovw]] shows a pictorial overview of the different options available in ABAQUS for scripting support. The ABAQUS PDE can be used for ABAQUS python script development.
 #+CAPTION: Options in ABAQUS for Scripting
-#+ATTR_HTML: :width 600px
+#+ATTR_HTML: :width 600px :class zoomable-image
 #+ATTR_LATEX: :width \textwidth
 #+NAME: fig:ovw
 [[./figs/ovw.png]]
@@ -571,6 +559,9 @@ This can be specified in ~Model->Edit Attributes->Model-1~ as follows:
 Although we have taken care to ensure that the mesh of the =TOPBEAM= and =BOTBEAM= are conformal at the interface, minor imperfections in the nodal locations may exist.
 Furthermore, the ordering of the nodes on the top interface will be different from that on the bottom interface.
 Through some scripting, we can create node sets in such a way that the top and bottom interface nodesets are ordered in a convenient fashion.
+
+You can use the [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1a.cae][model\under{}step1a.cae]] and work along if you are here just for this section.
+
 1. We use the following slightly modified header for this script:
    #+begin_src python -n
      # -*- coding: utf-8 -*-
@@ -740,10 +731,11 @@ Through some scripting, we can create node sets in such a way that the top and b
                                   recoveryRegion=ras.sets['OutNodes'],
                                   computeReducedMassMatrix=True)
 
-     mdl.RetainedNodalDofsBC(name="TOPRET", createStepName="HCBCMS", 
+     # The name dictates ordering. A comes before B.
+     mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS", 
                              region=ras.sets['TOPS_NDS'], 
                              u1=ON, u2=ON, u3=ON)
-     mdl.RetainedNodalDofsBC(name="BOTRET", createStepName="HCBCMS", 
+     mdl.RetainedNodalDofsBC(name="B", createStepName="HCBCMS", 
                              region=ras.sets['BOTS_NDS'], 
                              u1=ON, u2=ON, u3=ON)
 
@@ -761,6 +753,8 @@ Through some scripting, we can create node sets in such a way that the top and b
                   loads=tuple(('BoltLoad-%d' %(i), 1.0) for i in range(1, 4)) +
                   tuple(('NutLoad-%d' %(i), 1.0) for i in range(1, 4)))
    #+end_src
+   Note, in the above that the ordering of the two sets is controlled by the name given to the ~RetainedNodalDofsBC~ function.
+   Although the node sets themselves are not sorted, the order in which the nodesets appear is sorted by default.
 3. We finally need to request matrix output.
    [[https://classes.engineering.wustl.edu/2009/spring/mase5513/abaqus/docs/v6.6/books/key/default.htm?startat=ch18abk43.html][Here]] is the ABAQUS documentation for the ~*Substructure Matrix Output~ card.
    Thus far (until version 2023) ABAQUS CAE doesn't support requesting matrix output from Substructure steps.
@@ -834,8 +828,9 @@ Through some scripting, we can create node sets in such a way that the top and b
            STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES
      ,*End Step
    #+end_src   
+   You can find the inp-file generate from the above in [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp][Job.inp]].
 ** Run Job and Generate the mtx file.                            :Script:GUI:
-You can now run the Job named "Job" in the GUI, or directly run the "Job.inp" file from the command line using
+You can now run the Job named "Job" in the GUI, or directly run the "[[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp][Job.inp]]" file from the command line using
 #+begin_src bash
   abaqus job=Job inp=Job.inp cpus=2 interactive
 #+end_src
@@ -1028,5 +1023,3 @@ Don't forget to check out the repository in github at [[https://github.com/Nidis
 It has the above scripts as well as all the cae files.
 
 You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
-
-
