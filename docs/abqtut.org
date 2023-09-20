@@ -207,7 +207,7 @@ We will do the construction through Abaqus Python code that can be imported thro
 
      rpt.Set(name='Set-1', referencePoints=rpt.referencePoints.values())
    #+end_src
-4. Now import the nuts, washers and bolts by importing the file [[../scripts/c_nutwasherbolt_516.py]].
+4. Now import the nuts, washers and bolts by importing the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py]].
    You should be able to see the nut, washer and bolt, along with the half beam \& reference point created before, as follows after importing:
    #+ATTR_HTML: :width 600px
    [[./figs/nwb.png]]
@@ -919,12 +919,12 @@ We will conduct a *Nonlinear Prestress Analysis* for a frictionless contact with
 
 * Outro/Contact Details
 In summary, all the scripts used in the tutorial are provided in 
-1. [[../scripts/a_steelmat.py]]: Loading material
-2. [[../scripts/b_halfbm.py]]: Building the half-beam model
-3. [[../scripts/c_nutwasherbolt_516.py]]: Building the bolt, nut, & washer models.
-4. [[../scripts/d_applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
-5. [[../scripts/e_nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
-6. [[../scripts/readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
+1. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a_steelmat.py]]: Loading material
+2. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/b_halfbm.py]]: Building the half-beam model
+3. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py]]: Building the bolt, nut, & washer models.
+4. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
+5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
+6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
    
 You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
 
