@@ -214,7 +214,6 @@ Here is an example:
    The Python script also assigns the material "STEEL" (see above) to the parts.
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step0.cae][model_step0.cae]] stores the CAE file at the end of the above steps (building parts, and partitioning).
-*REGENERATE THIS AFTER THE PARTITIONED BOLT IS USED!*
 ** Creating appropriate surface sets                                   :GUI:
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
 Doing this with surfaces (before meshing) is advantageous since the same scripts can be reused even if the model is remeshed.
@@ -408,7 +407,6 @@ We will now go through the process of specifying this.
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model_step1.cae]] stores the CAE-file generated after the end of the above steps.
 We will now proceed with meshing.
-*CORRECT NW CONSTRAINTS AND REUPLOAD*
 * Meshing
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the =Mesh= module for this section.
@@ -434,7 +432,6 @@ Switch to the =Mesh= module for this section.
    [[./figs/fullmesh.png]]
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model_step1.cae]] stores the CAE-file along with the mesh.
-*CORRECT NW CONSTRAINTS AND RE-UPLOAD*
 ** (Optional, recommended) Verify correctness of model through frictionless prestress
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
 
