@@ -1,0 +1,1236 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].Material(name='STEEL')
+mdb.models['Model-1'].materials['STEEL'].Density(table=((7800.0, ), ))
+mdb.models['Model-1'].materials['STEEL'].Elastic(table=((200000000000.0, 0.29), 
+    ))
+mdb.models['Model-1'].HomogeneousSolidSection(material='STEEL', name=
+    'Section-1', thickness=None)
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=2.0)
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.36, 0.0127), 
+    point2=(-0.06, 0.0127))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.06, 0.0127), 
+    point2=(-0.06, 0))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.06, 0), point2=(
+    0.06, 0))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.06, 0), point2=(
+    0.06, -0.0127))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.06, -0.0127), 
+    point2=(-0.36, -0.0127))
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.36, -0.0127), 
+    point2=(-0.36, 0.0127))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='HALFBEAM', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['HALFBEAM'].BaseSolidExtrude(depth=0.0254, sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].ConstrainedSketch(gridSpacing=0.03, name='__profile__', 
+    sheetSize=2.0, transform=
+    mdb.models['Model-1'].parts['HALFBEAM'].MakeSketchTransform(
+    sketchPlane=mdb.models['Model-1'].parts['HALFBEAM'].faces[2], 
+    sketchPlaneSide=SIDE1, 
+    sketchUpEdge=mdb.models['Model-1'].parts['HALFBEAM'].edges[8], 
+    sketchOrientation=RIGHT, origin=(0.0, 0.0, 0.0127)))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    -0.03, 0), point1=(-0.02575, 0))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.0, 0), point1=(0.00425, 0))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.03, 0), point1=(0.03425, 0))
+mdb.models['Model-1'].parts['HALFBEAM'].CutExtrude(sketch=
+    mdb.models['Model-1'].sketches['__profile__'], sketchOrientation=RIGHT, 
+    sketchPlane=mdb.models['Model-1'].parts['HALFBEAM'].faces[2], 
+    sketchPlaneSide=SIDE1, sketchUpEdge=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[8])
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByExtendFace(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, extendFace=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces[6])
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByExtendFace(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, extendFace=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces[7])
+mdb.models['Model-1'].ConstrainedSketch(gridSpacing=0.03, name='__profile__', 
+    sheetSize=2.0, transform=
+    mdb.models['Model-1'].parts['HALFBEAM'].MakeSketchTransform(
+    sketchPlane=mdb.models['Model-1'].parts['HALFBEAM'].faces[11], 
+    sketchPlaneSide=SIDE1, 
+    sketchUpEdge=mdb.models['Model-1'].parts['HALFBEAM'].edges[27], 
+    sketchOrientation=RIGHT, origin=(0.0, 0.0, 0.0127)))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    -0.03, 0), point1=(-0.02126875, 0))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.0, 0), point1=(0.00873125, 0))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.03, 0), point1=(0.03873125, 0))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellBySketch(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, sketch=
+    mdb.models['Model-1'].sketches['__profile__'], sketchPlane=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces[11], sketchUpEdge=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[27])
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByExtrudeEdge(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, edges=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[0], line=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[36], sense=FORWARD)
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByExtrudeEdge(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, edges=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[3], line=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[37], sense=FORWARD)
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByExtrudeEdge(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, edges=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[6], line=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[38], sense=FORWARD)
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[38], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[38], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[75], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[75], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[39], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[39], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[85], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[85], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[39], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[39], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[41], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[41], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[111], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[111], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].PartitionCellByPlanePointNormal(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, normal=
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[135], point=
+    mdb.models['Model-1'].parts['HALFBEAM'].InterestingPoint(
+    mdb.models['Model-1'].parts['HALFBEAM'].edges[135], MIDDLE))
+mdb.models['Model-1'].parts['HALFBEAM'].Set(cells=
+    mdb.models['Model-1'].parts['HALFBEAM'].cells, name='Set-1')
+mdb.models['Model-1'].parts['HALFBEAM'].SectionAssignment(region=
+    mdb.models['Model-1'].parts['HALFBEAM'].sets['Set-1'], sectionName=
+    'Section-1')
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=2.0)
+mdb.models['Model-1'].sketches['__profile__'].ConstructionLine(angle=90.0, 
+    point1=(-0.00635, 0.0))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[2])
+mdb.models['Model-1'].sketches['__profile__'].ConstructionLine(angle=90.0, 
+    point1=(0.00635, 0.0))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[3])
+mdb.models['Model-1'].sketches['__profile__'].radialPattern(centerPoint=(0.0, 
+    0.0), geomList=(mdb.models['Model-1'].sketches['__profile__'].geometry[2], 
+    mdb.models['Model-1'].sketches['__profile__'].geometry[3]), number=3, 
+    totalAngle=360.0, vertexList=())
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.0, 
+    0.00733234841868981), point2=(-0.00635, 0.00366617420906768))
+mdb.models['Model-1'].sketches['__profile__'].ParallelConstraint(addUndoState=
+    False, entity1=mdb.models['Model-1'].sketches['__profile__'].geometry[5], 
+    entity2=mdb.models['Model-1'].sketches['__profile__'].geometry[8])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[0], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[5])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[1], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[2])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.00635, 
+    0.00366617420906768), point2=(-0.00635, -0.00366617420934489))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[9])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[2], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[2])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.00635, 
+    -0.00366617420934489), point2=(0.0, -0.00733234841887462))
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[3], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[4])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.0, 
+    -0.00733234841887462), point2=(0.00635, -0.0036661742095297))
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[4], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[3])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.00635, 
+    -0.0036661742095297), point2=(0.00635, 0.00366617420934489))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[12])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[5], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[3])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.00635, 
+    0.00366617420934489), point2=(0.0, 0.00733234841868981))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='BOLT', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['BOLT'].BaseSolidExtrude(depth=0.005159375, sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].ConstrainedSketch(gridSpacing=0.03, name='__profile__', 
+    sheetSize=1.58, transform=
+    mdb.models['Model-1'].parts['BOLT'].MakeSketchTransform(
+    sketchPlane=mdb.models['Model-1'].parts['BOLT'].faces[6], 
+    sketchPlaneSide=SIDE1, 
+    sketchUpEdge=mdb.models['Model-1'].parts['BOLT'].edges[0], 
+    sketchOrientation=RIGHT, origin=(0.0, 0.0, 0.005159375)))
+mdb.models['Model-1'].parts['BOLT'].projectReferencesOntoSketch(filter=
+    COPLANAR_EDGES, sketch=mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.0, 0.0), point1=(0.00396875, 0.0))
+mdb.models['Model-1'].parts['BOLT'].SolidExtrude(depth=0.0381, 
+    flipExtrudeDirection=OFF, sketch=
+    mdb.models['Model-1'].sketches['__profile__'], sketchOrientation=RIGHT, 
+    sketchPlane=mdb.models['Model-1'].parts['BOLT'].faces[6], sketchPlaneSide=
+    SIDE1, sketchUpEdge=mdb.models['Model-1'].parts['BOLT'].edges[0])
+mdb.models['Model-1'].parts['BOLT'].DatumPlaneByOffset(flip=SIDE1, offset=
+    0.028575, plane=mdb.models['Model-1'].parts['BOLT'].faces[8])
+mdb.models['Model-1'].parts['BOLT'].DatumPlaneByOffset(flip=SIDE1, offset=
+    0.005159375, plane=mdb.models['Model-1'].parts['BOLT'].datums[3])
+mdb.models['Model-1'].parts['BOLT'].PartitionCellByDatumPlane(cells=
+    mdb.models['Model-1'].parts['BOLT'].cells, datumPlane=
+    mdb.models['Model-1'].parts['BOLT'].datums[3])
+mdb.models['Model-1'].parts['BOLT'].PartitionCellByDatumPlane(cells=
+    mdb.models['Model-1'].parts['BOLT'].cells, datumPlane=
+    mdb.models['Model-1'].parts['BOLT'].datums[4])
+mdb.models['Model-1'].parts['BOLT'].Set(cells=
+    mdb.models['Model-1'].parts['BOLT'].cells, name='Set-1')
+mdb.models['Model-1'].parts['BOLT'].SectionAssignment(region=
+    mdb.models['Model-1'].parts['BOLT'].sets['Set-1'], sectionName='Section-1')
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=2.0)
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.0, 0.0), point1=(0.004365625, 0.0))
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.0, 0.0), point1=(0.00873125, 0.0))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='WASHER', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['WASHER'].BaseSolidExtrude(depth=0.0015875, sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].parts['WASHER'].Set(cells=
+    mdb.models['Model-1'].parts['WASHER'].cells, name='Set-1')
+mdb.models['Model-1'].parts['WASHER'].SectionAssignment(region=
+    mdb.models['Model-1'].parts['WASHER'].sets['Set-1'], sectionName=
+    'Section-1')
+mdb.models['Model-1'].ConstrainedSketch(name='__profile__', sheetSize=2.0)
+mdb.models['Model-1'].sketches['__profile__'].ConstructionLine(angle=90.0, 
+    point1=(-0.00635, 0.0))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[2])
+mdb.models['Model-1'].sketches['__profile__'].ConstructionLine(angle=90.0, 
+    point1=(0.00635, 0.0))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[3])
+mdb.models['Model-1'].sketches['__profile__'].radialPattern(centerPoint=(0.0, 
+    0.0), geomList=(mdb.models['Model-1'].sketches['__profile__'].geometry[2], 
+    mdb.models['Model-1'].sketches['__profile__'].geometry[3]), number=3, 
+    totalAngle=360.0, vertexList=())
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.0, 
+    0.00733234841868981), point2=(-0.00635, 0.00366617420906768))
+mdb.models['Model-1'].sketches['__profile__'].ParallelConstraint(addUndoState=
+    False, entity1=mdb.models['Model-1'].sketches['__profile__'].geometry[5], 
+    entity2=mdb.models['Model-1'].sketches['__profile__'].geometry[8])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[0], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[5])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[1], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[2])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.00635, 
+    0.00366617420906768), point2=(-0.00635, -0.00366617420934489))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[9])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[2], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[2])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(-0.00635, 
+    -0.00366617420934489), point2=(0.0, -0.00733234841887462))
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[3], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[4])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.0, 
+    -0.00733234841887462), point2=(0.00635, -0.0036661742095297))
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[4], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[3])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.00635, 
+    -0.0036661742095297), point2=(0.00635, 0.00366617420934489))
+mdb.models['Model-1'].sketches['__profile__'].VerticalConstraint(addUndoState=
+    False, entity=mdb.models['Model-1'].sketches['__profile__'].geometry[12])
+mdb.models['Model-1'].sketches['__profile__'].CoincidentConstraint(
+    addUndoState=False, entity1=
+    mdb.models['Model-1'].sketches['__profile__'].vertices[5], entity2=
+    mdb.models['Model-1'].sketches['__profile__'].geometry[3])
+mdb.models['Model-1'].sketches['__profile__'].Line(point1=(0.00635, 
+    0.00366617420934489), point2=(0.0, 0.00733234841868981))
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='NUT', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['NUT'].BaseSolidExtrude(depth=0.005159375, sketch=
+    mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].ConstrainedSketch(gridSpacing=0.03, name='__profile__', 
+    sheetSize=1.58, transform=
+    mdb.models['Model-1'].parts['NUT'].MakeSketchTransform(
+    sketchPlane=mdb.models['Model-1'].parts['NUT'].faces[6], 
+    sketchPlaneSide=SIDE1, 
+    sketchUpEdge=mdb.models['Model-1'].parts['NUT'].edges[0], 
+    sketchOrientation=RIGHT, origin=(0.0, 0.0, 0.005159375)))
+mdb.models['Model-1'].parts['NUT'].projectReferencesOntoSketch(filter=
+    COPLANAR_EDGES, sketch=mdb.models['Model-1'].sketches['__profile__'])
+mdb.models['Model-1'].sketches['__profile__'].CircleByCenterPerimeter(center=(
+    0.0, 0.0), point1=(0.00396875, 0.0))
+mdb.models['Model-1'].parts['NUT'].CutExtrude(flipExtrudeDirection=OFF, sketch=
+    mdb.models['Model-1'].sketches['__profile__'], sketchOrientation=RIGHT, 
+    sketchPlane=mdb.models['Model-1'].parts['NUT'].faces[6], sketchPlaneSide=
+    SIDE1, sketchUpEdge=mdb.models['Model-1'].parts['NUT'].edges[0])
+mdb.models['Model-1'].parts['NUT'].Set(cells=
+    mdb.models['Model-1'].parts['NUT'].cells, name='Set-1')
+mdb.models['Model-1'].parts['NUT'].SectionAssignment(region=
+    mdb.models['Model-1'].parts['NUT'].sets['Set-1'], sectionName='Section-1')
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].parts['HALFBEAM'].Surface(name='INSURF', side1Faces=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces.getSequenceFromMask((
+    '[#41222028 #90090602 #944022 #3082000 #1001c ]', ), ))
+mdb.models['Model-1'].parts['HALFBEAM'].Surface(name='BmW1', side1Faces=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces.getSequenceFromMask((
+    '[#0 #104000 #0 #20000 #2 ]', ), ))
+mdb.models['Model-1'].parts['HALFBEAM'].Surface(name='BmW2', side1Faces=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces.getSequenceFromMask((
+    '[#0:2 #1010000 #80008000 ]', ), ))
+mdb.models['Model-1'].parts['HALFBEAM'].Surface(name='BmW3', side1Faces=
+    mdb.models['Model-1'].parts['HALFBEAM'].faces.getSequenceFromMask((
+    '[#0 #8000000 #8 #20400000 ]', ), ))
+mdb.models['Model-1'].parts['BOLT'].Surface(name='BlW', side1Faces=
+    mdb.models['Model-1'].parts['BOLT'].faces.getSequenceFromMask(('[#1000 ]', 
+    ), ))
+mdb.models['Model-1'].parts['BOLT'].Surface(name='BN', side1Faces=
+    mdb.models['Model-1'].parts['BOLT'].faces.getSequenceFromMask(('[#2 ]', ), 
+    ))
+mdb.models['Model-1'].parts['NUT'].Surface(name='NB', side1Faces=
+    mdb.models['Model-1'].parts['NUT'].faces.getSequenceFromMask(('[#1 ]', ), 
+    ))
+mdb.models['Model-1'].parts['NUT'].Surface(name='NW', side1Faces=
+    mdb.models['Model-1'].parts['NUT'].faces.getSequenceFromMask(('[#80 ]', ), 
+    ))
+mdb.models['Model-1'].parts['WASHER'].Surface(name='WS', side1Faces=
+    mdb.models['Model-1'].parts['WASHER'].faces.getSequenceFromMask(('[#4 ]', 
+    ), ))
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].Part(dimensionality=THREE_D, name='REFPT', type=
+    DEFORMABLE_BODY)
+mdb.models['Model-1'].parts['REFPT'].ReferencePoint(point=(0.0, 0.0, 0.0))
+del mdb.models['Model-1'].sketches['__profile__']
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Model-1'].rootAssembly.Instance(dependent=OFF, name='HALFBEAM-1', 
+    part=mdb.models['Model-1'].parts['HALFBEAM'])
+mdb.models['Model-1'].rootAssembly.Instance(dependent=OFF, name='HALFBEAM-2', 
+    part=mdb.models['Model-1'].parts['HALFBEAM'])
+mdb.models['Model-1'].rootAssembly.instances['HALFBEAM-2'].translate(vector=(
+    0.462, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('HALFBEAM-1', ), 
+    vector=(0.0, 0.0, -0.0127))
+mdb.models['Model-1'].rootAssembly.rotate(angle=180.0, axisDirection=(0.0, 0.0, 
+    1.0), axisPoint=(0.0, 0.0, 0.0), instanceList=('HALFBEAM-2', ))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('HALFBEAM-2', ), 
+    vector=(0.462, 0.0, -0.0127))
+mdb.models['Model-1'].rootAssembly.rotate(angle=90.0, axisDirection=(1.0, 0.0, 
+    0.0), axisPoint=(0.0, 0.0, 0.0), instanceList=('HALFBEAM-1', 'HALFBEAM-2'))
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='HALFBEAM-1', 
+    toName='TOPBEAM')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='HALFBEAM-2', 
+    toName='BOTBEAM')
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='BOLT-1', part=
+    mdb.models['Model-1'].parts['BOLT'])
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='NUT-1', part=
+    mdb.models['Model-1'].parts['NUT'])
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='WASHER-1', 
+    part=mdb.models['Model-1'].parts['WASHER'])
+mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].translate(vector=(
+    0.368382, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.instances['NUT-1'].translate(vector=(
+    0.382987, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.instances['WASHER-1'].translate(vector=(
+    0.3998145, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='WASHER-2', 
+    part=mdb.models['Model-1'].parts['WASHER'])
+mdb.models['Model-1'].rootAssembly.instances['WASHER-2'].translate(vector=(
+    0.4574505375, 0.0, 0.0))
+mdb.models['Model-1'].parts['WASHER'].surfaces.changeKey(fromName='WS', toName=
+    'WS1')
+mdb.models['Model-1'].parts['WASHER'].surfaces.changeKey(fromName='WS1', 
+    toName='WSTOP')
+mdb.models['Model-1'].parts['WASHER'].surfaces.changeKey(fromName='WSTOP', 
+    toName='WSBOT')
+mdb.models['Model-1'].parts['WASHER'].Surface(name='WSTOP', side1Faces=
+    mdb.models['Model-1'].parts['WASHER'].faces.getSequenceFromMask(('[#8 ]', 
+    ), ))
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.deleteFeatures(('BOLT-1', 'NUT-1'))
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='WASHER-1', 
+    toName='TOPWASHER-1')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='WASHER-2', 
+    toName='TOPWASHER2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='TOPWASHER2', 
+    toName='BOTWASHER-1')
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('TOPWASHER-1', ), 
+    vector=(-0.429814, 0.0, -0.014287))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('BOTWASHER-1', ), 
+    vector=(-0.487451, 0.0, 0.0127))
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='NUT-1', part=
+    mdb.models['Model-1'].parts['NUT'])
+mdb.models['Model-1'].rootAssembly.instances['NUT-1'].translate(vector=(
+    0.36762, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('NUT-1', ), vector=(
+    -0.39762, 0.0, 0.014287))
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='BOLT-1', part=
+    mdb.models['Model-1'].parts['BOLT'])
+mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].translate(vector=(
+    0.368382, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('BOLT-1', ), vector=
+    (-0.398381, 0.0, -0.019446))
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].parts['NUT'].Surface(name='NW', side1Faces=
+    mdb.models['Model-1'].parts['NUT'].faces.getSequenceFromMask(('[#100 ]', ), 
+    ))
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='REFPT-1', part=
+    mdb.models['Model-1'].parts['REFPT'])
+mdb.models['Model-1'].rootAssembly.instances['REFPT-1'].translate(vector=(
+    0.396, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('REFPT-1', ), 
+    vector=(-0.425999, 0.0, 0.019448))
+mdb.models['Model-1'].rootAssembly.DatumPointByMidPoint(point1=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].vertices[0], point2=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].vertices[1])
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('REFPT-1', ), 
+    vector=(0.0, 0.0, -0.00258))
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='REFPT-1', 
+    toName='BPT-1')
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='REFPT-1', part=
+    mdb.models['Model-1'].parts['REFPT'])
+mdb.models['Model-1'].rootAssembly.instances['REFPT-1'].translate(vector=(
+    0.396, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.translate(instanceList=('REFPT-1', ), 
+    vector=(-0.425999, 0.0, 0.016868))
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='REFPT-1', 
+    toName='NPT-1')
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.LinearInstancePattern(direction1=(1.0, 0.0, 
+    0.0), direction2=(0.0, 1.0, 0.0), instanceList=('TOPWASHER-1', 
+    'BOTWASHER-1', 'NUT-1', 'BOLT-1', 'BPT-1', 'NPT-1'), number1=3, number2=1, 
+    spacing1=0.03, spacing2=0.0174625)
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName=
+    'TOPWASHER-1-lin-2-1', toName='TOPWASHER-2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName=
+    'TOPWASHER-1-lin-3-1', toName='TOPWASHER-3')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName=
+    'BOTWASHER-1-lin-2-1', toName='BOTWASHER-2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName=
+    'BOTWASHER-1-lin-3-1', toName='BOTWASHER-3')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='NUT-1-lin-2-1', 
+    toName='NUT-2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='NUT-1-lin-3-1', 
+    toName='NUT-3')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='BPT-1-lin-2-1', 
+    toName='BPT-2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='BPT-1-lin-3-1', 
+    toName='BPT-3')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='NPT-1-lin-2-1', 
+    toName='NPT-2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='NPT-1-lin-3-1', 
+    toName='NPT-3')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='BOLT-1-lin-2-1'
+    , toName='BOLT-2')
+mdb.models['Model-1'].rootAssembly.features.changeKey(fromName='BOLT-1-lin-3-1'
+    , toName='BOLT-3')
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSTOP']
+    , name='BW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSTOP']
+    , name='BW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BlW'])
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSTOP']
+    , name='BW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSTOP']
+    , name='BW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSTOP']
+    , name='BW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSTOP']
+    , name='BW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSTOP']
+    , name='BW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSTOP']
+    , name='BW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSTOP']
+    , name='BW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'].surfaces['WSBOT']
+    , name='NW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSTOP']
+    , name='BW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'].surfaces['WSBOT']
+    , name='NW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSTOP']
+    , name='BW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'].surfaces['WSBOT']
+    , name='NW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].surfaces['BlW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW1'], 
+    name='BmTW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW1'], 
+    name='BmTW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW1'], 
+    name='BmTW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW1'], 
+    name='BmTW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW1'], 
+    name='BmTW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW2'], 
+    name='BmTW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW2'], 
+    name='BmTW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW3'], 
+    name='BmTW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW3'], 
+    name='BmTW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW1'], 
+    name='BmTW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW1'], 
+    name='BmBW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW2'], 
+    name='BmTW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW2'], 
+    name='BmBW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW3'], 
+    name='BmTW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW3'], 
+    name='BmBW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW1'], 
+    name='BmTW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW3'], 
+    name='BmBW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW2'], 
+    name='BmTW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW2'], 
+    name='BmBW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].surfaces['BmW3'], 
+    name='BmTW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].surfaces['WSBOT']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].surfaces['BmW1'], 
+    name='BmBW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'].surfaces['WSTOP']
+    , thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].parts['REFPT'].Set(name='Set-1', referencePoints=(
+    mdb.models['Model-1'].parts['REFPT'].referencePoints[1], ))
+mdb.models['Model-1'].parts['REFPT'].Set(name='Set-1', referencePoints=
+    mdb.models['Model-1'].parts['REFPT'].referencePoints)
+#* TypeError: referencePoints; found RPRepository, expecting tuple
+mdb.models['Model-1'].parts['REFPT'].Set(name='Set-1', referencePoints=
+    [mdb.models['Model-1'].parts['REFPT'].referencePoints[1]])
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'].sets['Set-1'], 
+    couplingType=DISTRIBUTING, influenceRadius=WHOLE_SURFACE, localCsys=None, 
+    name='BPC-1', surface=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BN'], u1=
+    ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON, weightingMethod=UNIFORM)
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].constraints['BPC-1'].setValues(couplingType=STRUCTURAL)
+del mdb.models['Model-1'].constraints['BPC-1']
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='BPC-1', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BN'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='BPC-1', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].surfaces['BN'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['NPT-1'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='NPC-1', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'].surfaces['NB'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-2'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='BPC-2', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].surfaces['BN'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['NPT-2'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='NPC-2', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'].surfaces['NB'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-3'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='BPC-3', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].surfaces['BN'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Coupling(controlPoint=
+    mdb.models['Model-1'].rootAssembly.instances['NPT-3'].sets['Set-1'], 
+    couplingType=STRUCTURAL, influenceRadius=WHOLE_SURFACE, name='NPC-3', 
+    surface=
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'].surfaces['NB'], 
+    weightingMethod=UNIFORM)
+mdb.models['Model-1'].Equation(name='BNEQ1-1', terms=((1.0, 'BPT-1.Set-1', 1), 
+    (-1.0, 'NPT-1.Set-1', 1)))
+mdb.models['Model-1'].Equation(name='BNEQ1-1', terms=((1.0, 'BPT-1.Set-1', 1), 
+    (-1.0, 'NPT-1.Set-1', 1)))
+mdb.models['Model-1'].Equation(name='BNEQ1-2', terms=((1.0, 'BPT-1.Set-1', 2), 
+    (-1.0, 'NPT-1.Set-1', 2)))
+mdb.models['Model-1'].Equation(name='BNEQ1-4', terms=((1.0, 'BPT-1.Set-1', 4), 
+    (-1.0, 'NPT-1.Set-1', 4)))
+mdb.models['Model-1'].Equation(name='BNEQ1-5', terms=((1.0, 'BPT-1.Set-1', 5), 
+    (-1.0, 'NPT-1.Set-1', 5)))
+mdb.models['Model-1'].Equation(name='BNEQ1-6', terms=((1.0, 'BPT-1.Set-1', 6), 
+    (-1.0, 'NPT-1.Set-1', 6)))
+mdb.models['Model-1'].Equation(name='BNEQ2-1', terms=((1.0, 'BPT-2.Set-1', 1), 
+    (-1.0, 'NPT-2.Set-1', 1)))
+mdb.models['Model-1'].Equation(name='BNEQ2-2', terms=((1.0, 'BPT-2.Set-1', 2), 
+    (-1.0, 'NPT-2.Set-1', 2)))
+mdb.models['Model-1'].Equation(name='BNEQ2-4', terms=((1.0, 'BPT-2.Set-1', 4), 
+    (-1.0, 'NPT-2.Set-1', 4)))
+mdb.models['Model-1'].Equation(name='BNEQ2-5', terms=((1.0, 'BPT-2.Set-1', 5), 
+    (-1.0, 'NPT-2.Set-1', 5)))
+mdb.models['Model-1'].Equation(name='BNEQ2-6', terms=((1.0, 'BPT-2.Set-1', 6), 
+    (-1.0, 'NPT-2.Set-1', 6)))
+mdb.models['Model-1'].Equation(name='BNEQ3-1', terms=((1.0, 'BPT-3.Set-1', 1), 
+    (-1.0, 'NPT-3.Set-1', 1)))
+mdb.models['Model-1'].Equation(name='BNEQ3-2', terms=((1.0, 'BPT-3.Set-1', 2), 
+    (-1.0, 'NPT-3.Set-1', 2)))
+mdb.models['Model-1'].Equation(name='BNEQ3-4', terms=((1.0, 'BPT-3.Set-1', 4), 
+    (-1.0, 'NPT-3.Set-1', 4)))
+mdb.models['Model-1'].Equation(name='BNEQ3-5', terms=((1.0, 'BPT-3.Set-1', 5), 
+    (-1.0, 'NPT-3.Set-1', 5)))
+mdb.models['Model-1'].Equation(name='BNEQ3-6', terms=((1.0, 'BPT-3.Set-1', 6), 
+    (-1.0, 'NPT-3.Set-1', 6)))
+mdb.models['Model-1'].StaticStep(name='PRESTRESS', nlgeom=ON, previous=
+    'Initial')
+mdb.models['Model-1'].ConcentratedForce(cf3=12000.0, createStepName='PRESTRESS'
+    , distributionType=UNIFORM, field='', localCsys=None, name='BoltLoad-1', 
+    region=mdb.models['Model-1'].rootAssembly.instances['BPT-1'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=12000.0, createStepName='PRESTRESS'
+    , distributionType=UNIFORM, name='BoltLoad-1', region=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=12000.0, createStepName='PRESTRESS'
+    , distributionType=UNIFORM, name='BoltLoad-1', region=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=-12000.0, createStepName=
+    'PRESTRESS', distributionType=UNIFORM, name='NutLoad-1', region=
+    mdb.models['Model-1'].rootAssembly.instances['NPT-1'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=12000.0, createStepName='PRESTRESS'
+    , distributionType=UNIFORM, name='BoltLoad-2', region=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-2'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=-12000.0, createStepName=
+    'PRESTRESS', distributionType=UNIFORM, name='NutLoad-2', region=
+    mdb.models['Model-1'].rootAssembly.instances['NPT-2'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=12000.0, createStepName='PRESTRESS'
+    , distributionType=UNIFORM, name='BoltLoad-3', region=
+    mdb.models['Model-1'].rootAssembly.instances['BPT-3'].sets['Set-1'])
+mdb.models['Model-1'].ConcentratedForce(cf3=-12000.0, createStepName=
+    'PRESTRESS', distributionType=UNIFORM, name='NutLoad-3', region=
+    mdb.models['Model-1'].rootAssembly.instances['NPT-3'].sets['Set-1'])
+# Save by nbalaji on 2023_09_19-19.07.33; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.makeIndependent(instances=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3']))
+# Save by nbalaji on 2023_09_19-19.13.17; build 2023 2022_09_28-20.11.55 183150
+# Save by nbalaji on 2023_09_19-19.13.24; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.setMeshControls(elemShape=HEX_DOMINATED, 
+    regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    mask=('[#ffffffff ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].cells.getSequenceFromMask(
+    mask=('[#ffffffff ]', ), ))
+mdb.models['Model-1'].rootAssembly.seedPartInstance(deviationFactor=0.05, 
+    minSizeFactor=0.1, regions=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3']), size=0.00254)
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3']))
+mdb.models['Model-1'].parts['BOLT'].PartitionCellByExtendFace(cells=
+    mdb.models['Model-1'].parts['BOLT'].cells.getSequenceFromMask(('[#2 ]', ), 
+    ), extendFace=mdb.models['Model-1'].parts['BOLT'].faces[12])
+# Save by nbalaji on 2023_09_19-19.23.56; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].cells.getSequenceFromMask(
+    ('[#4 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].cells.getSequenceFromMask(
+    ('[#4 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].cells.getSequenceFromMask(
+    ('[#4 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].cells.getSequenceFromMask(
+    ('[#1 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].cells.getSequenceFromMask(
+    ('[#1 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].cells.getSequenceFromMask(
+    ('[#1 ]', ), ))
+# Save by nbalaji on 2023_09_19-19.24.40; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.deleteMesh(regions=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BPT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NPT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3']))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3']))
+# Save by nbalaji on 2023_09_19-19.26.19; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.deleteMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    mask=('[#ffffffff ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].cells.getSequenceFromMask(
+    mask=('[#ffffffff ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'].cells.getSequenceFromMask(
+    mask=('[#f ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'].cells.getSequenceFromMask(
+    mask=('[#1 ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'].cells.getSequenceFromMask(
+    mask=('[#f ]', ), )+\
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3'].cells.getSequenceFromMask(
+    mask=('[#f ]', ), ))
+# Save by nbalaji on 2023_09_19-19.26.58; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].edges.getSequenceFromMask(
+    ('[#48000048 #2400000 #88000 ]', ), ), number=5)
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].edges.getSequenceFromMask(
+    ('[#0:3 #80440 #20200904 #404080 #4 ]', ), ), number=3)
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].edges.getSequenceFromMask(
+    ('[#800 #80200 #201 #10150000 #48410003 #1020001 #e700000 ]', ), ), number=
+    6)
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].edges.getSequenceFromMask(
+    ('[#1400 #80140500 #40000002 #24200 ]', ), ), number=3)
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#400 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#4000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#80 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#20000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#8000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#10000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#1000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#2000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#40 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#100 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#1000000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#2000000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#40000000 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#10 ]', ), ))
+mdb.models['Model-1'].rootAssembly.deleteMesh(regions=
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'].cells.getSequenceFromMask(
+    ('[#c3abf5f8 ]', ), ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'], ))
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].edges.getSequenceFromMask(
+    ('[#48000048 #2400000 #88000 ]', ), ), number=5)
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].edges.getSequenceFromMask(
+    ('[#800 #80200 #201 #10150000 #48410003 #1020001 #e700000 ]', ), ), number=
+    6)
+mdb.models['Model-1'].rootAssembly.seedEdgeByNumber(constraint=FINER, edges=
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'].edges.getSequenceFromMask(
+    ('[#1400 #80140500 #40000002 #a4640 #20200904 #404080 #4 ]', ), ), number=
+    3)
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=(
+    mdb.models['Model-1'].rootAssembly.instances['BOTBEAM'], ))
+mdb.models['Model-1'].rootAssembly.generateMesh(regions=(
+    mdb.models['Model-1'].rootAssembly.instances['TOPBEAM'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-1'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['TOPWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-2'], 
+    mdb.models['Model-1'].rootAssembly.instances['BOLT-3']))
+# Save by nbalaji on 2023_09_19-19.54.15; build 2023 2022_09_28-20.11.55 183150
+# Save by nbalaji on 2023_09_19-19.58.57; build 2023 2022_09_28-20.11.55 183150
+# Save by nbalaji on 2023_09_19-20.30.44; build 2023 2022_09_28-20.11.55 183150
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-1'].surfaces['WSBOT']
+    , name='NW-1', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['NUT-1'].surfaces['NW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-2'].surfaces['WSBOT']
+    , name='NW-2', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['NUT-2'].surfaces['NW'], 
+    thickness=ON, tieRotations=ON)
+mdb.models['Model-1'].Tie(adjust=ON, main=
+    mdb.models['Model-1'].rootAssembly.instances['BOTWASHER-3'].surfaces['WSBOT']
+    , name='NW-3', positionToleranceMethod=COMPUTED, secondary=
+    mdb.models['Model-1'].rootAssembly.instances['NUT-3'].surfaces['NW'], 
+    thickness=ON, tieRotations=ON)
+# Save by nbalaji on 2023_09_19-20.31.02; build 2023 2022_09_28-20.11.55 183150
+# Save by nbalaji on 2023_09_19-20.31.04; build 2023 2022_09_28-20.11.55 183150
+# Save by nbalaji on 2023_09_19-21.17.01; build 2023 2022_09_28-20.11.55 183150
