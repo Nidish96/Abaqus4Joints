@@ -11,7 +11,7 @@
 
 #+BEGIN_EXPORT html
 <!-- <script type="text/javascript" src="./collcont_clkbls.js"></script> -->
-<!-- <script>var HS_STARTUP_FOLDED = true;</script> -->
+<script>var HS_STARTUP_FOLDED = true;</script>
 #+END_EXPORT
 
 # Inkscape Stroke Size: 3
