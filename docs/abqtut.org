@@ -410,7 +410,7 @@ The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/m
 We will now proceed with meshing.
 *CORRECT NW CONSTRAINTS AND REUPLOAD*
 * Meshing
-Since the model is reasonably symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
+Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the =Mesh= module for this section.
 ** Meshing Instructions
 1. Choose ~Mesh->Assign Mesh Controls~ and select the whole assembly (all the instances).
