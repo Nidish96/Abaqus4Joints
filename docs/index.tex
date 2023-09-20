@@ -1,4 +1,4 @@
-% Created 2023-09-20 Wed 16:29
+% Created 2023-09-20 Wed 16:34
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -16,11 +16,11 @@
 \usepackage{minted}
 \usepackage[margin=1in]{geometry}
 \usepackage{xcolor}
-\author{Nidish Narayanaa Balaji, Matthew Allen, and Matthew R. W. Brake}
+\author{Nidish Narayanaa Balaji}
 \date{\today}
 \title{An Abaqus-MATLAB tutorial for Jointed Systems}
 \hypersetup{
- pdfauthor={Nidish Narayanaa Balaji, Matthew Allen, and Matthew R. W. Brake},
+ pdfauthor={Nidish Narayanaa Balaji},
  pdftitle={An Abaqus-MATLAB tutorial for Jointed Systems},
  pdfkeywords={},
  pdfsubject={},
@@ -34,7 +34,7 @@
 \pagebreak
 
 \section{Preprocessing}
-\label{sec:orgf97811d}
+\label{sec:org0eb26e7}
 
 The Brake-Reuß Beam (BRB) is a 3-bolted lap-joint beam which will serve as our tutorial joint structure (read more about the benchmark \href{https://jointmechanics.org/index.php/Benchmarks\#The\_Brake-Reu\%C3\%9F\_Beams}{here}).
 To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in Abaqus and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
@@ -43,32 +43,32 @@ Buckle up! :)
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{./figs/300px-BRB.png}
-\caption{\label{fig:orge29a531}Geometry of the BRB Benchmark}
+\caption{\label{fig:org17753b6}Geometry of the BRB Benchmark}
 \end{figure}
 
-A picture of the parts of the BRB is shown in Fig. \ref{fig:orge29a531} and this will be used to guide the modeling here.
-Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see \ref{org4ae3e7f} for more details on bolt prestress modeling).
+A picture of the parts of the BRB is shown in Fig. \ref{fig:org17753b6} and this will be used to guide the modeling here.
+Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see \ref{org5237b33} for more details on bolt prestress modeling).
 
 \textbf{Note}: If you already have a model of your structure and want to just apply the node-selection/matrix extraction, you can safely ignore the sections particular to the modeling of the BRB and just go through the remaining, whose instructions are quite general.
 The general principles in the modeling section are, however, recommended for all jointed structure modeling.
 
 \subsection{A Note on Python Scripting}
-\label{sec:orga99fcd6}
+\label{sec:orgfe1853c}
 Abaqus Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
 \begin{itemize}
 \item For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. Abaqus would have saved the actions in a Python file called \texttt{abaqus.rpy}. This is just python code that can be imported into abaqus to repeat the same tasks.
 All standard python commands work so this makes it very helpful.
 \item On Windows the \textbf{work directory} may be an unfamiliar concept (on Linux it is just the directory from which Abaqus is launched). This directory can be manually set by \texttt{File->Set Work Directory}, following which all the files (including the \texttt{abaqus.rpy} file) will be put in the specified folder.
-\item Fig \ref{fig:org8ea3e6b} shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.
+\item Fig \ref{fig:org0806bd7} shows a pictorial overview of the different options available in Abaqus for scripting support. The Abaqus PDE can be used for Abaqus python script development.
 \end{itemize}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{./figs/ovw.png}
-\caption{\label{fig:org8ea3e6b}Options in Abaqus for Scripting}
+\caption{\label{fig:org0806bd7}Options in Abaqus for Scripting}
 \end{figure}
 
 \subsection{Modeling Parts\hfill{}\textsc{Script:GUI}}
-\label{sec:orgdc9ec13}
+\label{sec:org8f970b0}
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
 
 We will do the construction through Abaqus Python code that can be imported through \texttt{File->Run Script} or just typed into the command line.
@@ -246,7 +246,7 @@ If not, you will have to use the "Merge Edges" tool in the Part module and indiv
 \end{quote}
 \begin{enumerate}
 \item Create a Reference Point Part called \texttt{REFPT}.
-This will be necessary for the application of bolt prestress (see \ref{org4ae3e7f} below).
+This will be necessary for the application of bolt prestress (see \ref{org5237b33} below).
 \begin{verbatim}
 135  rpt = mdl.Part(name='REFPT', dimensionality=THREE_D, 
 136                 type=DEFORMABLE_BODY)
@@ -264,7 +264,7 @@ The Python script also assigns the material "STEEL" (see above) to the parts.
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step0.cae}{model\textsubscript{step0.cae}} stores the CAE file at the end of the above steps (building parts, and partitioning).
 \subsection{Creating appropriate surface sets\hfill{}\textsc{GUI}}
-\label{sec:orgb666b26}
+\label{sec:org8f32868}
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
 Doing this with surfaces (before meshing) is advantageous since the same scripts can be reused even if the model is remeshed.
 \begin{enumerate}
@@ -304,7 +304,7 @@ Here is a graphical depiction of the model with the surfaces.
 Now all the parts have been created and relevant surfaces have been identified.
 \textbf{Note}: It is important to have traceable but short names so that a lot of the repetitive tasks can be sped up considerably using scripting.
 \subsection{Create Assembly\hfill{}\textsc{GUI}}
-\label{sec:org5f918c2}
+\label{sec:orgde4d60b}
 \textbf{Note}: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
 This will be advantageous if we want to modify the meshes just at the interface for mirror symmetry.
 We will do independent meshing since it is good practice, although independent meshes are not a requirement for this example (dependent meshes can be used due to symmetry).
@@ -336,7 +336,7 @@ Rename this to \texttt{BPT-1} (standing for Bolt Point 1).
 \end{center}
 \item Now import another instance of the reference point \texttt{REFPT} and translate it to be coincident with \texttt{BPT-1}.
 Rename this \texttt{NPT-1} (standing for Nut Point 1).
-These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see \ref{org4ae3e7f} below for those steps).
+These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see \ref{org5237b33} below for those steps).
 The point \texttt{BPT-1} will be coupled to the bolt surface \texttt{BN} and \texttt{NPT-1} will be tied to the nut surface \texttt{NB} through RBE3 elements.
 \item Use the "Linear Pattern" dialog and copy the bolt-washer-washer-nut assembly thrice along the beam such that the assembly is complete.
 The figure below shows the final assembly along with a representation of the names of the different parts.
@@ -348,9 +348,9 @@ Recall that  the beam shown in the figure below is \texttt{TOPBEAM} and the hidd
 
 Now that the assembly is complete, the relevant constraints will have to be enforced, followed by a realization of the bolt preload.
 \section{Constraints}
-\label{sec:orgb901195}
+\label{sec:org386dea6}
 \subsection{Tie-Constraint Enforcement\hfill{}\textsc{Script:GUI}}
-\label{sec:org4bcdb79}
+\label{sec:orgc600d67}
 All the following operations can be conducted in the \texttt{Interaction} module in CAE.
 But since selecting each surface can be a time-consuming process, we use the following for-loop in Abaqus-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
 Specifically, it ties the Bolt-Washer, Nut-Washer, and Washer-Beam surfaces.
@@ -390,8 +390,8 @@ So \texttt{WASHER-1} is tied to \texttt{BmW3} of the bottom beam (and so on for 
 31              tieRotations=ON, thickness=ON)
 \end{verbatim}
 \subsection{Bolt Preload Realization\hfill{}\textsc{Script:GUI}}
-\label{sec:orgc32234c}
-\label{org4ae3e7f}
+\label{sec:orgd212162}
+\label{org5237b33}
 You might already have encountered the different parts of the model above that were carefully constructed for the bolt preload application (bolt-shank partitioning, reference points, etc.).
 \definecolor{osbe-bg}{HTML}{cccccc}\colorlet{osbe-fg}{black}\begin{quote}
                               \begin{tcolorbox}[colback=osbe-bg,colframe=osbe-fg,title={What 's wrong with the inbuilt Bolt Pretension in ABAQUS?},sharp corners,boxrule=0.4pt]
@@ -501,11 +501,11 @@ It is, however, a physical requirement for equilibrium that \texttt{BoltLoad-n} 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\textsubscript{step1.cae}} stores the CAE-file generated after the end of the above steps.
 We will now proceed with meshing.
 \section{Meshing}
-\label{sec:org8647633}
+\label{sec:orgb026244}
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the \texttt{Mesh} module for this section.
 \subsection{Meshing Instructions}
-\label{sec:org51040d4}
+\label{sec:orgdeb612c}
 \begin{enumerate}
 \item Choose \texttt{Mesh->Assign Mesh Controls} and select the whole assembly (all the instances).
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
@@ -535,7 +535,7 @@ Here is a view of the interfacial mesh you should get after the above seeding.
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\textsubscript{step1.cae}} stores the CAE-file along with the mesh.
 \subsection{(Optional, recommended) Verify correctness of model through frictionless prestress}
-\label{sec:org2b30b18}
+\label{sec:org0eb9ca5}
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
 
 \textbf{Setup}
@@ -626,7 +626,7 @@ In other words, the bolt-axial direction has now been fixed due to the fact that
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step2.cae}{model\textsubscript{step2.cae}} is the cae file containing the model with the above tests included.
 \section{Postprocessing}
-\label{sec:org735100d}
+\label{sec:orgdb834d9}
 Now that the model is verified to be correct/consistent, we will proceed with the steps necessary for substructured Matrix Extraction.
 
 Before proceeding it is necessary to first identify nodes on the meshed model that correspond to the input and output locations.
@@ -643,7 +643,7 @@ This can be specified in \texttt{Model->Edit Attributes->Model-1} as follows:
 \includegraphics[width=0.5\textwidth]{./figs/modl.png}
 \end{center}
 \subsection{Reorganize Interfacial Node Sets (readjust if necessary)\hfill{}\textsc{Script}}
-\label{sec:orgcbc9497}
+\label{sec:orga240c0a}
 Although we have taken care to ensure that the mesh of the \texttt{TOPBEAM} and \texttt{BOTBEAM} are conformal at the interface, minor imperfections in the nodal locations may exist.
 Furthermore, the ordering of the nodes on the top interface will be different from that on the bottom interface.
 Through some scripting, we can create node sets in such a way that the top and bottom interface nodesets are ordered in a convenient fashion.
@@ -792,7 +792,7 @@ So we will reintroduce the bolt loads in the substructuring step in \#8 below.
 \end{verbatim}
 \end{enumerate}
 \subsection{Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps\hfill{}\textsc{Script}}
-\label{sec:org03437ed}
+\label{sec:org769e6dd}
 \begin{enumerate}
 \item We are interested in \textbf{Fixed-Interface Component Mode Synthesis} with 20 retained modes.
 So we first do a fixed interface modal analysis and request \(20\times3 = 60\) modes (for ensuring accuracy of the first 20 modes).
@@ -916,7 +916,7 @@ which we introduced through the "synch" step in \#3 above.
 \end{verbatim}
 \end{enumerate}
 \subsection{Run Job and Generate the mtx file.\hfill{}\textsc{Script:GUI}}
-\label{sec:org600eef8}
+\label{sec:org24519a5}
 You can now run the Job named "Job" in the GUI, or directly run the "Job.inp" file from the command line using
 \begin{verbatim}
 abaqus job=Job inp=Job.inp cpus=2 interactive
@@ -924,7 +924,7 @@ abaqus job=Job inp=Job.inp cpus=2 interactive
 Once the job is done, it will output the matrix file "Modelmats.mtx" into the working directory.
 This, along with the "Nodes.dat" and "Elements.dat" files that were written out earlier, are all we need for external analyses.
 \section{Matrix Extraction}
-\label{sec:org258317d}
+\label{sec:orga678afa}
 By default, ABAQUS uses the \href{https://math.nist.gov/MatrixMarket/}{matrix market format} for the outputted matrices.
 Note the following, in terms of format:
 \begin{itemize}
@@ -938,7 +938,7 @@ where \(x_{cms}\) is the vector of DOFs of the CMS model (substructure) and \(x_
 Each column of \(R\) is \(N_{out}\times 1\), and \(R\) is \(N_{out}\times N_{cms}\).
 \end{itemize}
 \subsection{Postprocessing Exported Matrices\hfill{}\textsc{Script}}
-\label{sec:org71c6f0a}
+\label{sec:org517eb01}
 \begin{enumerate}
 \item The first few lines provide the generalized coordinates of the model. The nodes are listed as positive integers and the "modal" DOFs are listed as negative integers.
 This is followed by a list of DOFs active in each set.
@@ -1101,13 +1101,13 @@ Line-parsing on MATLAB was extremely slow for me.
 \end{enumerate}
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step3.cae}{model\textsubscript{step3.cae}} is the final cae file that contains all of the above.
 \subsection{Simple Analysis on MATLAB/OCTAVE\hfill{}\textsc{Script}}
-\label{sec:org97462bf}
+\label{sec:orga5cd17a}
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
 We will conduct a \textbf{Nonlinear Prestress Analysis} for a frictionless contact with a unilateral spring on the normal direction.
 \textbf{TO BE ADDED SOON}
 
 \section{Outro/Contact Details}
-\label{sec:org5ca61b4}
+\label{sec:orge06dbae}
 In summary, all the scripts used in the tutorial are provided in 
 \begin{enumerate}
 \item \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a\_steelmat.py}{a\textsubscript{steelmat.py}}: Loading material

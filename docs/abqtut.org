@@ -1,5 +1,5 @@
 #+TITLE: An Abaqus-MATLAB tutorial for Jointed Systems
-#+AUTHOR: Nidish Narayanaa Balaji, Matthew Allen, and Matthew R. W. Brake
+#+AUTHOR: Nidish Narayanaa Balaji
 #+EXPORT_FILE_NAME: index.html
 #+OPTIONS: startup:indent
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
