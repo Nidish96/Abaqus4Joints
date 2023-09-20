@@ -39,7 +39,7 @@ Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread 
 *Note*: If you already have a model of your structure and want to just apply the node-selection/matrix extraction, you can safely ignore the sections particular to the modeling of the BRB and just go through the remaining, whose instructions are quite general.
 The general principles in the modeling section are, however, recommended for all jointed structure modeling.
 
-** A Note on Python Scripting
+** A Note on Python Scripting                                       :Script:
 Abaqus Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
 + For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. Abaqus would have saved the actions in a Python file called =abaqus.rpy=. This is just python code that can be imported into abaqus to repeat the same tasks.
   All standard python commands work so this makes it very helpful.
@@ -446,7 +446,10 @@ We will now proceed with meshing.
 * Meshing
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the =Mesh= module for this section.
-** Meshing Instructions
+
+If such symmetry is not available, one may choose a more direct approach by using the ~bottom-up~ meshing to copy the mesh from one interface to another directly.
+Please [[mailto:nidish.balaji@ila.uni-stuttgart.de][write to me]] if you'd like an example for this.
+** Meshing Instructions                                                :GUI:
 1. Choose ~Mesh->Assign Mesh Controls~ and select the whole assembly (all the instances).
    We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
    #+ATTR_HTML: :width 300px
@@ -473,7 +476,7 @@ Switch to the =Mesh= module for this section.
    [[./figs/fullmesh.png]]
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model\under{}step1.cae]] stores the CAE-file along with the mesh.
-** (Optional, recommended) Verify correctness of model through frictionless prestress
+** (Optional, recommended) Verify correctness of model through frictionless prestress :GUI:
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
 
 *Setup*
