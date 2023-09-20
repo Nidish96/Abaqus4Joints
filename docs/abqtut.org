@@ -213,7 +213,7 @@ We will do the construction through Abaqus Python code that can be imported thro
    [[./figs/nwb.png]]
    The Python script also assigns the material "STEEL" (see above) to the parts.
 
-The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step0.cae]] stores the CAE file at the end of the above steps (building parts, & partitioning).
+The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step0.cae][model_step0.cae]] stores the CAE file at the end of the above steps (building parts, & partitioning).
 *REGENERATE THIS AFTER THE PARTITIONED BOLT IS USED!*
 ** Creating appropriate surface sets                                   :GUI:
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
@@ -406,7 +406,7 @@ We will now go through the process of specifying this.
    If this is not the case, the different loads can be exported separately and scaled appropriately (for external analysis).
    It is, however, a physical requirement for equilibrium that =BoltLoad-n= and =NutLoad-n= have to be of equal magnitude and opposite signs.
 
-The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae]] stores the CAE-file generated after the end of the above steps.
+The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model_step1.cae]] stores the CAE-file generated after the end of the above steps.
 We will now proceed with meshing.
 *CORRECT NW CONSTRAINTS AND REUPLOAD*
 * Meshing
@@ -433,7 +433,7 @@ Switch to the =Mesh= module for this section.
    #+ATTR_HTML: :width 600px
    [[./figs/fullmesh.png]]
 
-The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae]] stores the CAE-file along with the mesh.
+The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model_step1.cae]] stores the CAE-file along with the mesh.
 *CORRECT NW CONSTRAINTS AND RE-UPLOAD*
 ** (Optional, recommended) Verify correctness of model through frictionless prestress
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
@@ -505,7 +505,7 @@ We will now conduct a simple frictionless contact analysis to verify the correct
 4. If your model passes all the above, then you are ready to proceed.
    *INCLUDE NOTE ABOUT MESH CONVERGENCE?*
 
-The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step2.cae]] is the cae file containing the model with the above tests included.
+The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step2.cae][model_step2.cae]] is the cae file containing the model with the above tests included.
 * Postprocessing
 Now that the model is verified to be correct/consistent, we will proceed with the steps necessary for substructured Matrix Extraction.
 
@@ -911,7 +911,7 @@ Note the following, in terms of format:
 7. It may be possible to do this natively in MATLAB, but since this requires a line-parser, awk is better suited for the job than MATLAB.
    A MATLAB implementation might require loading the whole file into memory for speed.
    Line-parsing on MATLAB was extremely slow for me.
-The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step3.cae]] is the final cae file that contains all of the above.
+The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step3.cae][model_step3.cae]] is the final cae file that contains all of the above.
 ** Simple Analysis on MATLAB/OCTAVE
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
 We will conduct a *Nonlinear Prestress Analysis* for a frictionless contact with a unilateral spring on the normal direction.
