@@ -925,6 +925,8 @@ In summary, all the scripts used in the tutorial are provided in
 5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py][d_applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
 6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py][e_nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
 7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
-   
-You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
 
+Don't forget to check out the repository in github at [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step3.cae][https://github.com/Nidish96/Abaqus4Joints]].
+It has the above scripts as well as all the cae files.
+
+You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
