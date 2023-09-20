@@ -107,4 +107,4 @@ io.savemat(".out.mat",dict);
 print("Processing Over")
 EOF
 mv .out.mat $OUT
-# rm .STIFFNESS.mtx .MASS.mtx .RECOV.mtx .FVEC.mtx
+rm .STIFFNESS.mtx .MASS.mtx .RECOV.mtx .FVEC.mtx
