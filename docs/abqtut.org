@@ -24,7 +24,7 @@ Buckle up! :)
 #+CAPTION: Geometry of the BRB Benchmark
 #+NAME: fig:brbgeom
 #+ATTR_HTML: :width 300px
-[[../assets/parts/300px-BRB.png]]
+[[./figs/300px-BRB.png]]
 
 A picture of the parts of the BRB is shown in Fig. [[fig:brbgeom]] and this will be used to guide the modeling here.
 Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see [[sec:boltprel]] for more details on bolt prestress modeling).
