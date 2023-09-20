@@ -6,7 +6,7 @@
 #+HTML: <style> summary:hover {background:pink;} </style>
 # #+HTML_HEAD: <style> #content{max-width:2000px;}</style>
 # #+HTML_HEAD_EXTRA: <style>*{font-size: large;}</style>
-#+LATEX_HEADER: \usepackage[inkscapelatex=false]{svg}
+# #+LATEX_HEADER: \usepackage[inkscapelatex=false]{svg}
 
 #+BEGIN_EXPORT html
 <!-- <script type="text/javascript" src="./collcont_clkbls.js"></script> -->
@@ -41,7 +41,7 @@ Abaqus Python scripting is quite powerful and will be used quite liberally throu
 #+CAPTION: Options in Abaqus for Scripting
 #+ATTR_HTML: :width 600px
 #+NAME: fig:ovw
-[[./figs/ovw.svg]]
+[[./figs/ovw.png]]
 
 ** Modeling Parts                                               :Script:GUI:
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
@@ -191,7 +191,7 @@ We will do the construction through Abaqus Python code that can be imported thro
    At the end of this step, you should have a partitioned part that looks like this.
    The partitioning is done in this way to help with the seeded meshing, constraint enforcement, etc.
    #+ATTR_HTML: :width 600px
-   [[./figs/parthb.svg]]
+   [[./figs/parthb.png]]
    #+begin_Details IMPORTANT! Geometry Correction Note :background-color "#cccccc" :title-color "black"
    You have to ensure that the curved edges on the above are, indeed, single edges. You will run into meshing issues if this is not the case.
    If not, you will have to use the "Merge Edges" tool in the Part module and individually select each edge and merge them.
@@ -281,7 +281,7 @@ We will do independent meshing since it is good practice, although independent m
    The figure below shows the final assembly along with a representation of the names of the different parts.
    Recall that  the beam shown in the figure below is =TOPBEAM= and the hidden one is =BOTBEAM=.
    #+ATTR_HTML: :width 600px
-   [[./figs/as3bwn.svg]]
+   [[./figs/as3bwn.png]]
 
 Now that the assembly is complete, the relevant constraints will have to be enforced, followed by a realization of the bolt preload.
 * Constraints
@@ -400,7 +400,7 @@ We will now go through the process of specifying this.
                                cf3=-bpmag, distributionType=UNIFORM)
    #+end_src
    #+ATTR_HTML: :width 600px
-   [[./figs/loads.svg]]
+   [[./figs/loads.png]]
 5. *Note* that the bolt load constructed in the above manner is a "linear" load - i.e., the load can be increased/decreased by scaling the resulting force vector.
    It is assumed here that all 3 bolts are loaded equally.
    If this is not the case, the different loads can be exported separately and scaled appropriately (for external analysis).
@@ -424,7 +424,7 @@ Switch to the =Mesh= module for this section.
 3. Apply local seeds at the interface as shown here (on both interfaces).
    Use the ~Mesh->Seed Edges~ tool by choosing the Method as "By Number" and specify the number of elements.
    #+ATTR_HTML: :width 600px
-   [[./figs/lmeshseeds.svg]]
+   [[./figs/lmeshseeds.png]]
 4. Now mesh the assembly using ~Mesh->Mesh Part Instance~ and selecting all the part instances.
    Here is a view of the interfacial mesh you should get after the above seeding.
    #+ATTR_HTML: :width 600px
@@ -442,17 +442,17 @@ We will now conduct a simple frictionless contact analysis to verify the correct
 1. For the static prestress analysis, first a surface-to-surface contact interaction property has to be created and assigned.
    You can do this from CAE starting from ~Interaction->Create Interaction~ and following the steps in the figure below.
    #+ATTR_HTML: :width 600px
-   [[./figs/setcontact.svg]]
+   [[./figs/setcontact.png]]
 2. Now create two linear frequency steps, one before and one after the static prestress step, as shown in the figure below.
    Request 30 eigenvalues in each case.
    #+ATTR_HTML: :width 600px
-   [[./figs/lfreq.svg]]
+   [[./figs/lfreq.png]]
 3. Create 2 jobs. Suppress the interaction property in the first one and have just ~FREQ1~ active (see figure below).
    #+ATTR_HTML: :width 600px
-   [[./figs/run1.svg]]
+   [[./figs/run1.png]]
    For the second job, suppress ~FREQ1~ and resume the other steps. Resume the surface interaction properties (see figure below).
    #+ATTR_HTML: :width 600px
-   [[./figs/run2.svg]]
+   [[./figs/run2.png]]
    Optionally, field outputs for ~FREQ2~ (by default it will be set to none if ~FREQ1~ is suppressed).
    You can do this in ~Step->Create Field Outputs~.
    #+ATTR_HTML: :width 600px
