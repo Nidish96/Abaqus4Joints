@@ -1076,7 +1076,7 @@ The below tutorial is meant to be minimal so it is assumed that all the elements
    The following is a depiction of the quadrature points against the interfacial elements.
    #+ATTR_HTML: :width 600px
    #+ATTR_LATEX: :width \textwidth
-   [[../assets/demo/quadpts.png]]
+   [[./figs/quadpts.png]]
 4. We now construct a matrix $L_{rel}$ such that $L_{rel}x_{cms}$ gives an $N\times 1$ array of interfacial relative displacements in the normal direction.
    This is written based on the fact that the CMS model first lists out all the nodal DOFs of the top interface ($x, y, z$, in that order), and then lists out the DOFs of the bottom interface nodes.
    So the relative normal displacement is defined as $\Delta z:=x_{z,top}-x_{z,bot}$, such that $\Delta z>0$ implies contact and $\Delta z<0$ implies separation.
@@ -1194,7 +1194,7 @@ This completes the analysis, and the next two action points will do some plottin
    The following is the output figure, showing the relative normal displacements at each node, with the nodes connected through the undirected graph constructed using the element information.
    #+ATTR_HTML: :width 600px
    #+ATTR_LATEX: :width \textwidth
-   [[../assets/demo/intdisps.png]]
+   [[./figs/intdisps.png]]
 2. We can also plot the interfacial normal tractions by evaluating the contact model at the quadrature points and plotting them.
    Since we have just a single quadrature point per element, each element is filled in with a constant color.
    If multiple quadrature points are available, we can do a least-squares solve to obtain "nodal traction values", which will show the intra-element gradients also.
@@ -1226,7 +1226,7 @@ This completes the analysis, and the next two action points will do some plottin
    An alternative would be to implement a lagrange multiplier method for conducting hard contact simulations directly.
    #+ATTR_HTML: :width 600px
    #+ATTR_LATEX: :width \textwidth
-   [[../assets/demo/intpress.png]]
+   [[./figs/intpress.png]]
 *** Miscellanies
 1. Even if all the nodes have equal areas, *node-to-node contact elements are still inconsistent in this context*, since contact interactions can be understood to be a fundamentally local interaction, which need to be integrated to have global influence.
    Quadrature-based integration of local tractions to nodal forces conducts exactly this.
