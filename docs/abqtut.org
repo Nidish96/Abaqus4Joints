@@ -17,7 +17,7 @@ Buckle up! :)
 
 #+CAPTION: Geometry of the BRB Benchmark
 #+NAME: fig:brbgeom
-#+ATTR_HTML: :width 300px :class zoomable-image
+#+ATTR_HTML: :width 300px :class zoomable-image :align center
 #+ATTR_LATEX: :width 0.5\textwidth
 [[./figs/300px-BRB.png]]
 
@@ -34,7 +34,7 @@ ABAQUS Python scripting is quite powerful and will be used quite liberally throu
 + On Windows the *work directory* may be an unfamiliar concept (on Linux it is just the directory from which ABAQUS is launched). This directory can be manually set by ~File->Set Work Directory~, following which all the files (including the =ABAQUS.rpy= file) will be put in the specified folder.
 + Fig [[fig:ovw]] shows a pictorial overview of the different options available in ABAQUS for scripting support. The ABAQUS PDE can be used for ABAQUS python script development.
 #+CAPTION: Options in ABAQUS for Scripting
-#+ATTR_HTML: :width 600px :class zoomable-image
+#+ATTR_HTML: :width 600px :class zoomable-image :align center
 #+ATTR_LATEX: :width \textwidth
 #+NAME: fig:ovw
 [[./figs/ovw.png]]
