@@ -1107,7 +1107,7 @@ The below tutorial is meant to be minimal so it is assumed that all the elements
 
      Nn = size(Ln, 2);  % Null-reduced DOFs
    #+end_src
-6. Now conduct the nonlinear prestress simulation using a uniform nodal penalty stiffness of $5\times 10^6 N m^{-1}$.
+6. Now conduct the nonlinear prestress simulation using a uniform penalty stiffness of $5\times 10^6 Pa m^{-1}$ (units of traction per displacement).
    The normal contact is simulated using a penalty stiffness formulation for simplicity.
    #+begin_src octave +n
      %% Solve the Nonlinear Static Prestress Problem
