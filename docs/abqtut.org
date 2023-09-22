@@ -1040,7 +1040,12 @@ The below tutorial is meant to be minimal so it is assumed that all the elements
    #+end_src
 2. It may be tempting to want to use *node-to-node contact elements*.
    But this is *inconsistent here* since the elements have non-uniform area and have non-trivial connectivity.
-   It is *necessary to employ quadrature integration* for consistency.
+   In the continuous case, the nodal-force-traction relationship is expressed as
+   $$ f_j = \int_\Omega \mathbb{N}_j t(\mathbb{x}) d\Omega, $$
+   where $\mathbb{N}_j$ is the $j^{th}$ shape function, $f_j$ is the nodal force of the $j^{th}$ node, and $t(\mathbb{x})$ is the traction-field (of the appropriate traction).\\
+   *Contact-constitutive models are understood as local relationships between the relative displacement and contact tractions.*
+   Nodal forces are merely integral effects of the local traction distributions.\\
+   It is therefore *necessary to employ quadrature integration* for consistency.
 3. The implementation greatly simplifies if we were to employ only a single Quadrature Point (QP) per element.
    We construct two matrices, $Q_m$ and $T_m$ such that
    \begin{align*}
@@ -1048,7 +1053,7 @@ The below tutorial is meant to be minimal so it is assumed that all the elements
    f_N &= T_{m} t_{QP}.
    \end{align*}
    Here, $x_{QP}$ and $x_N$ are the vector of displacements at quadrature points and nodal points respectively; and
-   $f_N$ and $p_{QP}$ are the vector of nodal forces and quadrature point tractions respectively.
+   $f_N$ and $t_{QP}$ are the vector of nodal forces and quadrature point tractions respectively.
    #+begin_src octave +n
      %% Single-Point-Quadrature Matrices
      Qm = zeros(Ne, N);  % Each element has one quadrature point
@@ -1072,7 +1077,10 @@ The below tutorial is meant to be minimal so it is assumed that all the elements
      Ar_avg = Ar_tot/Ne;  % Average element area
    #+end_src
    The fact that for a single quadrature point case, the quadrature point is exactly at the centroid of the element.
-   So the interpolation and integration weights may be easily specified.
+   For the integral, this assumes that the traction field within each element is uniform, so the integral may be simplified as
+   $$ f_j = \int_{\Omega_e} \mathbb{N}_j t(\mathbb{x}) d\Omega \approxeq t_{QP} \underbrace{\int_{\Omega_e} \mathbb{N}_j d\Omega}_{A_e/4,} $$
+   with $A_e$ denoting element area, and $\Omega_e$ denoting element domain (surface).
+   The interpolation and integration weights are, therefore, easily specified.
    The following is a depiction of the quadrature points against the interfacial elements.
    #+ATTR_HTML: :width 600px
    #+ATTR_LATEX: :width \textwidth
@@ -1097,8 +1105,8 @@ The below tutorial is meant to be minimal so it is assumed that all the elements
      Lz_n = kron(eye(N), [0 0 1]); % Get only normal displacement
      Lrel_n = [Lz_n -Lz_n zeros(N, Nint)];
    #+end_src
-5. Now we construct a null-space projection matrix $Ln$ such that $x_{cms} = Ln x_{nred}$, where $x_{nred}$ is the null space reduced set of DOFs ($N_{cms}-6$).
-   Note that the matrix $L1^T K L1$ has only 6 RBMs (and not 7) since the interfaces have been stuck together by the $L1$ matrix.
+5. Now we construct a null-space projection matrix $L_n$ such that $x_{cms} = L_n x_{nred}$, where $x_{nred}$ is the null space reduced set of DOFs ($N_{cms}-6$).
+   Note that the matrix $L_1^T K L_1$ has only 6 RBMs (and not 7) since the interfaces have been stuck together by the $L_1$ matrix.
    #+begin_src octave +n
      %% Remove fixed interface null-space
      L1 = null(Lrel);
