@@ -1237,6 +1237,9 @@ This completes the analysis, and the next two action points will do some plottin
 3. Do check out [[https://www.sciencedirect.com/science/article/abs/pii/S0888327018305739][QSMA]] (Quasistatic Modal Analysis) and [[https://www.sciencedirect.com/science/article/abs/pii/S0045794919315160][RQNM]] (Rayleigh Quotient-based Nonlinear Modal Analysis).
    These are two powerful quasi-static nonlinear modal analysis approaches that can be implemented using a routine that is not so much more complicated than the above.
    The advantage will be that using such cheap simulations, remarkable insights can be gathered about the (near-resonant) vibration behavior of the structure.
+4. It is often beneficial in this context to use *relative coordinates* at the interface (so we can get a 2x reduction in the total number of unknowns in the problem). 
+   You can do this in MATLAB on the HCB reduced model, or you can do this directly in the ABAQUS model by introducing ghost nodes representing the relative displacements.
+   Please [[mailto:nidish.balaji@ila.uni-stuttgart.de][write to me]] if you're having trouble with this particular aspect.
 * Outro/Contact
 In summary, all the scripts used in the tutorial are provided in 
 1. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a_steelmat.py][a\under{}steelmat.py]]: Loading material
