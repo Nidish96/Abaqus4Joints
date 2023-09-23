@@ -1249,7 +1249,12 @@ This completes the analysis, and the next two action points will do some plottin
    You can do this in MATLAB on the HCB reduced model, or you can do this directly in the ABAQUS model by introducing ghost nodes representing the relative displacements.
    Please [[mailto:nidish.balaji@ila.uni-stuttgart.de][write to me]] if you're having trouble with this particular aspect.
 * Outro/Contact
-In summary, all the scripts used in the tutorial are provided in 
+You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
+Don't forget to check out the repository in github at [[https://github.com/Nidish96/Abaqus4Joints][https://github.com/Nidish96/Abaqus4Joints]].
+
+If you found this useful, please consider citing [[https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017][this paper]] and/or [[https://scholarship.rice.edu/handle/1911/113700][this thesis]].
+** Summary
+All the scripts used in the tutorial are provided in 
 1. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a_steelmat.py][a\under{}steelmat.py]]: Loading material
 2. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/b_halfbm.py][b\under{}halfbm.py]]: Building the half-beam model
 3. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py][c\under{}nutwasherbolt\under{}516.py]]: Building the bolt, nut, and washer models.
@@ -1257,10 +1262,10 @@ In summary, all the scripts used in the tutorial are provided in
 5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py][e\under{}nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
 6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
 7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main.m][main.m]]: Contains the MATLAB file for doing the nonlinear static prestress analysis (also see [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/RESFUN.m][RESFUN.m]] for the residue routine).
-
-Don't forget to check out the repository in github at [[https://github.com/Nidish96/Abaqus4Joints][https://github.com/Nidish96/Abaqus4Joints]].
-It has the above scripts as well as all the cae files.
-
-You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
-
-If you found this useful, please consider citing [[https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017][this paper]] and/or [[https://scholarship.rice.edu/handle/1911/113700][this thesis]].
+   
+The [[https://github.com/Nidish96/Abaqus4Joints][Github repository]] has the above scripts as well as all the cae files.
+** Details on this web-page documentation/offering suggestions
++ This website was generated using org-mode on emacs with the Bigblow html theme from [[https://github.com/fniessen/org-html-themes][https://github.com/fniessen/org-html-themes]].
+  The collapsible details blocks from [[https://github.com/alhassy/org-special-block-extras][org-special-block-extras]] have also been used extensively.
++ The best way to offer suggestions would be to use the [[https://github.com/Nidish96/Abaqus4Joints/blob/main/docs/index.pdf][pdf version]] of the documentation, annotate it and [[mailto:nidish.balaji@ila.uni-stuttgart.de][mail it to me]].
+  Alternately, you can also clone the [[https://github.com/Nidish96/Abaqus4Joints][repository]], make changes and create a pull request.
