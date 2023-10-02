@@ -1155,7 +1155,7 @@ This completes the analysis, and the next two action points will do some plottin
    The following routine returns the quasi-static residue for a given normal load.
    Only a unilateral spring is considered in the normal direction.
    #+begin_src octave
-     function [R, dRdU, dRdf] = RESFUN_el2el(Uf, K, Fv, Lc, Gc, knl)
+     function [R, dRdU, dRdf] = RESFUN(Uf, K, Fv, Lc, Gc, knl)
          fnl_pred = knl*Lc*Uf(1:end-1);	% Predicted normal force
          fnl = max(fnl_pred, 0);		% Saturated @ 0: unilateral spring
 
