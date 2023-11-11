@@ -49,7 +49,7 @@ gawk "$awkcmd1" $1|gawk "$awkcmd2" > .RECOV.mtx
 
 echo "Preprocessing mtx files done"
 
-python <<EOF
+python3 <<EOF
 import numpy as np
 import scipy.io as io
 
