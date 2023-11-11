@@ -95,7 +95,7 @@ ylabel('Y Coordinate (m)')
 xx=colorbar('SouthOutside');
 xlabel(xx, 'Nodal Relative Displacement (m)', 'interpreter', 'latex', 'fontsize', 13)
 
-print('./intdisps.png', '-dpng', '-r300')
+print('./intdisps_rc.png', '-dpng', '-r300')
 
 %% Show Quadrature Nodes
 figure(2)
@@ -114,7 +114,7 @@ set(gca, 'XTick', (-6:3:6)*1e-2)
 xlabel('X Coordinate (m)')
 ylabel('Y Coordinate (m)')
 
-print('./quadpts.png', '-dpng', '-r300')
+print('./quadpts_rc.png', '-dpng', '-r300')
 
 %% Show Pressure field
 pvals = max(knl*Lz*Ln*U0, 0);  % pressure @ QPs
@@ -136,4 +136,4 @@ ylabel('Y Coordinate (m)')
 xx=colorbar('SouthOutside');
 xlabel(xx, 'Element Normal Pressure (Pa)', 'interpreter', 'latex', 'fontsize', 13)
 
-print('./intpress.png', '-dpng', '-r300')
+print('./intpress_rc.png', '-dpng', '-r300')
