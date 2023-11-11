@@ -57,10 +57,6 @@ for ne in range(TopEls.shape[0]):
                                            for k in range(4)]]
     ELS[ne, :] += 1
 
-# Save interfacial nodes & elements to txt files
-np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
-np.savetxt('Elements.dat', ELS, fmt='%d')
-
 #### 5. Node Pairing. We assume len(botnodes)=len(topnodes).
 botleft = range(N)
 bts = []
@@ -115,13 +111,11 @@ mdl.FrequencyStep(name="Fixed-Int-Modal", previous="Initial",
                   numEigen=60)
 mdl.EncastreBC(name="RELFIX", createStepName="Fixed-Int-Modal",
                region=ras.sets['RELCSET'])
-# mdl.EncastreBC(name="BOTFIX", createStepName="Fixed-Int-Modal",
-#                region=ras.sets['BOTS_NDS'])
     
 #### 10. Create a substructuring step, specify the modes and retained DOFs
 mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
                              substructureIdentifier=1, 
-                             retainedEigenmodesMethod=MODE_RANGE, modeRange=((1, 20, 1),),
+                             retainedEigenmodesMethod=MODE_RANGE, modeRange=((1, 26, 1),),
                              recoveryMatrix=REGION, recoveryRegion=ras.sets['OUTNODES'],
                              computeReducedMassMatrix=True)
 
@@ -133,7 +127,8 @@ mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS",
 for i in range(1, 4):
     mdl.ConcentratedForce(name='BoltLoad-%d' %(i), createStepName="HCBCMS",
                           cf3=1.0, region=ras.sets['BPT-%d_SET-1' %(i)])
-    mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName="HCBCMS",                          cf3=-1.0, region=ras.sets['NPT-%d_SET-1' %(i)])
+    mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName="HCBCMS",
+                          cf3=-1.0, region=ras.sets['NPT-%d_SET-1' %(i)])
 
 sbs = mdl.steps['HCBCMS']
 sbs.LoadCase(name="LCASE", loads=tuple(('BoltLoad-%d' %(i), 1.0) for i in range(1, 4)) +
@@ -152,3 +147,7 @@ mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2,
 #### 12. Create a job and write an inp file
 mdb.Job(name="HCBCMSJob", model='Model-1')
 mdb.jobs['HCBCMSJob'].writeInput()
+
+# Save interfacial nodes & elements to txt files
+np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
+np.savetxt('Elements.dat', ELS, fmt='%d')

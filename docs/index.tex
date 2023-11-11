@@ -1,4 +1,4 @@
-% Created 2023-10-02 Mon 10:18
+% Created 2023-11-11 Sat 14:48
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -14,8 +14,8 @@
 \usepackage{hyperref}
 \usepackage{tcolorbox}
 \usepackage{minted}
-\usepackage[margin=1in]{geometry}
 \usepackage{xcolor}
+\usepackage[margin=1in]{geometry} \usepackage{cleveref}
 \author{Nidish Narayanaa Balaji}
 \date{\today}
 \title{An ABAQUS-MATLAB tutorial for Jointed Systems}
@@ -33,9 +33,37 @@
 
 \pagebreak
 
-\section{Preprocess}
-\label{sec:orgf46d612}
+\section{Introduction}
+\label{sec:org934eabe}
+This tutorial has been prepared to help researchers get started with modeling jointed systems for use in nonlinear vibration contexts.
+A three-bolted lap joint system known as the Brake-Reu\{\ss\} Beam (read more about the benchmark \href{https://jointmechanics.org/index.php/Benchmarks\#The\_Brake-Reu\%C3\%9F\_Beams}{here}) is used for the demonstrations.
+We will start with making the model using CAD and go all the way to doing a simple nonlinear prestress calculation.
 
+It is understood that not everyone will be interested in each step of the tutorial, so intermediate files are saved and are available in the repository.
+This should help the reader start at any desired intermediate step.
+
+Here is an overview of the sections and their contents:
+\begin{enumerate}
+\item \textbf{Preprocessing} (Section \ref{sec:prepro}): discusses the CAD modeling (section \ref{sec:modeling}) of the parts along with necessary set creation (section \ref{sec:setcreat}). Of particular note here is the \textbf{realization of bolt prestress} (see more in section \ref{sec:boltprel}), which is done in a manner that is most convenient for linear and nonlinear vibration simulations including prestress effects.
+
+\uline{The model at the end of this step can be found in \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step0.cae}{model\_step0.cae}.}
+\item \textbf{Constraints} (Section \ref{sec:constr}): discusses the relevant constraints for the tied interfaces (washers are fully tied, for instance), and the bolt preload realization (section \ref{sec:boltprel}).
+
+\uline{The model at the end of this step can be found in \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\_step1.cae}.}
+\item \textbf{Meshing} (Section \ref{sec:meshing}): discusses the seeded meshing procedure. This section also includes instructions for an optional abaqus static prestress simulation (section \ref{sec:abqprs}) that can be used to verify the correctness of the model so far.
+
+\uline{The model at the end of this step can be found in \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1a.cae}{model\_step1a.cae}. Additionally, \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step2.cae}{model\_step2.cae} is also available, which includes the above prestress test.}
+\item \textbf{Mesh Process} (Section \ref{sec:meshproc}): discusses processing the mesh and includes selection of an output node, reorganization of node sets (so that the bottom interface nodes are right below the top), and provides instructions on setting up the Hurty/Craig-Bampton (HCB) procedure. It ends with instructions to run the job required for generating substructured matrices.
+\item \textbf{Matrix Extraction} (Section \ref{sec:mex}): discusses the format of the outputted matrix and provides a bash-python script to postprocess it (section \ref{sec:bscr}). Additionally a MATLAB/Octave tutorial is provide (section \ref{sec:nlan}) which conducts \textbf{nonlinear prestress analysis with sub-100 lines of code}.
+\uline{The model at the end of everything can be found in \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step3.cae}{model\_step3.cae}.}
+\item \textbf{Relative Coordinates Pipeline} (Section \ref{sec:relcsp}): discusses the pipeline that needs to be followe in ABAQUS for using relative coordinate DOFS. \textbf{This provides an \textasciitilde{}2x reduction in model size without any approximations}, and is therefore recommended always.
+This is presented as a separate section since it requires some experience with ABAQUS before following all the steps that are involved here.
+
+When the relative coordinate DOFs format is desired, section \ref{sec:meshproc} and section \ref{sec:mex} don't need to be followed. This can be substituted completely with section \ref{sec:relcsp}.
+\item \textbf{Outro/Contact} (Section \ref{sec:outro}): Concludes the tutorial, giving contact information of the authors, etc.
+\end{enumerate}
+\section{Preprocess}
+\label{sec:prepro}
 The Brake-Reuß Beam (BRB) is a 3-bolted lap-joint beam which will serve as our tutorial joint structure (read more about the benchmark \href{https://jointmechanics.org/index.php/Benchmarks\#The\_Brake-Reu\%C3\%9F\_Beams}{here}).
 To make the tutorial self-contained, the tutorial will begin with CAD-modeling of the BRB in ABAQUS and take you all the way to matrix extraction and nonlinear dynamics analysis on MATLAB/OCTAVE.
 Buckle up! :)
@@ -43,32 +71,32 @@ Buckle up! :)
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{./figs/300px-BRB.png}
-\caption{\label{fig:org938f910}Geometry of the BRB Benchmark}
+\caption{\label{fig:brbgeom}Geometry of the BRB Benchmark}
 \end{figure}
 
-A picture of the parts of the BRB is shown in Fig. \ref{fig:org938f910} and this will be used to guide the modeling here.
-Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see \ref{org03745ea} for more details on bolt prestress modeling).
+A picture of the parts of the BRB is shown in Fig. \ref{fig:brbgeom} and this will be used to guide the modeling here.
+Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread interactions won't be modeled here, the bolt shank is modeled as a smooth cylinder (see section \ref{sec:boltprel} for more details on bolt prestress modeling).
 
 \textbf{Note}: If you already have a model of your structure and want to just apply the node-selection/matrix extraction, you can safely ignore the sections particular to the modeling of the BRB and just go through the remaining, whose instructions are quite general.
 The general principles in the modeling section are, however, recommended for all jointed structure modeling.
 
 \subsection{A Note on Python Scripting\hfill{}\textsc{Script}}
-\label{sec:org73224e9}
+\label{sec:orgadf0150}
 ABAQUS Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
 \begin{itemize}
 \item For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. ABAQUS would have saved the actions in a Python file called \texttt{abaqus.rpy}. This is just python code that can be imported into ABAQUS to repeat the same tasks.
 All standard python commands work so this makes it very helpful.
 \item On Windows the \textbf{work directory} may be an unfamiliar concept (on Linux it is just the directory from which ABAQUS is launched). This directory can be manually set by \texttt{File->Set Work Directory}, following which all the files (including the \texttt{ABAQUS.rpy} file) will be put in the specified folder.
-\item Fig \ref{fig:org1127d61} shows a pictorial overview of the different options available in ABAQUS for scripting support. The ABAQUS PDE can be used for ABAQUS python script development.
+\item Fig \ref{fig:ovw} shows a pictorial overview of the different options available in ABAQUS for scripting support. The ABAQUS PDE can be used for ABAQUS python script development.
 \end{itemize}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{./figs/ovw.png}
-\caption{\label{fig:org1127d61}Options in ABAQUS for Scripting}
+\caption{\label{fig:ovw}Options in ABAQUS for Scripting}
 \end{figure}
 
 \subsection{Modeling Parts\hfill{}\textsc{Script:GUI}}
-\label{sec:orgc8212ed}
+\label{sec:modeling}
 We will first model the two "halves" of the BRB. The following steps enumerate the process (can be skipped if you already have a model).
 
 We will do the construction through ABAQUS Python code that can be imported through \texttt{File->Run Script} or just typed into the command line.
@@ -246,7 +274,7 @@ If not, you will have to use the "Merge Edges" tool in the Part module and indiv
 \end{quote}
 \begin{enumerate}
 \item Create a Reference Point Part called \texttt{REFPT}.
-This will be necessary for the application of bolt prestress (see \ref{org03745ea} below).
+This will be necessary for the application of bolt prestress (see section \ref{sec:boltprel} below).
 \begin{verbatim}
 135  rpt = mdl.Part(name='REFPT', dimensionality=THREE_D, 
 136                 type=DEFORMABLE_BODY)
@@ -264,7 +292,7 @@ The Python script also assigns the material "STEEL" (see above) to the parts.
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step0.cae}{model\_step0.cae} stores the CAE file at the end of the above steps (building parts, and partitioning).
 \subsection{Creating appropriate surface sets\hfill{}\textsc{GUI}}
-\label{sec:orgcc954f9}
+\label{sec:setcreat}
 It is necessary to choose appropriate surface sets for the constraint enforcement and, eventually, the interfacial mesh extraction.
 Doing this with surfaces (before meshing) is advantageous since the same scripts can be reused even if the model is remeshed.
 \begin{enumerate}
@@ -304,7 +332,7 @@ Here is a graphical depiction of the model with the surfaces.
 Now all the parts have been created and relevant surfaces have been identified.
 \textbf{Note}: It is important to have traceable but short names so that a lot of the repetitive tasks can be sped up considerably using scripting.
 \subsection{Create Assembly\hfill{}\textsc{GUI}}
-\label{sec:orgedb681a}
+\label{sec:org30736f3}
 \textbf{Note}: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
 This will be advantageous if we want to modify the meshes just at the interface for mirror symmetry.
 We will do independent meshing since it is good practice, although independent meshes are not a requirement for this example (dependent meshes can be used due to symmetry).
@@ -336,7 +364,7 @@ Rename this to \texttt{BPT-1} (standing for Bolt Point 1).
 \end{center}
 \item Now import another instance of the reference point \texttt{REFPT} and translate it to be coincident with \texttt{BPT-1}.
 Rename this \texttt{NPT-1} (standing for Nut Point 1).
-These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see \ref{org03745ea} below for those steps).
+These two points will have to be on the same geometrical point but equal and opposite forces will be applied for the force application (see section \ref{sec:boltprel} below for those steps).
 The point \texttt{BPT-1} will be coupled to the bolt surface \texttt{BN} and \texttt{NPT-1} will be tied to the nut surface \texttt{NB} through RBE3 elements.
 \item Use the "Linear Pattern" dialog and copy the bolt-washer-washer-nut assembly thrice along the beam such that the assembly is complete.
 The figure below shows the final assembly along with a representation of the names of the different parts.
@@ -348,9 +376,9 @@ Recall that  the beam shown in the figure below is \texttt{TOPBEAM} and the hidd
 
 Now that the assembly is complete, the relevant constraints will have to be enforced, followed by a realization of the bolt preload.
 \section{Constraints}
-\label{sec:org6383532}
+\label{sec:constr}
 \subsection{Tie-Constraint Enforcement\hfill{}\textsc{Script:GUI}}
-\label{sec:orgba0f526}
+\label{sec:org3f241ac}
 All the following operations can be conducted in the \texttt{Interaction} module in CAE.
 But since selecting each surface can be a time-consuming process, we use the following for-loop in ABAQUS-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
 Specifically, it ties the Bolt-Washer, Nut-Washer, and Washer-Beam surfaces.
@@ -390,8 +418,7 @@ So \texttt{WASHER-1} is tied to \texttt{BmW3} of the bottom beam (and so on for 
 31              tieRotations=ON, thickness=ON)
 \end{verbatim}
 \subsection{Bolt Preload Realization\hfill{}\textsc{Script:GUI}}
-\label{sec:org0282fc6}
-\label{org03745ea}
+\label{sec:boltprel}
 You might already have encountered the different parts of the model above that were carefully constructed for the bolt preload application (bolt-shank partitioning, reference points, etc.).
 \definecolor{osbe-bg}{HTML}{cccccc}\colorlet{osbe-fg}{black}\begin{quote}
                               \begin{tcolorbox}[colback=osbe-bg,colframe=osbe-fg,title={What 's wrong with the inbuilt Bolt Pretension in ABAQUS?},sharp corners,boxrule=0.4pt]
@@ -501,14 +528,14 @@ It is, however, a physical requirement for equilibrium that \texttt{BoltLoad-n} 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\_step1.cae} stores the CAE-file generated after the end of the above steps.
 We will now proceed with meshing.
 \section{Meshing}
-\label{sec:org7d6b3ab}
+\label{sec:meshing}
 Since the model is perfectly symmetric, it is sufficient to mesh the model with a global seed, after seeding the interface area locally.
 Switch to the \texttt{Mesh} module for this section.
 
 If such symmetry is not available, one may choose a more direct approach by using the \texttt{bottom-up} meshing to copy the mesh from one interface to another directly.
 Please \href{mailto:nidish.balaji@ila.uni-stuttgart.de}{write to me} if you'd like an example for this.
 \subsection{Meshing Instructions\hfill{}\textsc{GUI}}
-\label{sec:org50bee4e}
+\label{sec:orgb9474e8}
 \begin{enumerate}
 \item Choose \texttt{Mesh->Assign Mesh Controls} and select the whole assembly (all the instances).
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
@@ -536,9 +563,9 @@ Here is a view of the interfacial mesh you should get after the above seeding.
 \end{center}
 \end{enumerate}
 
-The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1.cae}{model\_step1.cae} stores the CAE-file along with the mesh.
+The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1a.cae}{model\_step1a.cae} stores the CAE-file along with the mesh.
 \subsection{(Optional, recommended) Verify correctness of model through frictionless prestress\hfill{}\textsc{GUI}}
-\label{sec:orgc40f7e8}
+\label{sec:abqprs}
 We will now conduct a simple frictionless contact analysis to verify the correctness of the model.
 
 \textbf{Setup}
@@ -631,8 +658,8 @@ Such a convergence analysis is presented in the appendix of \href{https://schola
 \end{enumerate}
 
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step2.cae}{model\_step2.cae} is the cae file containing the model with the above tests included.
-\section{Postprocess}
-\label{sec:orga881a0d}
+\section{Mesh Process}
+\label{sec:meshproc}
 Now that the model is verified to be correct/consistent, we will proceed with the steps necessary for substructured Matrix Extraction.
 
 Before proceeding it is necessary to first identify nodes on the meshed model that correspond to the input and output locations.
@@ -649,7 +676,7 @@ This can be specified in \texttt{Model->Edit Attributes->Model-1} as follows:
 \includegraphics[width=0.5\textwidth]{./figs/modl.png}
 \end{center}
 \subsection{Reorganize Interfacial Node Sets (readjust if necessary)\hfill{}\textsc{Script}}
-\label{sec:org3d6bf38}
+\label{sec:org3f835e7}
 Although we have taken care to ensure that the mesh of the \texttt{TOPBEAM} and \texttt{BOTBEAM} are conformal at the interface, minor imperfections in the nodal locations may exist.
 Furthermore, the ordering of the nodes on the top interface will be different from that on the bottom interface.
 Through some scripting, we can create node sets in such a way that the top and bottom interface nodesets are ordered in a convenient fashion.
@@ -801,7 +828,7 @@ So we will reintroduce the bolt loads in the substructuring step in \#8 below.
 \end{verbatim}
 \end{enumerate}
 \subsection{Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps\hfill{}\textsc{Script}}
-\label{sec:org06d43a0}
+\label{sec:org2689e78}
 \begin{enumerate}
 \item We are interested in \textbf{Fixed-Interface Component Mode Synthesis} with 20 retained modes.
 So we first do a fixed interface modal analysis and request \(20\times3 = 60\) modes (for ensuring accuracy of the first 20 modes).
@@ -929,7 +956,7 @@ which we introduced through the "synch" step in \#3 above.
 You can find the inp-file generate from the above in \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp}{Job.inp}.
 \end{enumerate}
 \subsection{Run Job and Generate the mtx file.\hfill{}\textsc{Script:GUI}}
-\label{sec:org447622d}
+\label{sec:org9b38cf0}
 You can now run the Job named "Job" in the GUI, or directly run the "\href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp}{Job.inp}" file from the command line using
 \begin{verbatim}
 abaqus job=Job inp=Job.inp cpus=2 interactive
@@ -937,7 +964,7 @@ abaqus job=Job inp=Job.inp cpus=2 interactive
 Once the job is done, it will output the matrix file "Modelmats.mtx" into the working directory.
 This, along with the "Nodes.dat" and "Elements.dat" files that were written out earlier, are all we need for external analyses.
 \section{Matrix Extraction + NL-Analysis}
-\label{sec:org9495a1b}
+\label{sec:mex}
 By default, ABAQUS uses the \href{https://math.nist.gov/MatrixMarket/}{matrix market format} for the outputted matrices.
 Note the following, in terms of format:
 \begin{itemize}
@@ -951,7 +978,7 @@ where \(x_{cms}\) is the vector of DOFs of the CMS model (substructure) and \(x_
 Each column of \(R\) is \(N_{out}\times 1\), and \(R\) is \(N_{out}\times N_{cms}\).
 \end{itemize}
 \subsection{Postprocessing Exported Matrices\hfill{}\textsc{Script}}
-\label{sec:org00c65eb}
+\label{sec:bscr}
 \begin{enumerate}
 \item The first few lines provide the generalized coordinates of the model. The nodes are listed as positive integers and the "modal" DOFs are listed as negative integers.
 This is followed by a list of DOFs active in each set.
@@ -1114,7 +1141,7 @@ Line-parsing on MATLAB was extremely slow for me.
 \end{enumerate}
 The file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step3.cae}{model\_step3.cae} is the final cae file that contains all of the above.
 \subsection{Nonlinear Analysis on MATLAB/OCTAVE in under 100 lines of code\hfill{}\textsc{Script}}
-\label{sec:org015014e}
+\label{sec:nlan}
 We will now do our first nonlinear analysis on MATLAB/OCTAVE with the exported matrices.
 We will conduct a \textbf{Nonlinear Prestress Analysis} for a frictionless contact with a unilateral spring on the normal direction.
 
@@ -1286,7 +1313,7 @@ end
                \end{tcolorbox}
 \end{quote}
 \subsubsection{Plotting}
-\label{sec:org88119f5}
+\label{sec:org42b68ca}
 \begin{enumerate}
 \item We next construct a \texttt{MATLAB Graph} object using the element information and plot out the relative normal displacements at the interface as a graph.
 \begin{verbatim}
@@ -1355,7 +1382,7 @@ An alternative would be to implement a lagrange multiplier method for conducting
 \end{center}
 \end{enumerate}
 \subsubsection{Miscellanies}
-\label{sec:orgde7a9e1}
+\label{sec:org17084a2}
 \begin{enumerate}
 \item Even if all the nodes have equal areas, \textbf{node-to-node contact elements are still inconsistent in this context}, since contact interactions can be understood to be a fundamentally local interaction, which need to be integrated to have global influence.
 Quadrature-based integration of local tractions to nodal forces conducts exactly this.
@@ -1368,16 +1395,457 @@ These are two powerful quasi-static nonlinear modal analysis approaches that can
 The advantage will be that using such cheap simulations, remarkable insights can be gathered about the (near-resonant) vibration behavior of the structure.
 \item It is often beneficial in this context to use \textbf{relative coordinates} at the interface (so we can get a 2x reduction in the total number of unknowns in the problem). 
 You can do this in MATLAB on the HCB reduced model, or you can do this directly in the ABAQUS model by introducing ghost nodes representing the relative displacements.
-Please \href{mailto:nidish.balaji@ila.uni-stuttgart.de}{write to me} if you're having trouble with this particular aspect.
+This is optional, but recommended - see instructions in section \ref{sec:relcsp}.
+\end{enumerate}
+\section{Relative Coordinates Pipeline}
+\label{sec:relcsp}
+In section \ref{sec:meshproc} and section \ref{sec:mex}, the true nodal DOFS of the interfacial nodes are extracted for the HCBCMS.
+Here, we instead extract the relative coordinates directly by introducing a set of \textbf{ghost nodes} at the interface whose DOFs are set to be equal to the difference between the DOFs of the top and bottom nodes.
+We achieve this by creating Reference Point instances at the appropriate locations and constraining them using the \textbf{EQUATION} constraint.
+
+Note that we will first insert the reference points into the model (section \ref{sec:insrpt}) and the write the resulting model into an inp file.
+\textbf{I have been unable to figure out a way to do this fully natively with the cae model object, since the node IDs of the reference point instances don't seem to be available unless we are just about to do the analysis.}
+If someone can figure this out, please \href{mailto:nidbid@gmail.com}{write to me}
+
+We start with the file \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model\_step1a.cae}{model\_step1a.cae} for this.
+\subsection{Insertion of Reference Point Instances\hfill{}\textsc{Script}}
+\label{sec:insrpt}
+\begin{enumerate}
+\item Load the cae file along with the necessary preamble.
+\begin{verbatim}
+ 1  import sys
+ 2  import numpy as np
+ 3  
+ 4  from part import *
+ 5  from material import *
+ 6  from section import *
+ 7  from assembly import *
+ 8  from step import *
+ 9  from interaction import *
+10  from load import *
+11  from mesh import *
+12  from optimization import *
+13  from job import *
+14  from sketch import *
+15  from visualization import *
+16  from connectorBehavior import *
+17  
+18  from abaqus import *
+19  from abaqusConstants import *
+20  from caeModules import * 
+21  import regionToolset
+22  import job
+23  import step
+24  import sets
+25  
+26  from inpParser import *
+27  
+28  mdbm = openMdb('./model_step1a.cae')
+29  mdl = mdbm.models['Model-1']
+30  ras = mdl.rootAssembly
+31  
+32  mdl.setValues(noPartsInputFile=ON)
+\end{verbatim}
+\item Get the nodes of only the top surface
+\begin{verbatim}
+33  topsurf = ras.instances['TOPBEAM'].surfaces['INSURF']
+34  topnodes = topsurf.nodes
+35  N = len(topnodes)  # Number of nodes
+36  # Top Nodes & Coordinates
+37  Topnd_dict = dict(zip([topnodes[i].label for i in range(N)], range(N)))
+38  TopNdCds = np.array([topnodes[i].coordinates for i in range(N)])
+\end{verbatim}
+\item Import the reference point (partname: \texttt{REFPT}) as instances into the assembly and move them to the nodal locations.
+\begin{verbatim}
+39  rpt = mdl.parts['REFPT']
+40  for i in range(N):
+41      ras.Instance(name='RELPT-%d' %(i+1), part=rpt, dependent=OFF)
+42      ras.translate(instanceList=('RELPT-%d' %(i+1), ), vector=topnodes[i].coordinates)
+\end{verbatim}
+\item Create a set of the reference points, then simplify the model, and save the resulting model to an inp file.
+The name of the resulting inp file will be \texttt{MeshedModel.inp}.
+\begin{verbatim}
+43  ras.Set(name='RELCSET',
+44          referencePoints=[ras.instances['RELPT-%d' %(i+1)].referencePoints[1] for i in range(N)] )
+45  
+46  tmp = mdl.interactions
+47  while len(tmp) > 0:
+48      del tmp[tmp.keys()[-1]]
+49  
+50  tmp = mdl.interactionProperties
+51  while len(tmp) > 0:
+52      del tmp[tmp.keys()[-1]]
+53  
+54  # Remove all steps except initial
+55  tmp = mdl.steps
+56  while len(tmp) > 1:
+57      del tmp[tmp.keys()[-1]]
+58  
+59  #### 5. Create a Job and write an inp file
+60  mdbm.Job(name="MeshedModel", model='Model-1')
+61  mdbm.jobs['MeshedModel'].writeInput()
+62  
+63  mdbm.close()
+\end{verbatim}
+\end{enumerate}
+\subsection{Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.}
+\label{sec:org0b8c943}
+\begin{enumerate}
+\item We first read in the inp file we saved in the above.
+\begin{verbatim}
+ 1  import sys
+ 2  import numpy as np
+ 3  
+ 4  from part import *
+ 5  from material import *
+ 6  from section import *
+ 7  from assembly import *
+ 8  from step import *
+ 9  from interaction import *
+10  from load import *
+11  from mesh import *
+12  from optimization import *
+13  from job import *
+14  from sketch import *
+15  from visualization import *
+16  from connectorBehavior import *
+17  
+18  from abaqus import *
+19  from abaqusConstants import *
+20  from caeModules import * 
+21  import regionToolset
+22  import job
+23  import step
+24  import sets
+25  
+26  from inpParser import *
+27  
+28  mdl = mdb.ModelFromInputFile(name='Model-1',
+29                               inputFileName='./MeshedModel.inp')
+30  ras = mdl.rootAssembly
+\end{verbatim}
+\item Following a process similar to that in section \ref{sec:meshproc}, we renumber and align the bottom surface nodes to match the top surface nodes.
+Note that since we have read the model from the inp file, all set names are fully upper case, and the concept of instances does not exist any more.
+\begin{verbatim}
+31  topsurf = ras.surfaces['TOPBEAM_INSURF']
+32  botsurf = ras.surfaces['BOTBEAM_INSURF']
+33  
+34  topnodes = topsurf.nodes
+35  botnodes = botsurf.nodes
+36  N = len(topnodes)  # Number of nodes
+37  Topnd_dict = dict(zip([topnodes[i].label for i in range(N)], range(N)))
+38  TopNdCds = np.array([topnodes[i].coordinates for i in range(N)])
+39  
+40  # Top Elements
+41  TopEls = np.array([topsurf.elements[i].connectivity for i in range(len(topsurf.elements))])
+42  ELS = np.zeros((TopEls.shape[0], 5), dtype=int)
+43  for ne in range(TopEls.shape[0]):
+44      elefac = topsurf.elements[ne].getElemFaces()
+45  
+46      # Gives you the list of faces on the interface (we only expect a single face)
+47      fe = np.argwhere([all([Topnd_dict.has_key(x) for x in 
+48                             [elefac[k].getNodes()[i].label for i in range(4)]])
+49                        for k in range(6)])[0,0]
+50      ELS[ne, 0] = ne
+51      # Searches for the face where all the nodes are in the interface and returns those nodes
+52      ELS[ne, 1:] = [Topnd_dict[x] for x in [elefac[fe].getNodes()[k].label
+53                                             for k in range(4)]]
+54      ELS[ne, :] += 1
+\end{verbatim}
+\begin{enumerate}
+\item Resort the bottom nodes
+\begin{verbatim}
+55  # Re-sort the bottom nodes    
+56  botleft = range(N)
+57  bts = []
+58  tmi = 0
+59  for i in range(N):
+60      # Calculates deviation of selected node coordinate on bottom to each
+61      # node coordinate on top and "assigns" the closest one to the index.
+62      bts.append(
+63          botleft.pop(
+64              np.argmin(
+65                  np.linalg.norm(
+66                      topnodes[i].coordinates-np.array([botnodes[j].coordinates for j in botleft]),
+67                      axis=1)
+68              )
+69          )
+70      )
+71  
+72  # Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly
+73  for i in range(N):
+74      ras.editNode(nodes=botnodes[bts[i]:bts[i]+1],
+75                   coordinates=(topnodes[i].coordinates,))
+76  
+\end{verbatim}
+\end{enumerate}
+\item Create node sets for the top, bottom and relative coordinates.
+\begin{verbatim}
+77  botpairednds = botnodes.sequenceFromLabels(tuple([botnodes[i].label for i in bts]))
+78  # Reordering from the sorting above
+79  
+80  ras.SetFromNodeLabels(name="TOPS_NDS", 
+81                        nodeLabels=((topnodes[0].instanceName, 
+82                                     tuple([topnodes[i].label for i in range(N)])),),
+83                        unsorted=True)
+84  ras.SetFromNodeLabels(name="BOTS_NDS", 
+85                        nodeLabels=((botpairednds[0].instanceName, 
+86                                     [botpairednds[i].label for i in range(N)]),),
+87                        unsorted=True)
+88  rlcn = ras.sets['RELCSET'].nodes
+89  ras.SetFromNodeLabels(name="RELCSET",
+90                        nodeLabels=((rlcn[0].instanceName,
+91                                     [rlcn[i].label for i in range(N)]),),
+92                        unsorted=True)
+\end{verbatim}
+\item We now set equation constraints to set a meaning for the ghost nodes.
+It is possible to provide sets as inputs to the Equation constraint (each node is taken as-ordered).
+\begin{verbatim}
+93  for i in range(3):
+94      mdl.Equation(name='RELCS-%d' %(i+1),
+95                   terms=((1.0, 'TOPS_NDS', i+1),
+96                          (-1.0, 'RELCSET', i+1),
+97                          (-1.0, 'BOTS_NDS', i+1)))
+\end{verbatim}
+The constraint represented by the above is
+$$ u^{(i)}_{RELCSET} = u^{(i)}_{TOP} - u^{(i)}_{BOT} \implies
+   u^{(i)}_{TOP} - u^{(i)}_{RELCSET} - u^{(i)}_{BOT} = 0 $$
+\item We next setup the "fixed interface" CMS by conducting a Frequency step while constraining all the DOFS of the \texttt{RELCSET} nodeset to be zero (interface stuck against each other).
+\begin{verbatim}
+ 98  mdl.FrequencyStep(name="Fixed-Int-Modal", previous="Initial",
+ 99                    normalization=MASS, eigensolver=LANCZOS,
+100                    numEigen=60)
+101  mdl.EncastreBC(name="RELFIX", createStepName="Fixed-Int-Modal",
+102                 region=ras.sets['RELCSET'])
+\end{verbatim}
+\item The substructuring step is finally setup.
+We request 6 more modes in \texttt{modeRange} since the "fixedInterface= model will have 6 Rigid Body Modes which don't add anything to model accuracy.
+So if 20 generalized modes are desired, we ask for 26. 
+\begin{verbatim}
+103  mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
+104                               substructureIdentifier=1, 
+105                               retainedEigenmodesMethod=MODE_RANGE, modeRange=((1, 26, 1),),
+106                               recoveryMatrix=REGION, recoveryRegion=ras.sets['OUTNODES'],
+107                               computeReducedMassMatrix=True)
+108  
+109  mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS",
+110                          region=ras.sets['RELCSET'],
+111                          u1=ON, u2=ON, u3=ON)
+112  
+113  # Apply Bolt Loads (1N magnitude)
+114  for i in range(1, 4):
+115      mdl.ConcentratedForce(name='BoltLoad-%d' %(i), createStepName="HCBCMS",
+116                            cf3=1.0, region=ras.sets['BPT-%d_SET-1' %(i)])
+117      mdl.ConcentratedForce(name='NutLoad-%d' %(i), createStepName="HCBCMS",
+118                            cf3=-1.0, region=ras.sets['NPT-%d_SET-1' %(i)])
+119  
+120  sbs = mdl.steps['HCBCMS']
+121  sbs.LoadCase(name="LCASE", loads=tuple(('BoltLoad-%d' %(i), 1.0) for i in range(1, 4)) +
+122               tuple(('NutLoad-%d' %(i), 1.0) for i in range(1, 4)))
+\end{verbatim}
+\item We complete the task by requesting matrix output and outputting node and element information.
+\begin{verbatim}
+123  # ABAQUS CAE doesn't support this yet (GUI or scripting),
+124  # so the keywords need to be manually modified.
+125  mdl.keywordBlock.synchVersions(storeNodesAndElements=False)
+126  li = np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] == "*Retained Nodal Dofs" for i in range(len(mdl.keywordBlock.sieBlocks))])[0][0]
+127  txi = mdl.keywordBlock.sieBlocks[li]
+128  mdl.keywordBlock.replace(li, "*Retained Nodal Dofs, sorted=NO"+txi[20:])
+129  mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2, 
+130                          "*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES")
+131  
+132  # Create a job and write an inp file
+133  mdb.Job(name="HCBCMSJob", model='Model-1')
+134  mdb.jobs['HCBCMSJob'].writeInput()
+135  
+136  # Save interfacial nodes & elements to txt files
+137  np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
+138  np.savetxt('Elements.dat', ELS, fmt='%d')
+\end{verbatim}
+\item The inp file "HCBCMSJob.inp" can be run just as before, and it will generate an mtx file named "Modelmats.mtx".
+\item The script \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh}{readwritematvec.sh} can be used to post process this mtx file just as before.
+\end{enumerate}
+\subsection{Nonlinear Prestress Analysis with MATLAB/OCTAVE}
+\label{sec:org8fe9f7f}
+\begin{enumerate}
+\item The same MATLAB/OCTAVE routines from section \ref{sec:nlan} can be used here, with minor tweaks to account for the fact that the model is already in the relative coordinates frame.
+\item Everything in the preamble is identical to before:
+\begin{verbatim}
+ 1  clc
+ 2  clear all
+ 3  
+ 4  set(0,'defaultAxesTickLabelInterpreter', 'default');
+ 5  set(0,'defaultTextInterpreter','latex');
+ 6  set(0, 'DefaultLegendInterpreter', 'latex');
+ 7  set(0,'defaultAxesFontSize',13);
+ 8  
+ 9  %% Read Nodes and Elements
+10  Nodes = dlmread('./Nodes.dat');
+11  Elements = dlmread('./Elements.dat');
+12  N = size(Nodes,1);  % Number of nodes per side
+13  Ne = size(Elements,1);  % Number of elements
+14  
+15  %% Load Matrices
+16  fname = './Modelmats.mat';
+17  load(fname, 'M', 'K', 'R', 'Fv');
+18  
+19  % Number of generalized modal DOFs
+20  Nint = size(M,1)-N*3;
+21  
+22  %% Single-Point-Quadrature Matrices
+23  Qm = zeros(Ne, N);  % Each element has one quadrature point
+24  Tm = zeros(N, Ne);  % Each quadrature pt integrated to 4 nodes
+25  Ars = zeros(Ne, 1);  % Vector of areas of each element
+26  for ei=1:Ne
+27      ndis = Elements(ei, 2:end);  % Nodes of the current element
+28      Qm(ei, ndis) = ones(1, 4)/4;
+29                  % value @ QP = avg of nodal values
+30  
+31      Ars(ei) = polyarea(Nodes(ndis,1), Nodes(ndis,2));
+32  
+33      Tm(ndis, ei) = ones(4, 1)*Ars(ei)/4;
+34                  % (integrated) nodal value = value @ QP times element Area/4
+35  end
+36  % Qm is quadrature interpolation matrix
+37  % Tm is quadrature integration matrix
+38  
+39  Ar_tot = 120e-3*25.4e-3-3*pi*(0.85e-2/2)^2; % True total area
+40                                              % Rectangle-3*Circles
+41  Ar_avg = Ar_tot/Ne;  % Average element area
+\end{verbatim}
+\item Since the DOFs are already relative displacements, we directly use the Quadrature matrices for the extraction:
+\begin{verbatim}
+42  %% Contact Relative Displacements (DOFS already in relative coordinates
+43  Lz = [kron(Qm, [0 0 1]) zeros(Ne, Nint)]; % Get only normal displacement
+44  Gz = [kron(Tm, [0; 0; 1]); zeros(Nint, Ne)];
+45  
+46  % Nodal relative disp (only for plotting)
+47  Lz_n = [kron(eye(N), [0 0 1]) zeros(N, Nint)]; % Get only normal displacement
+\end{verbatim}
+\item Just as before, we use the null-space to get a well-posed formulation, and then conduct the nonlinear prestress analysis (\texttt{RESFUN.m} is the same as before).
+\begin{verbatim}
+48  %% Remove fixed interface null-space
+49  L1 = null(Lz);
+50  [V,D] = eigs(L1'*K*L1, L1'*M*L1, 20, 'SM'); % Get first 20 modes
+51  Ln = null(V(:, 1:6)'*L1'*M);  % First six modes are RBMs
+52  
+53  Nn = size(Ln, 2);  % Null-reduced DOFs
+54  
+55  %% Solve the Nonlinear Static Prestress Problem
+56  bpmag = 12e3;
+57  knl = 5e6/(Ar_tot/Ne); % knl divided by avg element area
+58  U0 = (Ln'*K*Ln + (Gz'*Ln)'*(Lz*Ln)*knl)\(Ln'*Fv*bpmag);
+59  
+60  opt = optimoptions('fsolve', 'specifyObjectiveGradient', true, ...
+61                     'Display', 'iter');
+62  [U0, ~, ~, ~, J0] = fsolve(@(U) RESFUN([U; bpmag], Ln'*K*Ln, ...
+63                                         Ln'*Fv, Lz*Ln, Ln'*Gz, knl), U0, opt);
+64  
+65  %% Linearized Modal Analysis
+66  [V0, D0] = eigs(J0, Ln'*M*Ln, 10, 'SM');
+67  W0 = sqrt(diag(D0));
+68  disp(table((1:10)', W0/2/pi, 'VariableNames', {'Index', 'Frequency (Hz)'}))
+\end{verbatim}
+\item Here is the results of the linearized modal analysis:   
+\begin{center}
+\begin{tabular}{rr}
+Index & Frequency (Hz)\\[0pt]
+\hline
+1 & 143.74\\[0pt]
+2 & 151.3\\[0pt]
+3 & 575.05\\[0pt]
+4 & 642.77\\[0pt]
+5 & 870.5\\[0pt]
+6 & 945.57\\[0pt]
+7 & 1130.3\\[0pt]
+8 & 1475.6\\[0pt]
+9 & 1700.1\\[0pt]
+10 & 1896.2\\[0pt]
+\end{tabular}
+\end{center}
+Comparing this with the predictions from before indicate a very close agreement.
+\end{enumerate}
+\subsubsection{Plotting Results}
+\label{sec:org25cc1c0}
+\begin{enumerate}
+\item We use the following modified version of the plotting code to visualize the response:
+\begin{verbatim}
+ 1  %% Depict Interfacial Displacement Field
+ 2  A = zeros(N);  % Graph adjacency matrix
+ 3  for ei=1:Ne
+ 4         ndis = Elements(ei, 2:end);  % Nodes of the current element
+ 5         A(ndis, ndis([2:end 1])) = A(ndis, ndis([2:end 1])) + eye(4);
+ 6         A(ndis([2:end 1]), ndis) = A(ndis([2:end 1]), ndis) + eye(4);
+ 7  end
+ 8  G = graph(A);
+ 9  
+10  figure(1)
+11  pos=get(gcf, 'Position');
+12  set(gcf, 'Position', [pos(1:2) 900 320], 'Color', 'white')
+13  clf()
+14  plot(G, 'XData', Nodes(:,1), 'YData', Nodes(:,2), ...
+15       'NodeCData', Lz_n*Ln*U0, ...
+16       'MarkerSize', 4, 'LineWidth', 3)
+17  colormap(jet)
+18  grid on
+19  axis equal
+20  axis tight
+21  set(gca, 'XTick', (-6:3:6)*1e-2)
+22  xlim([-1 1]*6e-2)
+23  ylim([-1 1]*1.27e-2)
+24  xlabel('X Coordinate (m)')
+25  ylabel('Y Coordinate (m)')
+26  xx=colorbar('SouthOutside');
+27  xlabel(xx, 'Nodal Relative Displacement (m)', 'interpreter', 'latex', 'fontsize', 13)
+28  
+29  print('./intdisps_rc.png', '-dpng', '-r300')
+30  
+31  %% Show Pressure field
+32  pvals = max(knl*Lz*Ln*U0, 0);  % pressure @ QPs
+33  figure(2)
+34  pos=get(gcf, 'Position');
+35  set(gcf, 'Position', [pos(1:2) 900 320], 'Color', 'white')
+36  clf()
+37  for ei=1:Ne
+38      ndis = Elements(ei, 2:end);  % Nodes of the current element
+39      fill(Nodes(ndis,1), Nodes(ndis,2), pvals(ei)); hold on
+40  end
+41  colormap(jet)
+42  grid on
+43  axis equal
+44  axis tight
+45  set(gca, 'XTick', (-6:3:6)*1e-2)
+46  xlabel('X Coordinate (m)')
+47  ylabel('Y Coordinate (m)')
+48  xx=colorbar('SouthOutside');
+49  xlabel(xx, 'Element Normal Pressure (Pa)', 'interpreter', 'latex', 'fontsize', 13)
+50  
+51  print('./intpress_rc.png', '-dpng', '-r300')
+\end{verbatim}
+\item Here are the results
+\begin{enumerate}
+\item Nodal Displacements:
+\begin{center}
+\includegraphics[width=\textwidth]{./figs/intdisps_rc.png}
+\end{center}
+\item Interfacial Pressures:
+\begin{center}
+\includegraphics[width=\textwidth]{./figs/intpress_rc.png}
+\end{center}
+\end{enumerate}
+\item The results can be seen to be almost nearly identical to those shown before.
+\item Computationally the advantages are clear.
+The size of the model matrices with relative coordinates is 2078, while the size without is 4136.
+Using the relative DOF-coordinates, therefore, \textbf{one can achieve an almost 2x reduction in system size}, which is beneficial in every form of analysis.
 \end{enumerate}
 \section{Outro/Contact}
-\label{sec:org8ccbab6}
+\label{sec:outro}
 You can contact me at \href{mailto:nidish.balaji@ila.uni-stuttgart.de}{nidish.balaji@ila.uni-stuttgart.de} or \href{mailto:nidbid@gmail.com}{nidbid@gmail.com} for any questions/suggestions.
 Don't forget to check out the repository in github at \href{https://github.com/Nidish96/Abaqus4Joints}{https://github.com/Nidish96/Abaqus4Joints}.
 
 If you found this useful, please consider citing \href{https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017}{this paper} and/or \href{https://scholarship.rice.edu/handle/1911/113700}{this thesis}.
 \subsection{Summary}
-\label{sec:org5e255ae}
+\label{sec:orgf9dc5b8}
 All the scripts used in the tutorial are provided in 
 \begin{enumerate}
 \item \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a\_steelmat.py}{a\_steelmat.py}: Loading material
@@ -1391,7 +1859,7 @@ All the scripts used in the tutorial are provided in
 
 The \href{https://github.com/Nidish96/Abaqus4Joints}{Github repository} has the above scripts as well as all the cae files.
 \subsection{Details on this web-page documentation/offering suggestions}
-\label{sec:org837f750}
+\label{sec:org45b8331}
 \begin{itemize}
 \item This website was generated using org-mode on emacs with the Bigblow html theme from \href{https://github.com/fniessen/org-html-themes}{https://github.com/fniessen/org-html-themes}.
 The collapsible details blocks from \href{https://github.com/alhassy/org-special-block-extras}{org-special-block-extras} have also been used extensively.
