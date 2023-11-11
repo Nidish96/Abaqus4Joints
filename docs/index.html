@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-11-11 Sat 14:48 -->
+<!-- 2023-11-11 Sat 15:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>An ABAQUS-MATLAB tutorial for Jointed Systems</title>
@@ -128,32 +128,32 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org453c955">1. Introduction</a></li>
+<li><a href="#org964c0bf">1. Introduction</a></li>
 <li><a href="#sec:prepro">2. Preprocess</a>
 <ul>
-<li><a href="#org4200d69">2.1. A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orgbd53484">2.1. A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
 <li><a href="#sec:modeling">2.2. Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 <li><a href="#sec:setcreat">2.3. Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
-<li><a href="#org955d454">2.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#orgf88fc13">2.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:constr">3. Constraints</a>
 <ul>
-<li><a href="#org0c04be3">3.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org856a69c">3.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 <li><a href="#sec:boltprel">3.2. Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:meshing">4. Meshing</a>
 <ul>
-<li><a href="#orgeb48e18">4.1. Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#org59ff2b8">4.1. Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 <li><a href="#sec:abqprs">4.2. (Optional, recommended) Verify correctness of model through frictionless prestress&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:meshproc">5. Mesh Process</a>
 <ul>
-<li><a href="#org38a4f29">5.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#orga01a1d4">5.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org176ba8c">5.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#orgda73947">5.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org5cb81c8">5.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orge285cd6">5.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:mex">6. Matrix Extraction + NL-Analysis</a>
@@ -161,8 +161,8 @@
 <li><a href="#sec:bscr">6.1. Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
 <li><a href="#sec:nlan">6.2. Nonlinear Analysis on MATLAB/OCTAVE in under 100 lines of code&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a>
 <ul>
-<li><a href="#org475b973">6.2.1. Plotting</a></li>
-<li><a href="#org7f71e47">6.2.2. Miscellanies</a></li>
+<li><a href="#org7d85f6d">6.2.1. Plotting</a></li>
+<li><a href="#org519009a">6.2.2. Miscellanies</a></li>
 </ul>
 </li>
 </ul>
@@ -170,18 +170,18 @@
 <li><a href="#sec:relcsp">7. Relative Coordinates Pipeline</a>
 <ul>
 <li><a href="#sec:insrpt">7.1. Insertion of Reference Point Instances&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org865e9e2">7.2. Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</a></li>
-<li><a href="#org78f972b">7.3. Nonlinear Prestress Analysis with MATLAB/OCTAVE</a>
+<li><a href="#org8281091">7.2. Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</a></li>
+<li><a href="#org35df847">7.3. Nonlinear Prestress Analysis with MATLAB/OCTAVE</a>
 <ul>
-<li><a href="#orgb0a2eb3">7.3.1. Plotting Results</a></li>
+<li><a href="#orgac20136">7.3.1. Plotting Results</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#sec:outro">8. Outro/Contact</a>
 <ul>
-<li><a href="#org930555e">8.1. Summary</a></li>
-<li><a href="#orge4df007">8.2. Details on this web-page documentation/offering suggestions</a></li>
+<li><a href="#org67f44e4">8.1. Summary</a></li>
+<li><a href="#orge98971e">8.2. Details on this web-page documentation/offering suggestions</a></li>
 </ul>
 </li>
 </ul>
@@ -190,8 +190,8 @@
 <style> summary:hover {background:pink;} </style>
 <script>var HS_STARTUP_FOLDED = true;</script>
 
-<div id="outline-container-org453c955" class="outline-2">
-<h2 id="org453c955"><span class="section-number-2">1.</span> Introduction</h2>
+<div id="outline-container-org964c0bf" class="outline-2">
+<h2 id="org964c0bf"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This tutorial has been prepared to help researchers get started with modeling jointed systems for use in nonlinear vibration contexts.
@@ -271,8 +271,8 @@ The general principles in the modeling section are, however, recommended for all
 </p>
 </div>
 
-<div id="outline-container-org4200d69" class="outline-3">
-<h3 id="org4200d69"><span class="section-number-3">2.1.</span> A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-orgbd53484" class="outline-3">
+<h3 id="orgbd53484"><span class="section-number-3">2.1.</span> A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 ABAQUS Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
@@ -475,7 +475,7 @@ A quick way to check which face is what will be to use the <code>highlight</code
 Here is an example:
 </p>
 
-<div id="org7a1ef28" class="figure">
+<div id="orgb08a7ae" class="figure">
 <p><img src="./figs/highl.png" alt="highl.png" width="600px" />
 </p>
 </div>
@@ -487,7 +487,7 @@ At the end of this step, you should have a partitioned part that looks like this
 The partitioning is done in this way to help with the seeded meshing, constraint enforcement, etc.
 </p>
 
-<div id="org804daa5" class="figure">
+<div id="org31df344" class="figure">
 <p><img src="./figs/parthb.png" alt="parthb.png" width="600px" />
 </p>
 </div>
@@ -511,7 +511,7 @@ You have to ensure that the curved edges on the above are, indeed, single edges.
 If not, you will have to use the "Merge Edges" tool in the Part module and individually select each edge and merge them.
 </p>
 
-<div id="orgfdc1da6" class="figure">
+<div id="org2a96a81" class="figure">
 <p><img src="./figs/medg.png" alt="medg.png" width="600px" />
 </p>
 </div>
@@ -561,7 +561,7 @@ Select the faces by holding <code>Shift</code> and deselect by holding <code>Ctr
 Here is a picture of the surface highlighted in the viewport.
 </p>
 
-<div id="orgbd714aa" class="figure">
+<div id="org55c6c8c" class="figure">
 <p><img src="./figs/insurf.png" alt="insurf.png" width="300px" />
 </p>
 </div></li>
@@ -571,7 +571,7 @@ These will be tied to the washer for the analysis. (<code>BmWi</code> denotes th
 Here is a picture of the relevant surfaces highlighted (using different colors for each).
 </p>
 
-<div id="orgb53a5d1" class="figure">
+<div id="orgd9296b3" class="figure">
 <p><img src="./figs/bmwsurfs.png" alt="bmwsurfs.png" width="300px" />
 </p>
 </div></li>
@@ -581,7 +581,7 @@ Name the surface marked white as <code>BlW</code> and the surface marked green a
 (<code>BlW</code> denotes the Bolt-Washer contact surface; <code>BN</code> denotes the Bolt-Nut contact surface)
 </p>
 
-<div id="org5d11fe5" class="figure">
+<div id="org216e038" class="figure">
 <p><img src="./figs/boltsurfs.png" alt="boltsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -592,7 +592,7 @@ Name the white surface as <code>NW</code> and the green surface as <code>NB</cod
 <b>Note the direction axes carefully.</b>
 </p>
 
-<div id="org17a7d9c" class="figure">
+<div id="orgf9a9ca9" class="figure">
 <p><img src="./figs/nutsurfs.png" alt="nutsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -601,7 +601,7 @@ Create two surface on the <code>WASHER</code> model and label them as <code>WSTO
 Here is a graphical depiction of the model with the surfaces.
 </p>
 
-<div id="orgc0ffc69" class="figure">
+<div id="org9df1e65" class="figure">
 <p><img src="./figs/wshrsurf.png" alt="wshrsurf.png" width="200px" />
 </p>
 </div></li>
@@ -613,8 +613,8 @@ Now all the parts have been created and relevant surfaces have been identified.
 </p>
 </div>
 </div>
-<div id="outline-container-org955d454" class="outline-3">
-<h3 id="org955d454"><span class="section-number-3">2.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orgf88fc13" class="outline-3">
+<h3 id="orgf88fc13"><span class="section-number-3">2.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 <b>Note</b>: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
@@ -630,7 +630,7 @@ This will be the convention followed throughout this tutorial.
 The green beam in the following is renamed as <code>TOPBEAM</code> and the white beam in the following is renamed as <code>BOTBEAM</code>.
 </p>
 
-<div id="orgee97de3" class="figure">
+<div id="org6601014" class="figure">
 <p><img src="./figs/asb1.png" alt="asb1.png" width="400px" />
 </p>
 </div></li>
@@ -641,7 +641,7 @@ Rename the washer instances in the top and bottom as <code>TOPWASHER-1</code> an
 Rename the bolt and nut as <code>NUT-1</code> and <code>BOLT-1</code> respectively.
 </p>
 
-<div id="orgbd4ab76" class="figure">
+<div id="orgbb3efc1" class="figure">
 <p><img src="./figs/asbwn.png" alt="asbwn.png" width="300px" />
 </p>
 </div></li>
@@ -655,7 +655,7 @@ The figure below shows an example (a datum point was used for this here).
 Rename this to <code>BPT-1</code> (standing for Bolt Point 1).
 </p>
 
-<div id="orgc472a97" class="figure">
+<div id="orga5d8b27" class="figure">
 <p><img src="./figs/asrpt.png" alt="asrpt.png" width="400px" />
 </p>
 </div></li>
@@ -669,7 +669,7 @@ The figure below shows the final assembly along with a representation of the nam
 Recall that  the beam shown in the figure below is <code>TOPBEAM</code> and the hidden one is <code>BOTBEAM</code>.
 </p>
 
-<div id="org0a16e07" class="figure">
+<div id="org1aba88f" class="figure">
 <p><img src="./figs/as3bwn.png" alt="as3bwn.png" width="600px" />
 </p>
 </div></li>
@@ -685,8 +685,8 @@ Now that the assembly is complete, the relevant constraints will have to be enfo
 <h2 id="sec:constr"><span class="section-number-2">3.</span> Constraints</h2>
 <div class="outline-text-2" id="text-sec:constr">
 </div>
-<div id="outline-container-org0c04be3" class="outline-3">
-<h3 id="org0c04be3"><span class="section-number-3">3.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org856a69c" class="outline-3">
+<h3 id="org856a69c"><span class="section-number-3">3.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 All the following operations can be conducted in the <code>Interaction</code> module in CAE.
@@ -834,7 +834,7 @@ The following code does this through a nested loop such that <b><code>BNEQn-m</c
 Here is an image showing the constraints applied graphically.
 </p>
 
-<div id="org275ae4f" class="figure">
+<div id="org1ad7a7a" class="figure">
 <p><img src="./figs/conss.png" alt="conss.png" width="400px" />
 </p>
 </div></li>
@@ -870,7 +870,7 @@ The following python code applies a tightening load of 12kN to each bolt.
 </pre>
 </div>
 
-<div id="org881b254" class="figure">
+<div id="orgd00cf8a" class="figure">
 <p><img src="./figs/loads.png" alt="loads.png" width="400px" />
 </p>
 </div></li>
@@ -900,8 +900,8 @@ If such symmetry is not available, one may choose a more direct approach by usin
 Please <a href="mailto:nidish.balaji@ila.uni-stuttgart.de">write to me</a> if you'd like an example for this.
 </p>
 </div>
-<div id="outline-container-orgeb48e18" class="outline-3">
-<h3 id="orgeb48e18"><span class="section-number-3">4.1.</span> Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org59ff2b8" class="outline-3">
+<h3 id="org59ff2b8"><span class="section-number-3">4.1.</span> Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-4-1">
 <ol class="org-ol">
 <li><p>
@@ -909,7 +909,7 @@ Choose <code>Mesh-&gt;Assign Mesh Controls</code> and select the whole assembly 
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
 </p>
 
-<div id="orgcd27cbf" class="figure">
+<div id="orgbf124d5" class="figure">
 <p><img src="./figs/globmesh.png" alt="globmesh.png" width="300px" />
 </p>
 </div></li>
@@ -918,7 +918,7 @@ Now choose <code>Mesh-&gt;Seed Part Instance</code> and select all the instances
 Set 0.00254 as the global mesh seed (to ensure 10 elements across thickness) and 0.05 for curvature control.
 </p>
 
-<div id="org6d40784" class="figure">
+<div id="org9b01638" class="figure">
 <p><img src="./figs/gmeshseed.png" alt="gmeshseed.png" width="300px" />
 </p>
 </div></li>
@@ -927,7 +927,7 @@ Apply local seeds at the interface as shown here (on both interfaces).
 Use the <code>Mesh-&gt;Seed Edges</code> tool by choosing the Method as "By Number" and specify the number of elements.
 </p>
 
-<div id="org37ade39" class="figure">
+<div id="org826f652" class="figure">
 <p><img src="./figs/lmeshseeds.png" alt="lmeshseeds.png" width="400px" />
 </p>
 </div></li>
@@ -936,7 +936,7 @@ Now mesh the assembly using <code>Mesh-&gt;Mesh Part Instance</code> and selecti
 Here is a view of the interfacial mesh you should get after the above seeding.
 </p>
 
-<div id="orgd97e30e" class="figure">
+<div id="orgf86d6e8" class="figure">
 <p><img src="./figs/mesh.png" alt="mesh.png" width="300px" />
 </p>
 </div></li>
@@ -944,7 +944,7 @@ Here is a view of the interfacial mesh you should get after the above seeding.
 Here is an image of the total assembly with the mesh.
 </p>
 
-<div id="org5a20aad" class="figure">
+<div id="org31d4879" class="figure">
 <p><img src="./figs/fullmesh.png" alt="fullmesh.png" width="400px" />
 </p>
 </div></li>
@@ -971,7 +971,7 @@ For the static prestress analysis, first a surface-to-surface contact interactio
 You can do this from CAE starting from <code>Interaction-&gt;Create Interaction</code> and following the steps in the figure below.
 </p>
 
-<div id="org675815c" class="figure">
+<div id="orgeac167c" class="figure">
 <p><img src="./figs/setcontact.png" alt="setcontact.png" width="600px" />
 </p>
 </div></li>
@@ -980,7 +980,7 @@ Now create two linear frequency steps, one before and one after the static prest
 Request 30 eigenvalues in each case.
 </p>
 
-<div id="org03b019c" class="figure">
+<div id="org9e5e1b1" class="figure">
 <p><img src="./figs/lfreq.png" alt="lfreq.png" width="400px" />
 </p>
 </div></li>
@@ -997,7 +997,7 @@ Optionally, field outputs for <code>FREQ2</code> (by default it will be set to n
 You can do this in <code>Step-&gt;Create Field Outputs</code>.
 </p>
 
-<div id="org2f5f26d" class="figure">
+<div id="orgec6a640" class="figure">
 <p><img src="./figs/run2_fo.png" alt="run2_fo.png" width="300px" />
 </p>
 </div></li>
@@ -1083,7 +1083,7 @@ In the above, modes 1-7 are RBMs and modes 8 onwards are the elastic modes.
 Looking at the mode-shapes should make it clear that the two beams are free to move axially (the following is mode 1, for eg).
 </p>
 
-<div id="org40aec7e" class="figure">
+<div id="orgfb8ba87" class="figure">
 <p><img src="./figs/res1.png" alt="res1.png" width="400px" />
 </p>
 </div></li>
@@ -1095,7 +1095,7 @@ If it still doesn't converge, check your model again.
 Here is a picture of the contact pressures at the interface at the end of the static prestress step.
 </p>
 
-<div id="orgb2497a6" class="figure">
+<div id="org7efc4fd" class="figure">
 <p><img src="./figs/res2_1.png" alt="res2_1.png" width="400px" />
 </p>
 </div></li>
@@ -1209,13 +1209,13 @@ It is also helpful to use global node and element indexing henceforth.
 This can be specified in <code>Model-&gt;Edit Attributes-&gt;Model-1</code> as follows:
 </p>
 
-<div id="orga6499ca" class="figure">
+<div id="org22ece77" class="figure">
 <p><img src="./figs/modl.png" alt="modl.png" width="300px" />
 </p>
 </div>
 </div>
-<div id="outline-container-org38a4f29" class="outline-3">
-<h3 id="org38a4f29"><span class="section-number-3">5.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-orgda73947" class="outline-3">
+<h3 id="orgda73947"><span class="section-number-3">5.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 Although we have taken care to ensure that the mesh of the <code>TOPBEAM</code> and <code>BOTBEAM</code> are conformal at the interface, minor imperfections in the nodal locations may exist.
@@ -1393,8 +1393,8 @@ So we will reintroduce the bolt loads in the substructuring step in #8 below.
 </ol>
 </div>
 </div>
-<div id="outline-container-orga01a1d4" class="outline-3">
-<h3 id="orga01a1d4"><span class="section-number-3">5.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org5cb81c8" class="outline-3">
+<h3 id="org5cb81c8"><span class="section-number-3">5.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-2">
 <ol class="org-ol">
 <li><p>
@@ -1543,8 +1543,8 @@ You can find the inp-file generate from the above in <a href="https://github.com
 </ol>
 </div>
 </div>
-<div id="outline-container-org176ba8c" class="outline-3">
-<h3 id="org176ba8c"><span class="section-number-3">5.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orge285cd6" class="outline-3">
+<h3 id="orge285cd6"><span class="section-number-3">5.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 You can now run the Job named "Job" in the GUI, or directly run the "<a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp">Job.inp</a>" file from the command line using
@@ -1853,7 +1853,7 @@ The interpolation and integration weights are, therefore, easily specified.
 The following is a depiction of the quadrature points against the interfacial elements.
 </p>
 
-<div id="org49bbaca" class="figure">
+<div id="orga821dfe" class="figure">
 <p><img src="./figs/quadpts.png" alt="quadpts.png" width="600px" />
 </p>
 </div></li>
@@ -2031,8 +2031,8 @@ Only a unilateral spring is considered in the normal direction.
 
 </details>
 </div>
-<div id="outline-container-org475b973" class="outline-4">
-<h4 id="org475b973"><span class="section-number-4">6.2.1.</span> Plotting</h4>
+<div id="outline-container-org7d85f6d" class="outline-4">
+<h4 id="org7d85f6d"><span class="section-number-4">6.2.1.</span> Plotting</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <ol class="org-ol">
 <li><p>
@@ -2071,7 +2071,7 @@ xlabel<span class="org-rainbow-delimiters-depth-1">(</span>xx<span class="org-bu
 The following is the output figure, showing the relative normal displacements at each node, with the nodes connected through the undirected graph constructed using the element information.
 </p>
 
-<div id="org377171f" class="figure">
+<div id="org6cf1e7d" class="figure">
 <p><img src="./figs/intdisps.png" alt="intdisps.png" width="600px" />
 </p>
 </div></li>
@@ -2110,15 +2110,15 @@ Higher values of \(knl\) will obtain a better estimate of the "hard" contact res
 An alternative would be to implement a lagrange multiplier method for conducting hard contact simulations directly.
 </p>
 
-<div id="org05daa09" class="figure">
+<div id="orgda0aa31" class="figure">
 <p><img src="./figs/intpress.png" alt="intpress.png" width="600px" />
 </p>
 </div></li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org7f71e47" class="outline-4">
-<h4 id="org7f71e47"><span class="section-number-4">6.2.2.</span> Miscellanies</h4>
+<div id="outline-container-org519009a" class="outline-4">
+<h4 id="org519009a"><span class="section-number-4">6.2.2.</span> Miscellanies</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <ol class="org-ol">
 <li>Even if all the nodes have equal areas, <b>node-to-node contact elements are still inconsistent in this context</b>, since contact interactions can be understood to be a fundamentally local interaction, which need to be integrated to have global influence.
@@ -2227,33 +2227,34 @@ The name of the resulting inp file will be <code>MeshedModel.inp</code>.
 </p>
 <div class="org-src-container">
 <pre class="src src-python"><span class="linenr">43: </span>ras.Set<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'RELCSET'</span>,
-<span class="linenr">44: </span>        referencePoints<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">[</span>ras.instances<span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">'RELPT-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-4">(</span>i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">]</span>.referencePoints<span class="org-rainbow-delimiters-depth-3">[</span>1<span class="org-rainbow-delimiters-depth-3">]</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>N<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span> <span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">45: </span>
-<span class="linenr">46: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactions
-<span class="linenr">47: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-1">(</span>tmp<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-operator">&gt;</span> 0:
-<span class="linenr">48: </span>    <span class="org-keyword">del</span> tmp<span class="org-rainbow-delimiters-depth-1">[</span>tmp.keys<span class="org-rainbow-delimiters-depth-2">()[</span><span class="org-operator">-</span>1<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">49: </span>
-<span class="linenr">50: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactionProperties
-<span class="linenr">51: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-1">(</span>tmp<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-operator">&gt;</span> 0:
-<span class="linenr">52: </span>    <span class="org-keyword">del</span> tmp<span class="org-rainbow-delimiters-depth-1">[</span>tmp.keys<span class="org-rainbow-delimiters-depth-2">()[</span><span class="org-operator">-</span>1<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">53: </span>
-<span class="linenr">54: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Remove all steps except initial</span>
-<span class="linenr">55: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.steps
-<span class="linenr">56: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-1">(</span>tmp<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-operator">&gt;</span> 1:
-<span class="linenr">57: </span>    <span class="org-keyword">del</span> tmp<span class="org-rainbow-delimiters-depth-1">[</span>tmp.keys<span class="org-rainbow-delimiters-depth-2">()[</span><span class="org-operator">-</span>1<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">58: </span>
-<span class="linenr">59: </span><span class="org-comment-delimiter">#### </span><span class="org-comment">5. Create a Job and write an inp file</span>
-<span class="linenr">60: </span>mdbm.Job<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"MeshedModel"</span>, model<span class="org-operator">=</span><span class="org-string">'Model-1'</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">61: </span>mdbm.jobs<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'MeshedModel'</span><span class="org-rainbow-delimiters-depth-1">]</span>.writeInput<span class="org-rainbow-delimiters-depth-1">()</span>
-<span class="linenr">62: </span>
-<span class="linenr">63: </span>mdbm.close<span class="org-rainbow-delimiters-depth-1">()</span>
+<span class="linenr">44: </span>        referencePoints<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">[</span>ras.instances<span class="org-rainbow-delimiters-depth-3">[</span><span class="org-string">'RELPT-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-4">(</span>i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">]</span>.referencePoints<span class="org-rainbow-delimiters-depth-3">[</span>1<span class="org-rainbow-delimiters-depth-3">]</span>
+<span class="linenr">45: </span>                         <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>N<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span> <span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">46: </span>
+<span class="linenr">47: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactions
+<span class="linenr">48: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-1">(</span>tmp<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-operator">&gt;</span> 0:
+<span class="linenr">49: </span>    <span class="org-keyword">del</span> tmp<span class="org-rainbow-delimiters-depth-1">[</span>tmp.keys<span class="org-rainbow-delimiters-depth-2">()[</span><span class="org-operator">-</span>1<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">50: </span>
+<span class="linenr">51: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.interactionProperties
+<span class="linenr">52: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-1">(</span>tmp<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-operator">&gt;</span> 0:
+<span class="linenr">53: </span>    <span class="org-keyword">del</span> tmp<span class="org-rainbow-delimiters-depth-1">[</span>tmp.keys<span class="org-rainbow-delimiters-depth-2">()[</span><span class="org-operator">-</span>1<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">54: </span>
+<span class="linenr">55: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Remove all steps except initial</span>
+<span class="linenr">56: </span><span class="org-variable-name">tmp</span> <span class="org-operator">=</span> mdl.steps
+<span class="linenr">57: </span><span class="org-keyword">while</span> <span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-1">(</span>tmp<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-operator">&gt;</span> 1:
+<span class="linenr">58: </span>    <span class="org-keyword">del</span> tmp<span class="org-rainbow-delimiters-depth-1">[</span>tmp.keys<span class="org-rainbow-delimiters-depth-2">()[</span><span class="org-operator">-</span>1<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">59: </span>
+<span class="linenr">60: </span><span class="org-comment-delimiter">#### </span><span class="org-comment">5. Create a Job and write an inp file</span>
+<span class="linenr">61: </span>mdbm.Job<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"MeshedModel"</span>, model<span class="org-operator">=</span><span class="org-string">'Model-1'</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">62: </span>mdbm.jobs<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'MeshedModel'</span><span class="org-rainbow-delimiters-depth-1">]</span>.writeInput<span class="org-rainbow-delimiters-depth-1">()</span>
+<span class="linenr">63: </span>
+<span class="linenr">64: </span>mdbm.close<span class="org-rainbow-delimiters-depth-1">()</span>
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org865e9e2" class="outline-3">
-<h3 id="org865e9e2"><span class="section-number-3">7.2.</span> Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</h3>
+<div id="outline-container-org8281091" class="outline-3">
+<h3 id="org8281091"><span class="section-number-3">7.2.</span> Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</h3>
 <div class="outline-text-3" id="text-7-2">
 <ol class="org-ol">
 <li><p>
@@ -2307,20 +2308,21 @@ Note that since we have read the model from the inp file, all set names are full
 <span class="linenr">38: </span><span class="org-variable-name">TopNdCds</span> <span class="org-operator">=</span> np.array<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span>topnodes<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>.coordinates <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>N<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
 <span class="linenr">39: </span>
 <span class="linenr">40: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Top Elements</span>
-<span class="linenr">41: </span><span class="org-variable-name">TopEls</span> <span class="org-operator">=</span> np.array<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span>topsurf.elements<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>.connectivity <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-4">(</span>topsurf.elements<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">42: </span><span class="org-variable-name">ELS</span> <span class="org-operator">=</span> np.zeros<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span>TopEls.shape<span class="org-rainbow-delimiters-depth-3">[</span>0<span class="org-rainbow-delimiters-depth-3">]</span>, 5<span class="org-rainbow-delimiters-depth-2">)</span>, dtype<span class="org-operator">=</span><span class="org-builtin">int</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">43: </span><span class="org-keyword">for</span> ne <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>TopEls.shape<span class="org-rainbow-delimiters-depth-2">[</span>0<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>:
-<span class="linenr">44: </span>    <span class="org-variable-name">elefac</span> <span class="org-operator">=</span> topsurf.elements<span class="org-rainbow-delimiters-depth-1">[</span>ne<span class="org-rainbow-delimiters-depth-1">]</span>.getElemFaces<span class="org-rainbow-delimiters-depth-1">()</span>
-<span class="linenr">45: </span>
-<span class="linenr">46: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Gives you the list of faces on the interface (we only expect a single face)</span>
-<span class="linenr">47: </span>    <span class="org-variable-name">fe</span> <span class="org-operator">=</span> np.argwhere<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span><span class="org-builtin">all</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-rainbow-delimiters-depth-4">[</span>Topnd_dict.has_key<span class="org-rainbow-delimiters-depth-5">(</span>x<span class="org-rainbow-delimiters-depth-5">)</span> <span class="org-keyword">for</span> x <span class="org-keyword">in</span> 
-<span class="linenr">48: </span>                           <span class="org-rainbow-delimiters-depth-5">[</span>elefac<span class="org-rainbow-delimiters-depth-6">[</span>k<span class="org-rainbow-delimiters-depth-6">]</span>.getNodes<span class="org-rainbow-delimiters-depth-6">()[</span>i<span class="org-rainbow-delimiters-depth-6">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-6">(</span>4<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">]</span><span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">)</span>
-<span class="linenr">49: </span>                      <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>6<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)[</span>0,0<span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">50: </span>    <span class="org-variable-name">ELS</span><span class="org-rainbow-delimiters-depth-1">[</span>ne, 0<span class="org-rainbow-delimiters-depth-1">]</span> <span class="org-operator">=</span> ne
-<span class="linenr">51: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Searches for the face where all the nodes are in the interface and returns those nodes</span>
-<span class="linenr">52: </span>    <span class="org-variable-name">ELS</span><span class="org-rainbow-delimiters-depth-1">[</span>ne, 1:<span class="org-rainbow-delimiters-depth-1">]</span> <span class="org-operator">=</span> <span class="org-rainbow-delimiters-depth-1">[</span>Topnd_dict<span class="org-rainbow-delimiters-depth-2">[</span>x<span class="org-rainbow-delimiters-depth-2">]</span> <span class="org-keyword">for</span> x <span class="org-keyword">in</span> <span class="org-rainbow-delimiters-depth-2">[</span>elefac<span class="org-rainbow-delimiters-depth-3">[</span>fe<span class="org-rainbow-delimiters-depth-3">]</span>.getNodes<span class="org-rainbow-delimiters-depth-3">()[</span>k<span class="org-rainbow-delimiters-depth-3">]</span>.label
-<span class="linenr">53: </span>                                           <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>4<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">54: </span>    <span class="org-variable-name">ELS</span><span class="org-rainbow-delimiters-depth-1">[</span>ne, :<span class="org-rainbow-delimiters-depth-1">]</span> <span class="org-operator">+=</span> 1
+<span class="linenr">41: </span><span class="org-variable-name">TopEls</span> <span class="org-operator">=</span> np.array<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span>topsurf.elements<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>.connectivity
+<span class="linenr">42: </span>                   <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-4">(</span>topsurf.elements<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">43: </span><span class="org-variable-name">ELS</span> <span class="org-operator">=</span> np.zeros<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">(</span>TopEls.shape<span class="org-rainbow-delimiters-depth-3">[</span>0<span class="org-rainbow-delimiters-depth-3">]</span>, 5<span class="org-rainbow-delimiters-depth-2">)</span>, dtype<span class="org-operator">=</span><span class="org-builtin">int</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">44: </span><span class="org-keyword">for</span> ne <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>TopEls.shape<span class="org-rainbow-delimiters-depth-2">[</span>0<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>:
+<span class="linenr">45: </span>    <span class="org-variable-name">elefac</span> <span class="org-operator">=</span> topsurf.elements<span class="org-rainbow-delimiters-depth-1">[</span>ne<span class="org-rainbow-delimiters-depth-1">]</span>.getElemFaces<span class="org-rainbow-delimiters-depth-1">()</span>
+<span class="linenr">46: </span>
+<span class="linenr">47: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Gives you the list of faces on the interface (we only expect a single face)</span>
+<span class="linenr">48: </span>    <span class="org-variable-name">fe</span> <span class="org-operator">=</span> np.argwhere<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span><span class="org-builtin">all</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-rainbow-delimiters-depth-4">[</span>Topnd_dict.has_key<span class="org-rainbow-delimiters-depth-5">(</span>x<span class="org-rainbow-delimiters-depth-5">)</span> <span class="org-keyword">for</span> x <span class="org-keyword">in</span> 
+<span class="linenr">49: </span>                           <span class="org-rainbow-delimiters-depth-5">[</span>elefac<span class="org-rainbow-delimiters-depth-6">[</span>k<span class="org-rainbow-delimiters-depth-6">]</span>.getNodes<span class="org-rainbow-delimiters-depth-6">()[</span>i<span class="org-rainbow-delimiters-depth-6">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-6">(</span>4<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">]</span><span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">)</span>
+<span class="linenr">50: </span>                      <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>6<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)[</span>0,0<span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">51: </span>    <span class="org-variable-name">ELS</span><span class="org-rainbow-delimiters-depth-1">[</span>ne, 0<span class="org-rainbow-delimiters-depth-1">]</span> <span class="org-operator">=</span> ne
+<span class="linenr">52: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Searches for &amp; returns the face where all the nodes are in the interface</span>
+<span class="linenr">53: </span>    <span class="org-variable-name">ELS</span><span class="org-rainbow-delimiters-depth-1">[</span>ne, 1:<span class="org-rainbow-delimiters-depth-1">]</span> <span class="org-operator">=</span> <span class="org-rainbow-delimiters-depth-1">[</span>Topnd_dict<span class="org-rainbow-delimiters-depth-2">[</span>x<span class="org-rainbow-delimiters-depth-2">]</span> <span class="org-keyword">for</span> x <span class="org-keyword">in</span> <span class="org-rainbow-delimiters-depth-2">[</span>elefac<span class="org-rainbow-delimiters-depth-3">[</span>fe<span class="org-rainbow-delimiters-depth-3">]</span>.getNodes<span class="org-rainbow-delimiters-depth-3">()[</span>k<span class="org-rainbow-delimiters-depth-3">]</span>.label
+<span class="linenr">54: </span>                                           <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>4<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">55: </span>    <span class="org-variable-name">ELS</span><span class="org-rainbow-delimiters-depth-1">[</span>ne, :<span class="org-rainbow-delimiters-depth-1">]</span> <span class="org-operator">+=</span> 1
 </pre>
 </div>
 <ol class="org-ol">
@@ -2328,28 +2330,29 @@ Note that since we have read the model from the inp file, all set names are full
 Resort the bottom nodes
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">55: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Re-sort the bottom nodes    </span>
-<span class="linenr">56: </span><span class="org-variable-name">botleft</span> <span class="org-operator">=</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>N<span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">57: </span><span class="org-variable-name">bts</span> <span class="org-operator">=</span> <span class="org-rainbow-delimiters-depth-1">[]</span>
-<span class="linenr">58: </span><span class="org-variable-name">tmi</span> <span class="org-operator">=</span> 0
-<span class="linenr">59: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>N<span class="org-rainbow-delimiters-depth-1">)</span>:
-<span class="linenr">60: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Calculates deviation of selected node coordinate on bottom to each</span>
-<span class="linenr">61: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">node coordinate on top and "assigns" the closest one to the index.</span>
-<span class="linenr">62: </span>    bts.append<span class="org-rainbow-delimiters-depth-1">(</span>
-<span class="linenr">63: </span>        botleft.pop<span class="org-rainbow-delimiters-depth-2">(</span>
-<span class="linenr">64: </span>            np.argmin<span class="org-rainbow-delimiters-depth-3">(</span>
-<span class="linenr">65: </span>                np.linalg.norm<span class="org-rainbow-delimiters-depth-4">(</span>
-<span class="linenr">66: </span>                    topnodes<span class="org-rainbow-delimiters-depth-5">[</span>i<span class="org-rainbow-delimiters-depth-5">]</span>.coordinates<span class="org-operator">-</span>np.array<span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">[</span>botnodes<span class="org-rainbow-delimiters-depth-7">[</span>j<span class="org-rainbow-delimiters-depth-7">]</span>.coordinates <span class="org-keyword">for</span> j <span class="org-keyword">in</span> botleft<span class="org-rainbow-delimiters-depth-6">]</span><span class="org-rainbow-delimiters-depth-5">)</span>,
-<span class="linenr">67: </span>                    axis<span class="org-operator">=</span>1<span class="org-rainbow-delimiters-depth-4">)</span>
-<span class="linenr">68: </span>            <span class="org-rainbow-delimiters-depth-3">)</span>
-<span class="linenr">69: </span>        <span class="org-rainbow-delimiters-depth-2">)</span>
-<span class="linenr">70: </span>    <span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">71: </span>
-<span class="linenr">72: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly</span>
-<span class="linenr">73: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>N<span class="org-rainbow-delimiters-depth-1">)</span>:
-<span class="linenr">74: </span>    ras.editNode<span class="org-rainbow-delimiters-depth-1">(</span>nodes<span class="org-operator">=</span>botnodes<span class="org-rainbow-delimiters-depth-2">[</span>bts<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>:bts<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-2">]</span>,
-<span class="linenr">75: </span>                 coordinates<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span>topnodes<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>.coordinates,<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">76: </span>
+<pre class="src src-python"><span class="linenr">56: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Re-sort the bottom nodes    </span>
+<span class="linenr">57: </span><span class="org-variable-name">botleft</span> <span class="org-operator">=</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>N<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">58: </span><span class="org-variable-name">bts</span> <span class="org-operator">=</span> <span class="org-rainbow-delimiters-depth-1">[]</span>
+<span class="linenr">59: </span><span class="org-variable-name">tmi</span> <span class="org-operator">=</span> 0
+<span class="linenr">60: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>N<span class="org-rainbow-delimiters-depth-1">)</span>:
+<span class="linenr">61: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">Calculates deviation of selected node coordinate on bottom to each</span>
+<span class="linenr">62: </span>    <span class="org-comment-delimiter"># </span><span class="org-comment">node coordinate on top and "assigns" the closest one to the index.</span>
+<span class="linenr">63: </span>    bts.append<span class="org-rainbow-delimiters-depth-1">(</span>
+<span class="linenr">64: </span>        botleft.pop<span class="org-rainbow-delimiters-depth-2">(</span>
+<span class="linenr">65: </span>            np.argmin<span class="org-rainbow-delimiters-depth-3">(</span>
+<span class="linenr">66: </span>                np.linalg.norm<span class="org-rainbow-delimiters-depth-4">(</span>
+<span class="linenr">67: </span>                    topnodes<span class="org-rainbow-delimiters-depth-5">[</span>i<span class="org-rainbow-delimiters-depth-5">]</span>.coordinates<span class="org-operator">-</span>np.array<span class="org-rainbow-delimiters-depth-5">(</span><span class="org-rainbow-delimiters-depth-6">[</span>botnodes<span class="org-rainbow-delimiters-depth-7">[</span>j<span class="org-rainbow-delimiters-depth-7">]</span>.coordinates
+<span class="linenr">68: </span>                                                      <span class="org-keyword">for</span> j <span class="org-keyword">in</span> botleft<span class="org-rainbow-delimiters-depth-6">]</span><span class="org-rainbow-delimiters-depth-5">)</span>,
+<span class="linenr">69: </span>                    axis<span class="org-operator">=</span>1<span class="org-rainbow-delimiters-depth-4">)</span>
+<span class="linenr">70: </span>            <span class="org-rainbow-delimiters-depth-3">)</span>
+<span class="linenr">71: </span>        <span class="org-rainbow-delimiters-depth-2">)</span>
+<span class="linenr">72: </span>    <span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">73: </span>
+<span class="linenr">74: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly</span>
+<span class="linenr">75: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>N<span class="org-rainbow-delimiters-depth-1">)</span>:
+<span class="linenr">76: </span>    ras.editNode<span class="org-rainbow-delimiters-depth-1">(</span>nodes<span class="org-operator">=</span>botnodes<span class="org-rainbow-delimiters-depth-2">[</span>bts<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>:bts<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-2">]</span>,
+<span class="linenr">77: </span>                 coordinates<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span>topnodes<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">]</span>.coordinates,<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">78: </span>
 </pre>
 </div></li>
 </ol></li>
@@ -2357,22 +2360,22 @@ Resort the bottom nodes
 Create node sets for the top, bottom and relative coordinates.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">77: </span><span class="org-variable-name">botpairednds</span> <span class="org-operator">=</span> botnodes.sequenceFromLabels<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">[</span>botnodes<span class="org-rainbow-delimiters-depth-4">[</span>i<span class="org-rainbow-delimiters-depth-4">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> bts<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">78: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Reordering from the sorting above</span>
-<span class="linenr">79: </span>
-<span class="linenr">80: </span>ras.SetFromNodeLabels<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"TOPS_NDS"</span>, 
-<span class="linenr">81: </span>                      nodeLabels<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>topnodes<span class="org-rainbow-delimiters-depth-4">[</span>0<span class="org-rainbow-delimiters-depth-4">]</span>.instanceName, 
-<span class="linenr">82: </span>                                   <span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-4">(</span><span class="org-rainbow-delimiters-depth-5">[</span>topnodes<span class="org-rainbow-delimiters-depth-6">[</span>i<span class="org-rainbow-delimiters-depth-6">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-6">(</span>N<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">]</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
-<span class="linenr">83: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">84: </span>ras.SetFromNodeLabels<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"BOTS_NDS"</span>, 
-<span class="linenr">85: </span>                      nodeLabels<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>botpairednds<span class="org-rainbow-delimiters-depth-4">[</span>0<span class="org-rainbow-delimiters-depth-4">]</span>.instanceName, 
-<span class="linenr">86: </span>                                   <span class="org-rainbow-delimiters-depth-4">[</span>botpairednds<span class="org-rainbow-delimiters-depth-5">[</span>i<span class="org-rainbow-delimiters-depth-5">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-5">(</span>N<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
-<span class="linenr">87: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">88: </span><span class="org-variable-name">rlcn</span> <span class="org-operator">=</span> ras.sets<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'RELCSET'</span><span class="org-rainbow-delimiters-depth-1">]</span>.nodes
-<span class="linenr">89: </span>ras.SetFromNodeLabels<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"RELCSET"</span>,
-<span class="linenr">90: </span>                      nodeLabels<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>rlcn<span class="org-rainbow-delimiters-depth-4">[</span>0<span class="org-rainbow-delimiters-depth-4">]</span>.instanceName,
-<span class="linenr">91: </span>                                   <span class="org-rainbow-delimiters-depth-4">[</span>rlcn<span class="org-rainbow-delimiters-depth-5">[</span>i<span class="org-rainbow-delimiters-depth-5">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-5">(</span>N<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
-<span class="linenr">92: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<pre class="src src-python"><span class="linenr">79: </span><span class="org-variable-name">botpairednds</span> <span class="org-operator">=</span> botnodes.sequenceFromLabels<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">[</span>botnodes<span class="org-rainbow-delimiters-depth-4">[</span>i<span class="org-rainbow-delimiters-depth-4">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> bts<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">80: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Reordering from the sorting above</span>
+<span class="linenr">81: </span>
+<span class="linenr">82: </span>ras.SetFromNodeLabels<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"TOPS_NDS"</span>, 
+<span class="linenr">83: </span>                      nodeLabels<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>topnodes<span class="org-rainbow-delimiters-depth-4">[</span>0<span class="org-rainbow-delimiters-depth-4">]</span>.instanceName, 
+<span class="linenr">84: </span>                                   <span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-4">(</span><span class="org-rainbow-delimiters-depth-5">[</span>topnodes<span class="org-rainbow-delimiters-depth-6">[</span>i<span class="org-rainbow-delimiters-depth-6">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-6">(</span>N<span class="org-rainbow-delimiters-depth-6">)</span><span class="org-rainbow-delimiters-depth-5">]</span><span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
+<span class="linenr">85: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">86: </span>ras.SetFromNodeLabels<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"BOTS_NDS"</span>, 
+<span class="linenr">87: </span>                      nodeLabels<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>botpairednds<span class="org-rainbow-delimiters-depth-4">[</span>0<span class="org-rainbow-delimiters-depth-4">]</span>.instanceName, 
+<span class="linenr">88: </span>                                   <span class="org-rainbow-delimiters-depth-4">[</span>botpairednds<span class="org-rainbow-delimiters-depth-5">[</span>i<span class="org-rainbow-delimiters-depth-5">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-5">(</span>N<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
+<span class="linenr">89: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">90: </span><span class="org-variable-name">rlcn</span> <span class="org-operator">=</span> ras.sets<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'RELCSET'</span><span class="org-rainbow-delimiters-depth-1">]</span>.nodes
+<span class="linenr">91: </span>ras.SetFromNodeLabels<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"RELCSET"</span>,
+<span class="linenr">92: </span>                      nodeLabels<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>rlcn<span class="org-rainbow-delimiters-depth-4">[</span>0<span class="org-rainbow-delimiters-depth-4">]</span>.instanceName,
+<span class="linenr">93: </span>                                   <span class="org-rainbow-delimiters-depth-4">[</span>rlcn<span class="org-rainbow-delimiters-depth-5">[</span>i<span class="org-rainbow-delimiters-depth-5">]</span>.label <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-5">(</span>N<span class="org-rainbow-delimiters-depth-5">)</span><span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
+<span class="linenr">94: </span>                      unsorted<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div></li>
 <li><p>
@@ -2380,11 +2383,11 @@ We now set equation constraints to set a meaning for the ghost nodes.
 It is possible to provide sets as inputs to the Equation constraint (each node is taken as-ordered).
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">93: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>3<span class="org-rainbow-delimiters-depth-1">)</span>:
-<span class="linenr">94: </span>    mdl.Equation<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'RELCS-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-2">(</span>i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-2">)</span>,
-<span class="linenr">95: </span>                 terms<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>1.0, <span class="org-string">'TOPS_NDS'</span>, i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-3">)</span>,
-<span class="linenr">96: </span>                        <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-operator">-</span>1.0, <span class="org-string">'RELCSET'</span>, i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-3">)</span>,
-<span class="linenr">97: </span>                        <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-operator">-</span>1.0, <span class="org-string">'BOTS_NDS'</span>, i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<pre class="src src-python"><span class="linenr">95: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>3<span class="org-rainbow-delimiters-depth-1">)</span>:
+<span class="linenr">96: </span>    mdl.Equation<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'RELCS-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-2">(</span>i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-2">)</span>,
+<span class="linenr">97: </span>                 terms<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>1.0, <span class="org-string">'TOPS_NDS'</span>, i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-3">)</span>,
+<span class="linenr">98: </span>                        <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-operator">-</span>1.0, <span class="org-string">'RELCSET'</span>, i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-3">)</span>,
+<span class="linenr">99: </span>                        <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-operator">-</span>1.0, <span class="org-string">'BOTS_NDS'</span>, i<span class="org-operator">+</span>1<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div>
 <p>
@@ -2396,11 +2399,11 @@ The constraint represented by the above is
 We next setup the "fixed interface" CMS by conducting a Frequency step while constraining all the DOFS of the <code>RELCSET</code> nodeset to be zero (interface stuck against each other).
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr"> 98: </span>mdl.FrequencyStep<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>, previous<span class="org-operator">=</span><span class="org-string">"Initial"</span>,
-<span class="linenr"> 99: </span>                  normalization<span class="org-operator">=</span>MASS, eigensolver<span class="org-operator">=</span>LANCZOS,
-<span class="linenr">100: </span>                  numEigen<span class="org-operator">=</span>60<span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">101: </span>mdl.EncastreBC<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"RELFIX"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
-<span class="linenr">102: </span>               region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'RELCSET'</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<pre class="src src-python"><span class="linenr">100: </span>mdl.FrequencyStep<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>, previous<span class="org-operator">=</span><span class="org-string">"Initial"</span>,
+<span class="linenr">101: </span>                  normalization<span class="org-operator">=</span>MASS, eigensolver<span class="org-operator">=</span>LANCZOS,
+<span class="linenr">102: </span>                  numEigen<span class="org-operator">=</span>60<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">103: </span>mdl.EncastreBC<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"RELFIX"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
+<span class="linenr">104: </span>               region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'RELCSET'</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div></li>
 <li><p>
@@ -2409,48 +2412,53 @@ We request 6 more modes in <code>modeRange</code> since the "fixedInterface= mod
 So if 20 generalized modes are desired, we ask for 26. 
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">103: </span>mdl.SubstructureGenerateStep<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, previous<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
-<span class="linenr">104: </span>                             substructureIdentifier<span class="org-operator">=</span>1, 
-<span class="linenr">105: </span>                             retainedEigenmodesMethod<span class="org-operator">=</span>MODE_RANGE, modeRange<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>1, 26, 1<span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
-<span class="linenr">106: </span>                             recoveryMatrix<span class="org-operator">=</span>REGION, recoveryRegion<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'OUTNODES'</span><span class="org-rainbow-delimiters-depth-2">]</span>,
-<span class="linenr">107: </span>                             computeReducedMassMatrix<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">108: </span>
-<span class="linenr">109: </span>mdl.RetainedNodalDofsBC<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"A"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
-<span class="linenr">110: </span>                        region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'RELCSET'</span><span class="org-rainbow-delimiters-depth-2">]</span>,
-<span class="linenr">111: </span>                        u1<span class="org-operator">=</span>ON, u2<span class="org-operator">=</span>ON, u3<span class="org-operator">=</span>ON<span class="org-rainbow-delimiters-depth-1">)</span>
+<pre class="src src-python"><span class="linenr">105: </span>mdl.SubstructureGenerateStep<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>, previous<span class="org-operator">=</span><span class="org-string">"Fixed-Int-Modal"</span>,
+<span class="linenr">106: </span>                             substructureIdentifier<span class="org-operator">=</span>1, 
+<span class="linenr">107: </span>                             retainedEigenmodesMethod<span class="org-operator">=</span>MODE_RANGE,
+<span class="linenr">108: </span>                             modeRange<span class="org-operator">=</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span>1, 26, 1<span class="org-rainbow-delimiters-depth-3">)</span>,<span class="org-rainbow-delimiters-depth-2">)</span>,
+<span class="linenr">109: </span>                             recoveryMatrix<span class="org-operator">=</span>REGION,
+<span class="linenr">110: </span>                             recoveryRegion<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'OUTNODES'</span><span class="org-rainbow-delimiters-depth-2">]</span>,
+<span class="linenr">111: </span>                             computeReducedMassMatrix<span class="org-operator">=</span><span class="org-constant">True</span><span class="org-rainbow-delimiters-depth-1">)</span>
 <span class="linenr">112: </span>
-<span class="linenr">113: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Apply Bolt Loads (1N magnitude)</span>
-<span class="linenr">114: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>1, 4<span class="org-rainbow-delimiters-depth-1">)</span>:
-<span class="linenr">115: </span>    mdl.ConcentratedForce<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-2">(</span>i<span class="org-rainbow-delimiters-depth-2">)</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
-<span class="linenr">116: </span>                          cf3<span class="org-operator">=</span>1.0, region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'BPT-%d_SET-1'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-3">(</span>i<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">117: </span>    mdl.ConcentratedForce<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-2">(</span>i<span class="org-rainbow-delimiters-depth-2">)</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
-<span class="linenr">118: </span>                          cf3<span class="org-operator">=-</span>1.0, region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'NPT-%d_SET-1'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-3">(</span>i<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">119: </span>
-<span class="linenr">120: </span><span class="org-variable-name">sbs</span> <span class="org-operator">=</span> mdl.steps<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'HCBCMS'</span><span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">121: </span>sbs.LoadCase<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"LCASE"</span>, loads<span class="org-operator">=</span><span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-4">(</span>i<span class="org-rainbow-delimiters-depth-4">)</span>, 1.0<span class="org-rainbow-delimiters-depth-3">)</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>1, 4<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span> <span class="org-operator">+</span>
-<span class="linenr">122: </span>             <span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-4">(</span>i<span class="org-rainbow-delimiters-depth-4">)</span>, 1.0<span class="org-rainbow-delimiters-depth-3">)</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>1, 4<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">113: </span>mdl.RetainedNodalDofsBC<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"A"</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
+<span class="linenr">114: </span>                        region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'RELCSET'</span><span class="org-rainbow-delimiters-depth-2">]</span>,
+<span class="linenr">115: </span>                        u1<span class="org-operator">=</span>ON, u2<span class="org-operator">=</span>ON, u3<span class="org-operator">=</span>ON<span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">116: </span>
+<span class="linenr">117: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Apply Bolt Loads (1N magnitude)</span>
+<span class="linenr">118: </span><span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-1">(</span>1, 4<span class="org-rainbow-delimiters-depth-1">)</span>:
+<span class="linenr">119: </span>    mdl.ConcentratedForce<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-2">(</span>i<span class="org-rainbow-delimiters-depth-2">)</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
+<span class="linenr">120: </span>                          cf3<span class="org-operator">=</span>1.0, region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'BPT-%d_SET-1'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-3">(</span>i<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">121: </span>    mdl.ConcentratedForce<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-2">(</span>i<span class="org-rainbow-delimiters-depth-2">)</span>, createStepName<span class="org-operator">=</span><span class="org-string">"HCBCMS"</span>,
+<span class="linenr">122: </span>                          cf3<span class="org-operator">=-</span>1.0, region<span class="org-operator">=</span>ras.sets<span class="org-rainbow-delimiters-depth-2">[</span><span class="org-string">'NPT-%d_SET-1'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-3">(</span>i<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">123: </span>
+<span class="linenr">124: </span><span class="org-variable-name">sbs</span> <span class="org-operator">=</span> mdl.steps<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'HCBCMS'</span><span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">125: </span>sbs.LoadCase<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"LCASE"</span>, loads<span class="org-operator">=</span><span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'BoltLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-4">(</span>i<span class="org-rainbow-delimiters-depth-4">)</span>, 1.0<span class="org-rainbow-delimiters-depth-3">)</span>
+<span class="linenr">126: </span>                                       <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>1, 4<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span> <span class="org-operator">+</span>
+<span class="linenr">127: </span>             <span class="org-builtin">tuple</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-string">'NutLoad-%d'</span> <span class="org-operator">%</span><span class="org-rainbow-delimiters-depth-4">(</span>i<span class="org-rainbow-delimiters-depth-4">)</span>, 1.0<span class="org-rainbow-delimiters-depth-3">)</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span>1, 4<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div></li>
 <li><p>
 We complete the task by requesting matrix output and outputting node and element information.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span class="linenr">123: </span><span class="org-comment-delimiter"># </span><span class="org-comment">ABAQUS CAE doesn't support this yet (GUI or scripting),</span>
-<span class="linenr">124: </span><span class="org-comment-delimiter"># </span><span class="org-comment">so the keywords need to be manually modified.</span>
-<span class="linenr">125: </span>mdl.keywordBlock.synchVersions<span class="org-rainbow-delimiters-depth-1">(</span>storeNodesAndElements<span class="org-operator">=</span><span class="org-constant">False</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">126: </span><span class="org-variable-name">li</span> <span class="org-operator">=</span> np.argwhere<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span>mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">][</span>0:20<span class="org-rainbow-delimiters-depth-3">]</span> <span class="org-operator">==</span> <span class="org-string">"*Retained Nodal Dofs"</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-4">(</span>mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)[</span>0<span class="org-rainbow-delimiters-depth-1">][</span>0<span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">127: </span><span class="org-variable-name">txi</span> <span class="org-operator">=</span> mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-1">[</span>li<span class="org-rainbow-delimiters-depth-1">]</span>
-<span class="linenr">128: </span>mdl.keywordBlock.replace<span class="org-rainbow-delimiters-depth-1">(</span>li, <span class="org-string">"*Retained Nodal Dofs, sorted=NO"</span><span class="org-operator">+</span>txi<span class="org-rainbow-delimiters-depth-2">[</span>20:<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">129: </span>mdl.keywordBlock.insert<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-2">(</span>mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-operator">-</span>2, 
-<span class="linenr">130: </span>                        <span class="org-string">"*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES"</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">131: </span>
-<span class="linenr">132: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Create a job and write an inp file</span>
-<span class="linenr">133: </span>mdb.Job<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"HCBCMSJob"</span>, model<span class="org-operator">=</span><span class="org-string">'Model-1'</span><span class="org-rainbow-delimiters-depth-1">)</span>
-<span class="linenr">134: </span>mdb.jobs<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'HCBCMSJob'</span><span class="org-rainbow-delimiters-depth-1">]</span>.writeInput<span class="org-rainbow-delimiters-depth-1">()</span>
-<span class="linenr">135: </span>
-<span class="linenr">136: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Save interfacial nodes &amp; elements to txt files</span>
-<span class="linenr">137: </span>np.savetxt<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-string">'Nodes.dat'</span>, TopNdCds<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-comment-delimiter"># </span><span class="org-comment">Save to dat file</span>
-<span class="linenr">138: </span>np.savetxt<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-string">'Elements.dat'</span>, ELS, fmt<span class="org-operator">=</span><span class="org-string">'%d'</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<pre class="src src-python"><span class="linenr">128: </span><span class="org-comment-delimiter"># </span><span class="org-comment">ABAQUS CAE doesn't support this yet (GUI or scripting),</span>
+<span class="linenr">129: </span><span class="org-comment-delimiter"># </span><span class="org-comment">so the keywords need to be manually modified.</span>
+<span class="linenr">130: </span>mdl.keywordBlock.synchVersions<span class="org-rainbow-delimiters-depth-1">(</span>storeNodesAndElements<span class="org-operator">=</span><span class="org-constant">False</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">131: </span><span class="org-variable-name">li</span> <span class="org-operator">=</span> np.argwhere<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-rainbow-delimiters-depth-2">[</span>mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-3">[</span>i<span class="org-rainbow-delimiters-depth-3">][</span>0:20<span class="org-rainbow-delimiters-depth-3">]</span> <span class="org-operator">==</span> <span class="org-string">"*Retained Nodal Dofs"</span>
+<span class="linenr">132: </span>                  <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span><span class="org-rainbow-delimiters-depth-3">(</span><span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-4">(</span>mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)[</span>0<span class="org-rainbow-delimiters-depth-1">][</span>0<span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">133: </span><span class="org-variable-name">txi</span> <span class="org-operator">=</span> mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-1">[</span>li<span class="org-rainbow-delimiters-depth-1">]</span>
+<span class="linenr">134: </span>mdl.keywordBlock.replace<span class="org-rainbow-delimiters-depth-1">(</span>li, <span class="org-string">"*Retained Nodal Dofs, sorted=NO"</span><span class="org-operator">+</span>txi<span class="org-rainbow-delimiters-depth-2">[</span>20:<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">135: </span>mdl.keywordBlock.insert<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-builtin">len</span><span class="org-rainbow-delimiters-depth-2">(</span>mdl.keywordBlock.sieBlocks<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-operator">-</span>2, 
+<span class="linenr">136: </span>                        <span class="org-string">"*Substructure Matrix Output, FILE NAME=Modelmats,</span>
+<span class="linenr">137: </span><span class="org-string">                        MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES"</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">138: </span>
+<span class="linenr">139: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Create a job and write an inp file</span>
+<span class="linenr">140: </span>mdb.Job<span class="org-rainbow-delimiters-depth-1">(</span>name<span class="org-operator">=</span><span class="org-string">"HCBCMSJob"</span>, model<span class="org-operator">=</span><span class="org-string">'Model-1'</span><span class="org-rainbow-delimiters-depth-1">)</span>
+<span class="linenr">141: </span>mdb.jobs<span class="org-rainbow-delimiters-depth-1">[</span><span class="org-string">'HCBCMSJob'</span><span class="org-rainbow-delimiters-depth-1">]</span>.writeInput<span class="org-rainbow-delimiters-depth-1">()</span>
+<span class="linenr">142: </span>
+<span class="linenr">143: </span><span class="org-comment-delimiter"># </span><span class="org-comment">Save interfacial nodes &amp; elements to txt files</span>
+<span class="linenr">144: </span>np.savetxt<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-string">'Nodes.dat'</span>, TopNdCds<span class="org-rainbow-delimiters-depth-1">)</span> <span class="org-comment-delimiter"># </span><span class="org-comment">Save to dat file</span>
+<span class="linenr">145: </span>np.savetxt<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-string">'Elements.dat'</span>, ELS, fmt<span class="org-operator">=</span><span class="org-string">'%d'</span><span class="org-rainbow-delimiters-depth-1">)</span>
 </pre>
 </div></li>
 <li>The inp file "HCBCMSJob.inp" can be run just as before, and it will generate an mtx file named "Modelmats.mtx".</li>
@@ -2458,8 +2466,8 @@ We complete the task by requesting matrix output and outputting node and element
 </ol>
 </div>
 </div>
-<div id="outline-container-org78f972b" class="outline-3">
-<h3 id="org78f972b"><span class="section-number-3">7.3.</span> Nonlinear Prestress Analysis with MATLAB/OCTAVE</h3>
+<div id="outline-container-org35df847" class="outline-3">
+<h3 id="org35df847"><span class="section-number-3">7.3.</span> Nonlinear Prestress Analysis with MATLAB/OCTAVE</h3>
 <div class="outline-text-3" id="text-7-3">
 <ol class="org-ol">
 <li>The same MATLAB/OCTAVE routines from section <a href="#sec:nlan">6.2</a> can be used here, with minor tweaks to account for the fact that the model is already in the relative coordinates frame.</li>
@@ -2623,8 +2631,8 @@ Comparing this with the predictions from before indicate a very close agreement.
 </p></li>
 </ol>
 </div>
-<div id="outline-container-orgb0a2eb3" class="outline-4">
-<h4 id="orgb0a2eb3"><span class="section-number-4">7.3.1.</span> Plotting Results</h4>
+<div id="outline-container-orgac20136" class="outline-4">
+<h4 id="orgac20136"><span class="section-number-4">7.3.1.</span> Plotting Results</h4>
 <div class="outline-text-4" id="text-7-3-1">
 <ol class="org-ol">
 <li><p>
@@ -2690,7 +2698,7 @@ We use the following modified version of the plotting code to visualize the resp
 Nodal Displacements:
 </p>
 
-<div id="orgeef8d70" class="figure">
+<div id="orga1a3c2e" class="figure">
 <p><img src="./figs/intdisps_rc.png" alt="intdisps_rc.png" width="600px" />
 </p>
 </div></li>
@@ -2698,7 +2706,7 @@ Nodal Displacements:
 Interfacial Pressures:
 </p>
 
-<div id="org73aafe0" class="figure">
+<div id="org6912496" class="figure">
 <p><img src="./figs/intpress_rc.png" alt="intpress_rc.png" width="600px" />
 </p>
 </div></li>
@@ -2724,8 +2732,8 @@ Don't forget to check out the repository in github at <a href="https://github.co
 If you found this useful, please consider citing <a href="https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017">this paper</a> and/or <a href="https://scholarship.rice.edu/handle/1911/113700">this thesis</a>.
 </p>
 </div>
-<div id="outline-container-org930555e" class="outline-3">
-<h3 id="org930555e"><span class="section-number-3">8.1.</span> Summary</h3>
+<div id="outline-container-org67f44e4" class="outline-3">
+<h3 id="org67f44e4"><span class="section-number-3">8.1.</span> Summary</h3>
 <div class="outline-text-3" id="text-8-1">
 <p>
 All the scripts used in the tutorial are provided in 
@@ -2736,8 +2744,10 @@ All the scripts used in the tutorial are provided in
 <li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py">c_nutwasherbolt_516.py</a>: Building the bolt, nut, and washer models.</li>
 <li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py">d_applyconstraints.py</a>: Applying the relevant constraints and introducing bolt prestress.</li>
 <li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py">e_nodeproc.py</a>: The postprocessing script create surface node sets and setting up substructure analysis.</li>
+<li>Files <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d1_relcs.py">d1_relcs.py</a> and <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e1_relcsnproc.py">e1_relcsnproc.py</a> provide replacements for files 4 &amp; 5 above while using relative coordinates.</li>
 <li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh">readwritematvec.sh</a>: Contains the mtx reading script written with <code>bash</code> and <code>python</code>.</li>
-<li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main.m">main.m</a>: Contains the MATLAB file for doing the nonlinear static prestress analysis (also see <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/RESFUN.m">RESFUN.m</a> for the residue routine).</li>
+<li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main.m">main.m</a>: Contains the MATLAB/OCTAVE file for doing the nonlinear static prestress analysis (also see <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/RESFUN.m">RESFUN.m</a> for the residue routine).</li>
+<li><a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main_rc.m">main<sub>rc.m</sub></a>: Contains the MATLAB/OCTAVE file for the nonlinear static prestress analysis using the relative coordinates representation.</li>
 </ol>
 
 <p>
@@ -2745,11 +2755,12 @@ The <a href="https://github.com/Nidish96/Abaqus4Joints">Github repository</a> ha
 </p>
 </div>
 </div>
-<div id="outline-container-orge4df007" class="outline-3">
-<h3 id="orge4df007"><span class="section-number-3">8.2.</span> Details on this web-page documentation/offering suggestions</h3>
+<div id="outline-container-orge98971e" class="outline-3">
+<h3 id="orge98971e"><span class="section-number-3">8.2.</span> Details on this web-page documentation/offering suggestions</h3>
 <div class="outline-text-3" id="text-8-2">
 <ul class="org-ul">
-<li>This website was generated using org-mode on emacs with the Bigblow html theme from <a href="https://github.com/fniessen/org-html-themes">https://github.com/fniessen/org-html-themes</a>.
+<li>This website was generated using org-mode on emacs with the Bigblow html theme from
+<a href="https://github.com/fniessen/org-html-themes">https://github.com/fniessen/org-html-themes</a>.
 The collapsible details blocks from <a href="https://github.com/alhassy/org-special-block-extras">org-special-block-extras</a> have also been used extensively.</li>
 <li>The best way to offer suggestions would be to use the <a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/docs/index.pdf">pdf version</a> of the documentation, annotate it and <a href="mailto:nidish.balaji@ila.uni-stuttgart.de">mail it to me</a>.
 Alternately, you can also clone the <a href="https://github.com/Nidish96/Abaqus4Joints">repository</a>, make changes and create a pull request.</li>
@@ -2760,7 +2771,7 @@ Alternately, you can also clone the <a href="https://github.com/Nidish96/Abaqus4
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Nidish Narayanaa Balaji</p>
-<p class="date">Created: 2023-11-11 Sat 14:48</p>
+<p class="date">Created: 2023-11-11 Sat 15:10</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

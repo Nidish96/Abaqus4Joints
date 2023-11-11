@@ -3,7 +3,7 @@
 #+EXPORT_FILE_NAME: index.html
 #+OPTIONS: startup:indent
 #+HTML_HEAD: <base target="_blank">
-#+latex_header: \usepackage[margin=1in]{geometry} \usepackage{cleveref}
+#+latex_header: \usepackage[margin=0.8in]{geometry} \usepackage{cleveref}
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
 #+HTML: <style> summary:hover {background:pink;} </style>
 #+HTML: <script>var HS_STARTUP_FOLDED = true;</script>
@@ -36,6 +36,7 @@ Here is an overview of the sections and their contents:
 
    When the relative coordinate DOFs format is desired, [[cref:sec:meshproc]] and [[cref:sec:mex]] don't need to be followed. This can be substituted completely with [[cref:sec:relcsp]].
 7. *Outro/Contact* ([[Cref:sec:outro]]): Concludes the tutorial, giving contact information of the authors, etc.
+#+latex: \pagebreak
 * Preprocess
 :PROPERTIES:
 :CUSTOM_ID: sec:prepro
@@ -331,6 +332,7 @@ We will do independent meshing since it is good practice, although independent m
    [[./figs/as3bwn.png]]
 
 Now that the assembly is complete, the relevant constraints will have to be enforced, followed by a realization of the bolt preload.
+#+latex: \pagebreak
 * Constraints
 :PROPERTIES:
 :CUSTOM_ID: sec:constr
@@ -472,6 +474,7 @@ We will now go through the process of specifying this.
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step1.cae][model\under{}step1.cae]] stores the CAE-file generated after the end of the above steps.
 We will now proceed with meshing.
+#+latex: \pagebreak
 * Meshing
 :PROPERTIES:
 :CUSTOM_ID: sec:meshing
@@ -589,6 +592,7 @@ We will now conduct a simple frictionless contact analysis to verify the correct
    Such a convergence analysis is presented in the appendix of [[https://scholarship.rice.edu/handle/1911/113700][this thesis]]. 
 
 The file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/assembly/model_step2.cae][model\under{}step2.cae]] is the cae file containing the model with the above tests included.
+#+latex: \pagebreak
 * Mesh Process
 :PROPERTIES:
 :CUSTOM_ID: sec:meshproc
@@ -889,6 +893,7 @@ You can now run the Job named "Job" in the GUI, or directly run the "[[https://g
 #+end_src
 Once the job is done, it will output the matrix file "Modelmats.mtx" into the working directory.
 This, along with the "Nodes.dat" and "Elements.dat" files that were written out earlier, are all we need for external analyses.
+#+latex: \pagebreak
 * Matrix Extraction + NL-Analysis
 :PROPERTIES:
 :CUSTOM_ID: sec:mex
@@ -1307,6 +1312,7 @@ This completes the analysis, and the next two action points will do some plottin
 4. It is often beneficial in this context to use *relative coordinates* at the interface (so we can get a 2x reduction in the total number of unknowns in the problem). 
    You can do this in MATLAB on the HCB reduced model, or you can do this directly in the ABAQUS model by introducing ghost nodes representing the relative displacements.
    This is optional, but recommended - see instructions in [[cref:sec:relcsp]].
+#+latex: \pagebreak   
 * Relative Coordinates Pipeline
 :PROPERTIES:
 :CUSTOM_ID: sec:relcsp
@@ -1379,7 +1385,8 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
    The name of the resulting inp file will be =MeshedModel.inp=.
    #+begin_src python +n
      ras.Set(name='RELCSET',
-             referencePoints=[ras.instances['RELPT-%d' %(i+1)].referencePoints[1] for i in range(N)] )
+             referencePoints=[ras.instances['RELPT-%d' %(i+1)].referencePoints[1]
+                              for i in range(N)] )
 
      tmp = mdl.interactions
      while len(tmp) > 0:
@@ -1447,7 +1454,8 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
      TopNdCds = np.array([topnodes[i].coordinates for i in range(N)])
 
      # Top Elements
-     TopEls = np.array([topsurf.elements[i].connectivity for i in range(len(topsurf.elements))])
+     TopEls = np.array([topsurf.elements[i].connectivity
+                        for i in range(len(topsurf.elements))])
      ELS = np.zeros((TopEls.shape[0], 5), dtype=int)
      for ne in range(TopEls.shape[0]):
          elefac = topsurf.elements[ne].getElemFaces()
@@ -1457,7 +1465,7 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
                                 [elefac[k].getNodes()[i].label for i in range(4)]])
                            for k in range(6)])[0,0]
          ELS[ne, 0] = ne
-         # Searches for the face where all the nodes are in the interface and returns those nodes
+         # Searches for & returns the face where all the nodes are in the interface
          ELS[ne, 1:] = [Topnd_dict[x] for x in [elefac[fe].getNodes()[k].label
                                                 for k in range(4)]]
          ELS[ne, :] += 1
@@ -1475,17 +1483,18 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
                 botleft.pop(
                     np.argmin(
                         np.linalg.norm(
-                            topnodes[i].coordinates-np.array([botnodes[j].coordinates for j in botleft]),
+                            topnodes[i].coordinates-np.array([botnodes[j].coordinates
+                                                              for j in botleft]),
                             axis=1)
                     )
                 )
             )
-    
+
         # Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly
         for i in range(N):
             ras.editNode(nodes=botnodes[bts[i]:bts[i]+1],
                          coordinates=(topnodes[i].coordinates,))
-    
+
       #+end_src
 3. Create node sets for the top, bottom and relative coordinates.
    #+begin_src python +n
@@ -1532,8 +1541,10 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
    #+begin_src python +n
      mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
                                   substructureIdentifier=1, 
-                                  retainedEigenmodesMethod=MODE_RANGE, modeRange=((1, 26, 1),),
-                                  recoveryMatrix=REGION, recoveryRegion=ras.sets['OUTNODES'],
+                                  retainedEigenmodesMethod=MODE_RANGE,
+                                  modeRange=((1, 26, 1),),
+                                  recoveryMatrix=REGION,
+                                  recoveryRegion=ras.sets['OUTNODES'],
                                   computeReducedMassMatrix=True)
 
      mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS",
@@ -1548,7 +1559,8 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
                                cf3=-1.0, region=ras.sets['NPT-%d_SET-1' %(i)])
 
      sbs = mdl.steps['HCBCMS']
-     sbs.LoadCase(name="LCASE", loads=tuple(('BoltLoad-%d' %(i), 1.0) for i in range(1, 4)) +
+     sbs.LoadCase(name="LCASE", loads=tuple(('BoltLoad-%d' %(i), 1.0)
+                                            for i in range(1, 4)) +
                   tuple(('NutLoad-%d' %(i), 1.0) for i in range(1, 4)))
    #+end_src
 7. We complete the task by requesting matrix output and outputting node and element information.
@@ -1556,11 +1568,13 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
      # ABAQUS CAE doesn't support this yet (GUI or scripting),
      # so the keywords need to be manually modified.
      mdl.keywordBlock.synchVersions(storeNodesAndElements=False)
-     li = np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] == "*Retained Nodal Dofs" for i in range(len(mdl.keywordBlock.sieBlocks))])[0][0]
+     li = np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] == "*Retained Nodal Dofs"
+                       for i in range(len(mdl.keywordBlock.sieBlocks))])[0][0]
      txi = mdl.keywordBlock.sieBlocks[li]
      mdl.keywordBlock.replace(li, "*Retained Nodal Dofs, sorted=NO"+txi[20:])
      mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2, 
-                             "*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES")
+                             "*Substructure Matrix Output, FILE NAME=Modelmats,
+                             MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES")
 
      # Create a job and write an inp file
      mdb.Job(name="HCBCMSJob", model='Model-1')
@@ -1733,6 +1747,7 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
 4. Computationally the advantages are clear.
    The size of the model matrices with relative coordinates is 2078, while the size without is 4136.
    Using the relative DOF-coordinates, therefore, *one can achieve an almost 2x reduction in system size*, which is beneficial in every form of analysis.
+#+latex: \pagebreak   
 * Outro/Contact
 :PROPERTIES:
 :CUSTOM_ID: sec:outro
@@ -1748,12 +1763,15 @@ All the scripts used in the tutorial are provided in
 3. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/c_nutwasherbolt_516.py][c\under{}nutwasherbolt\under{}516.py]]: Building the bolt, nut, and washer models.
 4. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d_applyconstraints.py][d\under{}applyconstraints.py]]: Applying the relevant constraints and introducing bolt prestress.
 5. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e_nodeproc.py][e\under{}nodeproc.py]]: The postprocessing script create surface node sets and setting up substructure analysis.
-6. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
-7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main.m][main.m]]: Contains the MATLAB file for doing the nonlinear static prestress analysis (also see [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/RESFUN.m][RESFUN.m]] for the residue routine).
+6. Files [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d1_relcs.py][d1\under{}relcs.py]] and [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e1_relcsnproc.py][e1\under{}relcsnproc.py]] provide replacements for files 4 & 5 above while using relative coordinates.
+7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
+8. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main.m][main.m]]: Contains the MATLAB/OCTAVE file for doing the nonlinear static prestress analysis (also see [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/RESFUN.m][RESFUN.m]] for the residue routine).
+9. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main_rc.m][main_rc.m]]: Contains the MATLAB/OCTAVE file for the nonlinear static prestress analysis using the relative coordinates representation. 
    
 The [[https://github.com/Nidish96/Abaqus4Joints][Github repository]] has the above scripts as well as all the cae files.
 ** Details on this web-page documentation/offering suggestions
-+ This website was generated using org-mode on emacs with the Bigblow html theme from [[https://github.com/fniessen/org-html-themes][https://github.com/fniessen/org-html-themes]].
++ This website was generated using org-mode on emacs with the Bigblow html theme from
+  [[https://github.com/fniessen/org-html-themes][https://github.com/fniessen/org-html-themes]].
   The collapsible details blocks from [[https://github.com/alhassy/org-special-block-extras][org-special-block-extras]] have also been used extensively.
 + The best way to offer suggestions would be to use the [[https://github.com/Nidish96/Abaqus4Joints/blob/main/docs/index.pdf][pdf version]] of the documentation, annotate it and [[mailto:nidish.balaji@ila.uni-stuttgart.de][mail it to me]].
   Alternately, you can also clone the [[https://github.com/Nidish96/Abaqus4Joints][repository]], make changes and create a pull request.
