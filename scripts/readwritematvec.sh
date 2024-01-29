@@ -47,6 +47,9 @@ awkcmd2='BEGIN{FS=","}
     printf("\n");}'
 gawk "$awkcmd1" $1|gawk "$awkcmd2" > .RECOV.mtx
 
+tr -d $'\r' < .RECOV.mtx > .RECOV_ALT.mtx
+mv .RECOV_ALT.mtx .RECOV.mtx
+
 echo "Preprocessing mtx files done"
 
 python3 <<EOF
