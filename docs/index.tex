@@ -1,4 +1,4 @@
-% Created 2023-11-11 Sat 15:09
+% Created 2023-11-30 Thu 21:54
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -34,7 +34,7 @@
 \pagebreak
 
 \section{Introduction}
-\label{sec:orgb8e3cb5}
+\label{sec:org76e7960}
 This tutorial has been prepared to help researchers get started with modeling jointed systems for use in nonlinear vibration contexts.
 A three-bolted lap joint system known as the Brake-Reu\{\ss\} Beam (read more about the benchmark \href{https://jointmechanics.org/index.php/Benchmarks\#The\_Brake-Reu\%C3\%9F\_Beams}{here}) is used for the demonstrations.
 We will start with making the model using CAD and go all the way to doing a simple nonlinear prestress calculation.
@@ -82,7 +82,7 @@ Standard 5/16 bolt-nut-washers will be used for the assembly. Since Bolt thread 
 The general principles in the modeling section are, however, recommended for all jointed structure modeling.
 
 \subsection{A Note on Python Scripting\hfill{}\textsc{Script}}
-\label{sec:org783f528}
+\label{sec:orgfa221ef}
 ABAQUS Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
 \begin{itemize}
 \item For beginners, the easiest way to start scripting is to open up CAE (the GUI) and do the necessary tasks. ABAQUS would have saved the actions in a Python file called \texttt{abaqus.rpy}. This is just python code that can be imported into ABAQUS to repeat the same tasks.
@@ -333,7 +333,7 @@ Here is a graphical depiction of the model with the surfaces.
 Now all the parts have been created and relevant surfaces have been identified.
 \textbf{Note}: It is important to have traceable but short names so that a lot of the repetitive tasks can be sped up considerably using scripting.
 \subsection{Create Assembly\hfill{}\textsc{GUI}}
-\label{sec:org7495dd2}
+\label{sec:org19d901e}
 \textbf{Note}: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
 This will be advantageous if we want to modify the meshes just at the interface for mirror symmetry.
 We will do independent meshing since it is good practice, although independent meshes are not a requirement for this example (dependent meshes can be used due to symmetry).
@@ -380,7 +380,7 @@ Now that the assembly is complete, the relevant constraints will have to be enfo
 \section{Constraints}
 \label{sec:constr}
 \subsection{Tie-Constraint Enforcement\hfill{}\textsc{Script:GUI}}
-\label{sec:orgbaaf771}
+\label{sec:orgb69cdb3}
 All the following operations can be conducted in the \texttt{Interaction} module in CAE.
 But since selecting each surface can be a time-consuming process, we use the following for-loop in ABAQUS-python (either call it as a script or just copy paste it into the CLI) to make the required tie constraints.
 Specifically, it ties the Bolt-Washer, Nut-Washer, and Washer-Beam surfaces.
@@ -538,7 +538,7 @@ Switch to the \texttt{Mesh} module for this section.
 If such symmetry is not available, one may choose a more direct approach by using the \texttt{bottom-up} meshing to copy the mesh from one interface to another directly.
 Please \href{mailto:nidish.balaji@ila.uni-stuttgart.de}{write to me} if you'd like an example for this.
 \subsection{Meshing Instructions\hfill{}\textsc{GUI}}
-\label{sec:org97761ba}
+\label{sec:org151496a}
 \begin{enumerate}
 \item Choose \texttt{Mesh->Assign Mesh Controls} and select the whole assembly (all the instances).
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
@@ -680,7 +680,7 @@ This can be specified in \texttt{Model->Edit Attributes->Model-1} as follows:
 \includegraphics[width=0.5\textwidth]{./figs/modl.png}
 \end{center}
 \subsection{Reorganize Interfacial Node Sets (readjust if necessary)\hfill{}\textsc{Script}}
-\label{sec:org3854265}
+\label{sec:org78db347}
 Although we have taken care to ensure that the mesh of the \texttt{TOPBEAM} and \texttt{BOTBEAM} are conformal at the interface, minor imperfections in the nodal locations may exist.
 Furthermore, the ordering of the nodes on the top interface will be different from that on the bottom interface.
 Through some scripting, we can create node sets in such a way that the top and bottom interface nodesets are ordered in a convenient fashion.
@@ -832,7 +832,7 @@ while len(tmp) > 1:
 \end{minted}
 \end{enumerate}
 \subsection{Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps\hfill{}\textsc{Script}}
-\label{sec:org23f3eab}
+\label{sec:orgd758e65}
 \begin{enumerate}
 \item We are interested in \textbf{Fixed-Interface Component Mode Synthesis} with 20 retained modes.
 So we first do a fixed interface modal analysis and request \(20\times3 = 60\) modes (for ensuring accuracy of the first 20 modes).
@@ -960,7 +960,7 @@ NPT-3_Set-1, 3, -1.
 You can find the inp-file generate from the above in \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp}{Job.inp}.
 \end{enumerate}
 \subsection{Run Job and Generate the mtx file.\hfill{}\textsc{Script:GUI}}
-\label{sec:orgae703c3}
+\label{sec:org6590895}
 You can now run the Job named "Job" in the GUI, or directly run the "\href{https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp}{Job.inp}" file from the command line using
 \begin{minted}[]{bash}
 abaqus job=Job inp=Job.inp cpus=2 interactive
@@ -1318,7 +1318,7 @@ end
                \end{tcolorbox}
 \end{quote}
 \subsubsection{Plotting}
-\label{sec:orgf350c40}
+\label{sec:org6f5159f}
 \begin{enumerate}
 \item We next construct a \texttt{MATLAB Graph} object using the element information and plot out the relative normal displacements at the interface as a graph.
 \begin{minted}[]{octave}
@@ -1387,7 +1387,7 @@ An alternative would be to implement a lagrange multiplier method for conducting
 \end{center}
 \end{enumerate}
 \subsubsection{Miscellanies}
-\label{sec:org96ba972}
+\label{sec:org32183c1}
 \begin{enumerate}
 \item Even if all the nodes have equal areas, \textbf{node-to-node contact elements are still inconsistent in this context}, since contact interactions can be understood to be a fundamentally local interaction, which need to be integrated to have global influence.
 Quadrature-based integration of local tractions to nodal forces conducts exactly this.
@@ -1496,7 +1496,7 @@ mdbm.close()
 \end{minted}
 \end{enumerate}
 \subsection{Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.}
-\label{sec:orgda283eb}
+\label{sec:org134ad6b}
 \begin{enumerate}
 \item We first read in the inp file we saved in the above.
 \begin{minted}[linenos,firstnumber=1]{python}
@@ -1680,7 +1680,7 @@ np.savetxt('Elements.dat', ELS, fmt='%d')
 \item The script \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh}{readwritematvec.sh} can be used to post process this mtx file just as before.
 \end{enumerate}
 \subsection{Nonlinear Prestress Analysis with MATLAB/OCTAVE}
-\label{sec:orgcf2c400}
+\label{sec:orgcd714a7}
 \begin{enumerate}
 \item The same MATLAB/OCTAVE routines from section \ref{sec:nlan} can be used here, with minor tweaks to account for the fact that the model is already in the relative coordinates frame.
 \item Everything in the preamble is identical to before:
@@ -1780,7 +1780,7 @@ Index & Frequency (Hz)\\[0pt]
 Comparing this with the predictions from before indicate a very close agreement.
 \end{enumerate}
 \subsubsection{Plotting Results}
-\label{sec:org40ed2e8}
+\label{sec:org3dbb5c2}
 \begin{enumerate}
 \item We use the following modified version of the plotting code to visualize the response:
 \begin{minted}[linenos,firstnumber=1]{octave}
@@ -1860,7 +1860,7 @@ Don't forget to check out the repository in github at \href{https://github.com/N
 
 If you found this useful, please consider citing \href{https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017}{this paper} and/or \href{https://scholarship.rice.edu/handle/1911/113700}{this thesis}.
 \subsection{Summary}
-\label{sec:org3199eb8}
+\label{sec:org598a21c}
 All the scripts used in the tutorial are provided in 
 \begin{enumerate}
 \item \href{https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/a\_steelmat.py}{a\_steelmat.py}: Loading material
@@ -1876,7 +1876,7 @@ All the scripts used in the tutorial are provided in
 
 The \href{https://github.com/Nidish96/Abaqus4Joints}{Github repository} has the above scripts as well as all the cae files.
 \subsection{Details on this web-page documentation/offering suggestions}
-\label{sec:orgde696c8}
+\label{sec:org15a5b6a}
 \begin{itemize}
 \item This website was generated using org-mode on emacs with the Bigblow html theme from
 \href{https://github.com/fniessen/org-html-themes}{https://github.com/fniessen/org-html-themes}.

@@ -4,10 +4,12 @@
 #+OPTIONS: startup:indent
 #+HTML_HEAD: <base target="_blank">
 #+latex_header: \usepackage[margin=0.8in]{geometry} \usepackage{cleveref}
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+# #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
 #+HTML: <style> summary:hover {background:pink;} </style>
 #+HTML: <script>var HS_STARTUP_FOLDED = true;</script>
 # #+HTML_HEAD: <style> #content{max-width:2000px;} *{font-size: large;}</style>
+
 #+LATEX: \pagebreak
 
 * Introduction
