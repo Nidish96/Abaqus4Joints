@@ -3,19 +3,24 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-01-18 Thu 18:58 -->
+<!-- 2024-01-29 Mon 07:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>An ABAQUS-MATLAB tutorial for Jointed Systems</title>
 <meta name="author" content="Nidish Narayanaa Balaji" />
 <meta name="generator" content="Org Mode" />
 <base target="_blank">
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/bigblow.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/hideshow.css"/>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery-ui-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.localscroll-min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.zclip.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/bigblow.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/hideshow.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 
         <style>
         /* From: https://endlessparentheses.com/public/css/endless.css */
@@ -123,32 +128,32 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc179111">1. Introduction</a></li>
+<li><a href="#orgba02943">1. Introduction</a></li>
 <li><a href="#sec:prepro">2. Preprocess</a>
 <ul>
-<li><a href="#org40442cd">2.1. A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org3a2bb30">2.1. A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
 <li><a href="#sec:modeling">2.2. Modeling Parts&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 <li><a href="#sec:setcreat">2.3. Creating appropriate surface sets&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
-<li><a href="#orgc570da9">2.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#orgcefd19b">2.4. Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:constr">3. Constraints</a>
 <ul>
-<li><a href="#org7d15a49">3.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#orgab8ea36">3.1. Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 <li><a href="#sec:boltprel">3.2. Bolt Preload Realization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:meshing">4. Meshing</a>
 <ul>
-<li><a href="#org8d66712">4.1. Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
+<li><a href="#org06015dc">4.1. Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 <li><a href="#sec:abqprs">4.2. (Optional, recommended) Verify correctness of model through frictionless prestress&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:meshproc">5. Mesh Process</a>
 <ul>
-<li><a href="#org6d8110e">5.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#orgd083065">5.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org502d8e3">5.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
+<li><a href="#org24f9b1a">5.1. Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#orga348431">5.2. Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
+<li><a href="#org92856ac">5.3. Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></a></li>
 </ul>
 </li>
 <li><a href="#sec:mex">6. Matrix Extraction + NL-Analysis</a>
@@ -156,8 +161,8 @@
 <li><a href="#sec:bscr">6.1. Postprocessing Exported Matrices&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
 <li><a href="#sec:nlan">6.2. Nonlinear Analysis on MATLAB/OCTAVE in under 100 lines of code&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a>
 <ul>
-<li><a href="#org1636632">6.2.1. Plotting</a></li>
-<li><a href="#org1e164bd">6.2.2. Miscellanies</a></li>
+<li><a href="#org633aa0d">6.2.1. Plotting</a></li>
+<li><a href="#org0cf5daa">6.2.2. Miscellanies</a></li>
 </ul>
 </li>
 </ul>
@@ -165,18 +170,18 @@
 <li><a href="#sec:relcsp">7. Relative Coordinates Pipeline</a>
 <ul>
 <li><a href="#sec:insrpt">7.1. Insertion of Reference Point Instances&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></a></li>
-<li><a href="#org1d4793e">7.2. Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</a></li>
-<li><a href="#orga0d937a">7.3. Nonlinear Prestress Analysis with MATLAB/OCTAVE</a>
+<li><a href="#org629b3d0">7.2. Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</a></li>
+<li><a href="#orgbd4e040">7.3. Nonlinear Prestress Analysis with MATLAB/OCTAVE</a>
 <ul>
-<li><a href="#org507fe01">7.3.1. Plotting Results</a></li>
+<li><a href="#org67c40f1">7.3.1. Plotting Results</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#sec:outro">8. Outro/Contact</a>
 <ul>
-<li><a href="#org1f8406a">8.1. Summary</a></li>
-<li><a href="#orge718d98">8.2. Details on this web-page documentation/offering suggestions</a></li>
+<li><a href="#org8a52347">8.1. Summary</a></li>
+<li><a href="#org46a465d">8.2. Details on this web-page documentation/offering suggestions</a></li>
 </ul>
 </li>
 </ul>
@@ -185,8 +190,8 @@
 <style> summary:hover {background:pink;} </style>
 <script>var HS_STARTUP_FOLDED = true;</script>
 
-<div id="outline-container-orgc179111" class="outline-2">
-<h2 id="orgc179111"><span class="section-number-2">1.</span> Introduction</h2>
+<div id="outline-container-orgba02943" class="outline-2">
+<h2 id="orgba02943"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This tutorial has been prepared to help researchers get started with modeling jointed systems for use in nonlinear vibration contexts.
@@ -266,8 +271,8 @@ The general principles in the modeling section are, however, recommended for all
 </p>
 </div>
 
-<div id="outline-container-org40442cd" class="outline-3">
-<h3 id="org40442cd"><span class="section-number-3">2.1.</span> A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org3a2bb30" class="outline-3">
+<h3 id="org3a2bb30"><span class="section-number-3">2.1.</span> A Note on Python Scripting&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 ABAQUS Python scripting is quite powerful and will be used quite liberally throughout this tutorial. The following are some tips/tricks to get started for beginners:
@@ -470,7 +475,7 @@ A quick way to check which face is what will be to use the <code>highlight</code
 Here is an example:
 </p>
 
-<div id="org886684d" class="figure">
+<div id="orgcb5f243" class="figure">
 <p><img src="./figs/highl.png" alt="highl.png" width="600px" />
 </p>
 </div>
@@ -482,7 +487,7 @@ At the end of this step, you should have a partitioned part that looks like this
 The partitioning is done in this way to help with the seeded meshing, constraint enforcement, etc.
 </p>
 
-<div id="orgdf2742c" class="figure">
+<div id="orgf6d2111" class="figure">
 <p><img src="./figs/parthb.png" alt="parthb.png" width="600px" />
 </p>
 </div>
@@ -506,7 +511,7 @@ You have to ensure that the curved edges on the above are, indeed, single edges.
 If not, you will have to use the "Merge Edges" tool in the Part module and individually select each edge and merge them.
 </p>
 
-<div id="org09003a1" class="figure">
+<div id="org3f0264c" class="figure">
 <p><img src="./figs/medg.png" alt="medg.png" width="600px" />
 </p>
 </div>
@@ -556,7 +561,7 @@ Select the faces by holding <code>Shift</code> and deselect by holding <code>Ctr
 Here is a picture of the surface highlighted in the viewport.
 </p>
 
-<div id="orgbed685c" class="figure">
+<div id="org1074b2a" class="figure">
 <p><img src="./figs/insurf.png" alt="insurf.png" width="300px" />
 </p>
 </div></li>
@@ -566,7 +571,7 @@ These will be tied to the washer for the analysis. (<code>BmWi</code> denotes th
 Here is a picture of the relevant surfaces highlighted (using different colors for each).
 </p>
 
-<div id="orgbe4cbd7" class="figure">
+<div id="orgc0faad8" class="figure">
 <p><img src="./figs/bmwsurfs.png" alt="bmwsurfs.png" width="300px" />
 </p>
 </div></li>
@@ -576,7 +581,7 @@ Name the surface marked white as <code>BlW</code> and the surface marked green a
 (<code>BlW</code> denotes the Bolt-Washer contact surface; <code>BN</code> denotes the Bolt-Nut contact surface)
 </p>
 
-<div id="orgf327072" class="figure">
+<div id="org0c50178" class="figure">
 <p><img src="./figs/boltsurfs.png" alt="boltsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -587,7 +592,7 @@ Name the white surface as <code>NW</code> and the green surface as <code>NB</cod
 <b>Note the direction axes carefully.</b>
 </p>
 
-<div id="orgf4efd80" class="figure">
+<div id="orgfdf393d" class="figure">
 <p><img src="./figs/nutsurfs.png" alt="nutsurfs.png" width="200px" />
 </p>
 </div></li>
@@ -596,7 +601,7 @@ Create two surface on the <code>WASHER</code> model and label them as <code>WSTO
 Here is a graphical depiction of the model with the surfaces.
 </p>
 
-<div id="org8ae384e" class="figure">
+<div id="orgd525195" class="figure">
 <p><img src="./figs/wshrsurf.png" alt="wshrsurf.png" width="200px" />
 </p>
 </div></li>
@@ -608,8 +613,8 @@ Now all the parts have been created and relevant surfaces have been identified.
 </p>
 </div>
 </div>
-<div id="outline-container-orgc570da9" class="outline-3">
-<h3 id="orgc570da9"><span class="section-number-3">2.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orgcefd19b" class="outline-3">
+<h3 id="orgcefd19b"><span class="section-number-3">2.4.</span> Create Assembly&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 <b>Note</b>: While importing the parts, choose Instance Type as "Independent (Mesh on Instance)".
@@ -625,7 +630,7 @@ This will be the convention followed throughout this tutorial.
 The green beam in the following is renamed as <code>TOPBEAM</code> and the white beam in the following is renamed as <code>BOTBEAM</code>.
 </p>
 
-<div id="org6880501" class="figure">
+<div id="orgc15fa22" class="figure">
 <p><img src="./figs/asb1.png" alt="asb1.png" width="400px" />
 </p>
 </div></li>
@@ -636,7 +641,7 @@ Rename the washer instances in the top and bottom as <code>TOPWASHER-1</code> an
 Rename the bolt and nut as <code>NUT-1</code> and <code>BOLT-1</code> respectively.
 </p>
 
-<div id="org1089c84" class="figure">
+<div id="org980bdcf" class="figure">
 <p><img src="./figs/asbwn.png" alt="asbwn.png" width="300px" />
 </p>
 </div></li>
@@ -650,7 +655,7 @@ The figure below shows an example (a datum point was used for this here).
 Rename this to <code>BPT-1</code> (standing for Bolt Point 1).
 </p>
 
-<div id="org986e0db" class="figure">
+<div id="org6369957" class="figure">
 <p><img src="./figs/asrpt.png" alt="asrpt.png" width="400px" />
 </p>
 </div></li>
@@ -664,7 +669,7 @@ The figure below shows the final assembly along with a representation of the nam
 Recall that  the beam shown in the figure below is <code>TOPBEAM</code> and the hidden one is <code>BOTBEAM</code>.
 </p>
 
-<div id="org218aa90" class="figure">
+<div id="orgfe91770" class="figure">
 <p><img src="./figs/as3bwn.png" alt="as3bwn.png" width="600px" />
 </p>
 </div></li>
@@ -680,8 +685,8 @@ Now that the assembly is complete, the relevant constraints will have to be enfo
 <h2 id="sec:constr"><span class="section-number-2">3.</span> Constraints</h2>
 <div class="outline-text-2" id="text-sec:constr">
 </div>
-<div id="outline-container-org7d15a49" class="outline-3">
-<h3 id="org7d15a49"><span class="section-number-3">3.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-orgab8ea36" class="outline-3">
+<h3 id="orgab8ea36"><span class="section-number-3">3.1.</span> Tie-Constraint Enforcement&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 All the following operations can be conducted in the <code>Interaction</code> module in CAE.
@@ -829,7 +834,7 @@ The following code does this through a nested loop such that <b><code>BNEQn-m</c
 Here is an image showing the constraints applied graphically.
 </p>
 
-<div id="org006de4a" class="figure">
+<div id="orga969acc" class="figure">
 <p><img src="./figs/conss.png" alt="conss.png" width="400px" />
 </p>
 </div></li>
@@ -865,7 +870,7 @@ The following python code applies a tightening load of 12kN to each bolt.
 </pre>
 </div>
 
-<div id="org5121135" class="figure">
+<div id="orgcb253bb" class="figure">
 <p><img src="./figs/loads.png" alt="loads.png" width="400px" />
 </p>
 </div></li>
@@ -895,8 +900,8 @@ If such symmetry is not available, one may choose a more direct approach by usin
 Please <a href="mailto:nidish.balaji@ila.uni-stuttgart.de">write to me</a> if you'd like an example for this.
 </p>
 </div>
-<div id="outline-container-org8d66712" class="outline-3">
-<h3 id="org8d66712"><span class="section-number-3">4.1.</span> Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org06015dc" class="outline-3">
+<h3 id="org06015dc"><span class="section-number-3">4.1.</span> Meshing Instructions&#xa0;&#xa0;&#xa0;<span class="tag"><span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-4-1">
 <ol class="org-ol">
 <li><p>
@@ -904,7 +909,7 @@ Choose <code>Mesh-&gt;Assign Mesh Controls</code> and select the whole assembly 
 We will use a structured hex-dominated element type for the full model (it will give a warning that this is not possible for certain regions. This is okay).
 </p>
 
-<div id="org1754ecb" class="figure">
+<div id="orgba14879" class="figure">
 <p><img src="./figs/globmesh.png" alt="globmesh.png" width="300px" />
 </p>
 </div></li>
@@ -913,7 +918,7 @@ Now choose <code>Mesh-&gt;Seed Part Instance</code> and select all the instances
 Set 0.00254 as the global mesh seed (to ensure 10 elements across thickness) and 0.05 for curvature control.
 </p>
 
-<div id="org06f0470" class="figure">
+<div id="org0a97d05" class="figure">
 <p><img src="./figs/gmeshseed.png" alt="gmeshseed.png" width="300px" />
 </p>
 </div></li>
@@ -922,7 +927,7 @@ Apply local seeds at the interface as shown here (on both interfaces).
 Use the <code>Mesh-&gt;Seed Edges</code> tool by choosing the Method as "By Number" and specify the number of elements.
 </p>
 
-<div id="org8a796b3" class="figure">
+<div id="org38604ca" class="figure">
 <p><img src="./figs/lmeshseeds.png" alt="lmeshseeds.png" width="400px" />
 </p>
 </div></li>
@@ -931,7 +936,7 @@ Now mesh the assembly using <code>Mesh-&gt;Mesh Part Instance</code> and selecti
 Here is a view of the interfacial mesh you should get after the above seeding.
 </p>
 
-<div id="org33d45e1" class="figure">
+<div id="org0ab53f6" class="figure">
 <p><img src="./figs/mesh.png" alt="mesh.png" width="300px" />
 </p>
 </div></li>
@@ -939,7 +944,7 @@ Here is a view of the interfacial mesh you should get after the above seeding.
 Here is an image of the total assembly with the mesh.
 </p>
 
-<div id="org4ae0334" class="figure">
+<div id="org43ae948" class="figure">
 <p><img src="./figs/fullmesh.png" alt="fullmesh.png" width="400px" />
 </p>
 </div></li>
@@ -966,7 +971,7 @@ For the static prestress analysis, first a surface-to-surface contact interactio
 You can do this from CAE starting from <code>Interaction-&gt;Create Interaction</code> and following the steps in the figure below.
 </p>
 
-<div id="org5855b83" class="figure">
+<div id="org71e7ea3" class="figure">
 <p><img src="./figs/setcontact.png" alt="setcontact.png" width="600px" />
 </p>
 </div></li>
@@ -975,7 +980,7 @@ Now create two linear frequency steps, one before and one after the static prest
 Request 30 eigenvalues in each case.
 </p>
 
-<div id="org4f55191" class="figure">
+<div id="orgfd28fc7" class="figure">
 <p><img src="./figs/lfreq.png" alt="lfreq.png" width="400px" />
 </p>
 </div></li>
@@ -992,7 +997,7 @@ Optionally, field outputs for <code>FREQ2</code> (by default it will be set to n
 You can do this in <code>Step-&gt;Create Field Outputs</code>.
 </p>
 
-<div id="org7dbfa2b" class="figure">
+<div id="orgd42939f" class="figure">
 <p><img src="./figs/run2_fo.png" alt="run2_fo.png" width="300px" />
 </p>
 </div></li>
@@ -1078,7 +1083,7 @@ In the above, modes 1-7 are RBMs and modes 8 onwards are the elastic modes.
 Looking at the mode-shapes should make it clear that the two beams are free to move axially (the following is mode 1, for eg).
 </p>
 
-<div id="org192c31a" class="figure">
+<div id="orge04ee6d" class="figure">
 <p><img src="./figs/res1.png" alt="res1.png" width="400px" />
 </p>
 </div></li>
@@ -1090,7 +1095,7 @@ If it still doesn't converge, check your model again.
 Here is a picture of the contact pressures at the interface at the end of the static prestress step.
 </p>
 
-<div id="org9e7825e" class="figure">
+<div id="org0a14d3e" class="figure">
 <p><img src="./figs/res2_1.png" alt="res2_1.png" width="400px" />
 </p>
 </div></li>
@@ -1204,13 +1209,13 @@ It is also helpful to use global node and element indexing henceforth.
 This can be specified in <code>Model-&gt;Edit Attributes-&gt;Model-1</code> as follows:
 </p>
 
-<div id="org067e122" class="figure">
+<div id="orgea05e28" class="figure">
 <p><img src="./figs/modl.png" alt="modl.png" width="300px" />
 </p>
 </div>
 </div>
-<div id="outline-container-org6d8110e" class="outline-3">
-<h3 id="org6d8110e"><span class="section-number-3">5.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-org24f9b1a" class="outline-3">
+<h3 id="org24f9b1a"><span class="section-number-3">5.1.</span> Reorganize Interfacial Node Sets (readjust if necessary)&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 Although we have taken care to ensure that the mesh of the <code>TOPBEAM</code> and <code>BOTBEAM</code> are conformal at the interface, minor imperfections in the nodal locations may exist.
@@ -1388,8 +1393,8 @@ So we will reintroduce the bolt loads in the substructuring step in #8 below.
 </ol>
 </div>
 </div>
-<div id="outline-container-orgd083065" class="outline-3">
-<h3 id="orgd083065"><span class="section-number-3">5.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
+<div id="outline-container-orga348431" class="outline-3">
+<h3 id="orga348431"><span class="section-number-3">5.2.</span> Setup Fixed interface CMS (HCB-CMS) with linear frequency and substructure steps&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span></span></h3>
 <div class="outline-text-3" id="text-5-2">
 <ol class="org-ol">
 <li><p>
@@ -1538,8 +1543,8 @@ You can find the inp-file generate from the above in <a href="https://github.com
 </ol>
 </div>
 </div>
-<div id="outline-container-org502d8e3" class="outline-3">
-<h3 id="org502d8e3"><span class="section-number-3">5.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
+<div id="outline-container-org92856ac" class="outline-3">
+<h3 id="org92856ac"><span class="section-number-3">5.3.</span> Run Job and Generate the mtx file.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="Script">Script</span>&#xa0;<span class="GUI">GUI</span></span></h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 You can now run the Job named "Job" in the GUI, or directly run the "<a href="https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/Job.inp">Job.inp</a>" file from the command line using
@@ -1848,7 +1853,7 @@ The interpolation and integration weights are, therefore, easily specified.
 The following is a depiction of the quadrature points against the interfacial elements.
 </p>
 
-<div id="org2a824aa" class="figure">
+<div id="orgc0dd0cb" class="figure">
 <p><img src="./figs/quadpts.png" alt="quadpts.png" width="600px" />
 </p>
 </div></li>
@@ -2026,8 +2031,8 @@ Only a unilateral spring is considered in the normal direction.
 
 </details>
 </div>
-<div id="outline-container-org1636632" class="outline-4">
-<h4 id="org1636632"><span class="section-number-4">6.2.1.</span> Plotting</h4>
+<div id="outline-container-org633aa0d" class="outline-4">
+<h4 id="org633aa0d"><span class="section-number-4">6.2.1.</span> Plotting</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <ol class="org-ol">
 <li><p>
@@ -2066,7 +2071,7 @@ xlabel<span class="org-rainbow-delimiters-depth-1">(</span>xx<span class="org-bu
 The following is the output figure, showing the relative normal displacements at each node, with the nodes connected through the undirected graph constructed using the element information.
 </p>
 
-<div id="orgaba5bfa" class="figure">
+<div id="org8a5807d" class="figure">
 <p><img src="./figs/intdisps.png" alt="intdisps.png" width="600px" />
 </p>
 </div></li>
@@ -2105,15 +2110,15 @@ Higher values of \(knl\) will obtain a better estimate of the "hard" contact res
 An alternative would be to implement a lagrange multiplier method for conducting hard contact simulations directly.
 </p>
 
-<div id="org225b8c3" class="figure">
+<div id="org7e8f262" class="figure">
 <p><img src="./figs/intpress.png" alt="intpress.png" width="600px" />
 </p>
 </div></li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org1e164bd" class="outline-4">
-<h4 id="org1e164bd"><span class="section-number-4">6.2.2.</span> Miscellanies</h4>
+<div id="outline-container-org0cf5daa" class="outline-4">
+<h4 id="org0cf5daa"><span class="section-number-4">6.2.2.</span> Miscellanies</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <ol class="org-ol">
 <li>Even if all the nodes have equal areas, <b>node-to-node contact elements are still inconsistent in this context</b>, since contact interactions can be understood to be a fundamentally local interaction, which need to be integrated to have global influence.
@@ -2248,8 +2253,8 @@ The name of the resulting inp file will be <code>MeshedModel.inp</code>.
 </ol>
 </div>
 </div>
-<div id="outline-container-org1d4793e" class="outline-3">
-<h3 id="org1d4793e"><span class="section-number-3">7.2.</span> Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</h3>
+<div id="outline-container-org629b3d0" class="outline-3">
+<h3 id="org629b3d0"><span class="section-number-3">7.2.</span> Process the inp-file model, renumber the bottom nodes, and conduct HCBCMS.</h3>
 <div class="outline-text-3" id="text-7-2">
 <ol class="org-ol">
 <li><p>
@@ -2461,8 +2466,8 @@ We complete the task by requesting matrix output and outputting node and element
 </ol>
 </div>
 </div>
-<div id="outline-container-orga0d937a" class="outline-3">
-<h3 id="orga0d937a"><span class="section-number-3">7.3.</span> Nonlinear Prestress Analysis with MATLAB/OCTAVE</h3>
+<div id="outline-container-orgbd4e040" class="outline-3">
+<h3 id="orgbd4e040"><span class="section-number-3">7.3.</span> Nonlinear Prestress Analysis with MATLAB/OCTAVE</h3>
 <div class="outline-text-3" id="text-7-3">
 <ol class="org-ol">
 <li>The same MATLAB/OCTAVE routines from section <a href="#sec:nlan">6.2</a> can be used here, with minor tweaks to account for the fact that the model is already in the relative coordinates frame.</li>
@@ -2626,8 +2631,8 @@ Comparing this with the predictions from before indicate a very close agreement.
 </p></li>
 </ol>
 </div>
-<div id="outline-container-org507fe01" class="outline-4">
-<h4 id="org507fe01"><span class="section-number-4">7.3.1.</span> Plotting Results</h4>
+<div id="outline-container-org67c40f1" class="outline-4">
+<h4 id="org67c40f1"><span class="section-number-4">7.3.1.</span> Plotting Results</h4>
 <div class="outline-text-4" id="text-7-3-1">
 <ol class="org-ol">
 <li><p>
@@ -2693,7 +2698,7 @@ We use the following modified version of the plotting code to visualize the resp
 Nodal Displacements:
 </p>
 
-<div id="org17bdb5b" class="figure">
+<div id="org878d1bb" class="figure">
 <p><img src="./figs/intdisps_rc.png" alt="intdisps_rc.png" width="600px" />
 </p>
 </div></li>
@@ -2701,7 +2706,7 @@ Nodal Displacements:
 Interfacial Pressures:
 </p>
 
-<div id="orga51c462" class="figure">
+<div id="org99b8e91" class="figure">
 <p><img src="./figs/intpress_rc.png" alt="intpress_rc.png" width="600px" />
 </p>
 </div></li>
@@ -2727,8 +2732,8 @@ Don't forget to check out the repository in github at <a href="https://github.co
 If you found this useful, please consider citing <a href="https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017">this paper</a> and/or <a href="https://scholarship.rice.edu/handle/1911/113700">this thesis</a>.
 </p>
 </div>
-<div id="outline-container-org1f8406a" class="outline-3">
-<h3 id="org1f8406a"><span class="section-number-3">8.1.</span> Summary</h3>
+<div id="outline-container-org8a52347" class="outline-3">
+<h3 id="org8a52347"><span class="section-number-3">8.1.</span> Summary</h3>
 <div class="outline-text-3" id="text-8-1">
 <p>
 All the scripts used in the tutorial are provided in 
@@ -2750,8 +2755,8 @@ The <a href="https://github.com/Nidish96/Abaqus4Joints">Github repository</a> ha
 </p>
 </div>
 </div>
-<div id="outline-container-orge718d98" class="outline-3">
-<h3 id="orge718d98"><span class="section-number-3">8.2.</span> Details on this web-page documentation/offering suggestions</h3>
+<div id="outline-container-org46a465d" class="outline-3">
+<h3 id="org46a465d"><span class="section-number-3">8.2.</span> Details on this web-page documentation/offering suggestions</h3>
 <div class="outline-text-3" id="text-8-2">
 <ul class="org-ul">
 <li>This website was generated using org-mode on emacs with the Bigblow html theme from
@@ -2766,7 +2771,7 @@ Alternately, you can also clone the <a href="https://github.com/Nidish96/Abaqus4
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Nidish Narayanaa Balaji</p>
-<p class="date">Created: 2024-01-18 Thu 18:58</p>
+<p class="date">Created: 2024-01-29 Mon 07:08</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
