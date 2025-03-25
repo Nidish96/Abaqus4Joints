@@ -1,0 +1,134 @@
+\documentclass[10pt,hyperref={citecolor=blue,anchorcolor=blue,urlcolor=blue,colorlinks=true,pdfpagelabels=true},dvipsnames]{beamer}
+\usetheme{IITM}
+
+% \includeonlyframes{cur}
+
+\usepackage{mathtools}
+\usepackage{accents}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{cancel}
+\usepackage{soul}
+\usepackage{appendixnumberbeamer}
+\usepackage{cleveref}
+
+\addbibresource{refs.bib}
+
+% Custom Stuff %----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\newcommand{\vc}[1]{\underbar{$#1$}}
+\newcommand{\mx}[1]{\mathbf{\underline{\underbar{$#1$}}}\,}
+
+\newcommand{\uc}[1]{\underaccent{\tilde}{#1}}
+\newcommand{\mc}[1]{\underaccent{\approx}{#1}}
+
+\newcommand{\rtxt}[1]{\textcolor{red}{#1}}
+\newcommand{\btxt}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\mathcolorbox}[2]{\colorbox{#1}{$\displaystyle #2$}}
+\newcommand{\mhl}[1]{\colorbox{yellow}{$\displaystyle #1$}}
+
+\renewcommand<>{\hl}[1]{\only#2{\beameroriginal{\hl}}{#1}}
+
+\newcommand{\dd}{\mathrm{d}}
+
+\usetikzlibrary{shadings,shapes.arrows,shapes.callouts,patterns,decorations.pathmorphing,
+  decorations.markings,decorations.pathreplacing,shapes,arrows.meta}
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+\tikzset{
+  highlight on/.style={alt={#1{fill=red!80!black,color=red!80!black}{fill=gray!30!white,color=gray!30!white}}},
+}
+\tikzset{
+  nidbox/.style={fill=white, draw=red, thick, rounded corners=0.5mm, align=center}
+}
+
+\usetikzlibrary{tikzmark,calc,positioning}
+\usepackage[markings,customcolors,beamer]{hf-tikz}
+\hfsetfillcolor{yellow}
+\hfsetbordercolor{none}
+
+% Get rid of figure labels
+\captionsetup{labelformat=empty,labelsep=none}
+%----------------------------------------------------------------------------------------------------------------------------------------------------------------
+\title[Abaqus4Joints]{An Abaqus-Matlab Tutorial for Jointed Systems}
+\subtitle[ICJM Seminar]{International Committee on Jointed Structures Seminar Series}
+\author[Balaji, N. N.]{Nidish Narayanaa Balaji}
+\institute[AE, IITM]{Department of Aerospace Engineering, IIT Madras}
+% ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}
+  \begin{beamercolorbox}[sep=0.3cm,ht=1.8em,wd=\paperwidth]{frametitle}
+    \vbox{}\vskip-4ex%
+    \strut\insertframetitle{\begin{tikzpicture}[remember picture,overlay]
+        \node[anchor=north] at (current page.north) (A)
+        {\includegraphics[height=1.75cm]{template/logo.png}};
+      \end{tikzpicture}}\strut
+    \vskip-0.5ex%				
+  \end{beamercolorbox}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Table of Contents}
+  \begin{columns}
+    \centering
+    \begin{column}{.5\textwidth}
+      \tableofcontents{}
+    \end{column}
+
+    \begin{column}{.5\textwidth}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Introduction}
+\label{sec:introduction}
+
+\begin{frame}
+  \frametitle{\insertsectionnumber.~\insertsection}
+  
+\end{frame}
+
+\section{Outline of the Steps}
+\label{sec:outline-steps}
+
+\begin{frame}
+  \frametitle{\insertsectionnumber.~\insertsection}
+  
+\end{frame}
+
+\section{Outro}
+\label{sec:outro}
+
+\begin{frame}
+  \frametitle{\insertsectionnumber.~\insertsection}
+  \begin{block}{\centering Acknowledgements}
+    \begin{itemize}
+    \item Prof. Matthew Brake
+    \item Dr. Justin Porter, Maeve Karpov
+    \item Prof. Matt Allen
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{References}
+  \renewcommand*{\bibfont}{\tiny}
+  \vspace{-0.25cm}
+  \printbibliography
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:

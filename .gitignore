@@ -11,3 +11,10 @@
 /docs/index.synctex.gz
 /docs/ltximg/
 /docs/_minted-index/
+/icjm_pres/auto/*.el
+*.bcf
+*.nav
+*.pre
+*.run.xml
+*.snm
+*.gz
