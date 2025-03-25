@@ -18,3 +18,5 @@
 *.run.xml
 *.snm
 *.gz
+*bbl
+*blg
