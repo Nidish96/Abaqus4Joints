@@ -9,6 +9,7 @@
 #+HTML: <style> summary:hover {background:pink;} </style>
 #+HTML: <script>var HS_STARTUP_FOLDED = true;</script>
 # #+HTML_HEAD: <style> #content{max-width:2000px;} *{font-size: large;}</style>
+# #+HTML_HEAD: <link rel="stylesheet" href="./themes/codize.css">
 
 #+LATEX: \pagebreak
 
@@ -1777,3 +1778,7 @@ The [[https://github.com/Nidish96/Abaqus4Joints][Github repository]] has the abo
   The collapsible details blocks from [[https://github.com/alhassy/org-special-block-extras][org-special-block-extras]] have also been used extensively.
 + The best way to offer suggestions would be to use the [[https://github.com/Nidish96/Abaqus4Joints/blob/main/docs/index.pdf][pdf version]] of the documentation, annotate it and [[mailto:nidish.balaji@ila.uni-stuttgart.de][mail it to me]].
   Alternately, you can also clone the [[https://github.com/Nidish96/Abaqus4Joints][repository]], make changes and create a pull request.
+
+# Local Variables:
+# org-html-htmlize-output-type: inline-css
+# End:
