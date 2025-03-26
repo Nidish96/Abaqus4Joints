@@ -20,3 +20,5 @@
 *.gz
 *bbl
 *blg
+*SAVE-ERROR
+*rpy

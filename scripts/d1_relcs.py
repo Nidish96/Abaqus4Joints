@@ -19,11 +19,10 @@ from connectorBehavior import *
 
 from abaqus import *
 from abaqusConstants import *
-from caeModules import * 
+from caeModules import *
 import regionToolset
 import job
 import step
-import sets
 
 from inpParser import *
 

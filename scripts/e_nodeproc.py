@@ -19,11 +19,14 @@ from connectorBehavior import *
 
 from abaqus import *
 from abaqusConstants import *
-from caeModules import * 
+from caeModules import *
 import regionToolset
 import job
 import step
-import sets
+
+# mdbm = openMdb('./model_step1a.cae')
+# mdl = mdbm.models['Model-1']
+# ras = mdl.rootAssembly
 
 mdl = mdb.models['Model-1']
 ras = mdl.rootAssembly
@@ -48,9 +51,8 @@ TopEls = np.array([topsurf.elements[i].connectivity for i in range(len(topsurf.e
 ELS = np.zeros((TopEls.shape[0], 5), dtype=int)
 for ne in range(TopEls.shape[0]):
     elefac = topsurf.elements[ne].getElemFaces()
-    
     # Gives you the list of faces on the interface (we only expect a single face)
-    fe = np.argwhere([all([Topnd_dict.has_key(x) for x in 
+    fe = np.argwhere([all([x in Topnd_dict.keys() for x in
                            [elefac[k].getNodes()[i].label for i in range(4)]])
                       for k in range(6)])[0,0]
     ELS[ne, 0] = ne
@@ -64,7 +66,7 @@ np.savetxt('Nodes.dat', TopNdCds) # Save to dat file
 np.savetxt('Elements.dat', ELS, fmt='%d')
 
 # 3. Node Pairing. We assume len(botnodes)=len(topnodes).
-botleft = range(N)
+botleft = list(range(N))
 bts = []
 tmi = 0
 for i in range(N):
@@ -79,7 +81,7 @@ for i in range(N):
             )
         )
     )
-    
+
 # 4. Adjust Nodes on Bottom Beam Interface to Match Top Beam Exactly
 for i in range(N):
     ras.editNode(nodes=botnodes[bts[i]:bts[i]+1],
@@ -89,12 +91,12 @@ for i in range(N):
 botpairednds = botnodes.sequenceFromLabels(tuple([botnodes[i].label for i in bts]))
 # Reordering from the sorting above
 
-ras.SetFromNodeLabels(name="TOPS_NDS", 
-                      nodeLabels=((topnodes[0].instanceName, 
+ras.SetFromNodeLabels(name="TOPS_NDS",
+                      nodeLabels=((topnodes[0].instanceName,
                                    tuple([topnodes[i].label for i in range(N)])),),
                       unsorted=True)
-ras.SetFromNodeLabels(name="BOTS_NDS", 
-                      nodeLabels=((botpairednds[0].instanceName, 
+ras.SetFromNodeLabels(name="BOTS_NDS",
+                      nodeLabels=((botpairednds[0].instanceName,
                                    [botpairednds[i].label for i in range(len(botpairednds))]),),
                       unsorted=True)
 
@@ -123,17 +125,17 @@ mdl.EncastreBC(name="BOTFIX", createStepName="Fixed-Int-Modal",
 
 # 8. Create a substructuring step, specify the modes and retained DOFs
 mdl.SubstructureGenerateStep(name="HCBCMS", previous="Fixed-Int-Modal",
-                             substructureIdentifier=1, 
+                             substructureIdentifier=1,
                              retainedEigenmodesMethod=MODE_RANGE, modeRange=((1, 20, 1),),
                              recoveryMatrix=REGION, recoveryRegion=ras.sets['OutNodes'],
                              computeReducedMassMatrix=True)
 
 # The name dictates ordering. A comes before B.
-mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS", 
-                        region=ras.sets['TOPS_NDS'], 
+mdl.RetainedNodalDofsBC(name="A", createStepName="HCBCMS",
+                        region=ras.sets['TOPS_NDS'],
                         u1=ON, u2=ON, u3=ON)
-mdl.RetainedNodalDofsBC(name="B", createStepName="HCBCMS", 
-                        region=ras.sets['BOTS_NDS'], 
+mdl.RetainedNodalDofsBC(name="B", createStepName="HCBCMS",
+                        region=ras.sets['BOTS_NDS'],
                         u1=ON, u2=ON, u3=ON)
 
 # Apply Bolt Loads (1N magnitude)
@@ -154,7 +156,7 @@ mdl.keywordBlock.synchVersions(storeNodesAndElements=False)
 li = np.argwhere([mdl.keywordBlock.sieBlocks[i][0:20] == "*Retained Nodal Dofs" for i in range(len(mdl.keywordBlock.sieBlocks))])[0][0]
 txi = mdl.keywordBlock.sieBlocks[li]
 mdl.keywordBlock.replace(li, "*Retained Nodal Dofs, sorted=NO"+txi[20:])
-mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2, 
+mdl.keywordBlock.insert(len(mdl.keywordBlock.sieBlocks)-2,
                         "*Substructure Matrix Output, FILE NAME=Modelmats, MASS=YES, STIFFNESS=YES, SLOAD=YES, RECOVERY MATRIX=YES")
 
 # 10. Create a job and write an inp file

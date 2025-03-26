@@ -1769,7 +1769,7 @@ All the scripts used in the tutorial are provided in
 6. Files [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/d1_relcs.py][d1\under{}relcs.py]] and [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/e1_relcsnproc.py][e1\under{}relcsnproc.py]] provide replacements for files 4 & 5 above while using relative coordinates.
 7. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/scripts/readwritematvec.sh][readwritematvec.sh]]: Contains the mtx reading script written with =bash= and =python=.
 8. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main.m][main.m]]: Contains the MATLAB/OCTAVE file for doing the nonlinear static prestress analysis (also see [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/RESFUN.m][RESFUN.m]] for the residue routine).
-9. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main_rc.m][main_rc.m]]: Contains the MATLAB/OCTAVE file for the nonlinear static prestress analysis using the relative coordinates representation. 
+9. [[https://github.com/Nidish96/Abaqus4Joints/blob/main/assets/demo/main_rc.m][main\under{}rc.m]]: Contains the MATLAB/OCTAVE file for the nonlinear static prestress analysis using the relative coordinates representation. 
    
 The [[https://github.com/Nidish96/Abaqus4Joints][Github repository]] has the above scripts as well as all the cae files.
 ** Details on this web-page documentation/offering suggestions

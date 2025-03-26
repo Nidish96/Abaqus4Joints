@@ -1,3 +1,4 @@
+% * Preamble
 clc
 clear all
 
@@ -6,20 +7,22 @@ set(0,'defaultTextInterpreter','latex');
 set(0, 'DefaultLegendInterpreter', 'latex');
 set(0,'defaultAxesFontSize',13);
 
-%% Read Nodes and Elements
+savfigs = false;
+
+% * Read Nodes and Elements
 Nodes = dlmread('./Nodes.dat');
 Elements = dlmread('./Elements.dat');
 N = size(Nodes,1);  % Number of nodes per side
 Ne = size(Elements,1);  % Number of elements
 
-%% Load Matrices
+% * Load Matrices
 fname = './Modelmats.mat';
 load(fname, 'M', 'K', 'R', 'Fv');
 
 % Number of generalized modal DOFs
 Nint = size(M,1)-(2*N)*3;
 
-%% Single-Point-Quadrature Matrices
+% * Single-Point-Quadrature Matrices
 Qm = zeros(Ne, N);  % Each element has one quadrature point
 Tm = zeros(N, Ne);  % Each quadrature pt integrated to 4 nodes
 Ars = zeros(Ne, 1);  % Vector of areas of each element
@@ -40,7 +43,7 @@ Ar_tot = 120e-3*25.4e-3-3*pi*(0.85e-2/2)^2; % True total area
                                             % Rectangle-3*Circles
 Ar_avg = Ar_tot/Ne;  % Average element area
 
-%% Contact Relative Displacements
+% * Contact Relative Displacements
 Lz = kron(Qm, [0 0 1]); % Get only normal displacement
 Lrel = [Lz -Lz zeros(Ne, Nint)];
 % Lrel defd such that Lrel*x>0 implies contact and Lrel*x<0 implies separation.
@@ -52,14 +55,14 @@ Grel = [Gz; -Gz; zeros(Nint, Ne)];
 Lz_n = kron(eye(N), [0 0 1]); % Get only normal displacement
 Lrel_n = [Lz_n -Lz_n zeros(N, Nint)];
 
-%% Remove fixed interface null-space
+% * Remove fixed interface null-space
 L1 = null(Lrel);
 [V,D] = eigs(L1'*K*L1, L1'*M*L1, 20, 'SM'); % Get first 20 modes
 Ln = null(V(:, 1:6)'*L1'*M);  % First six modes are RBMs
 
 Nn = size(Ln, 2);  % Null-reduced DOFs
 
-%% Solve the Nonlinear Static Prestress Problem
+% * Solve the Nonlinear Static Prestress Problem
 bpmag = 12e3;
 knl = 5e6/(Ar_tot/Ne); % knl divided by avg element area
 U0 = (Ln'*K*Ln + (Grel'*Ln)'*(Lrel*Ln)*knl)\(Ln'*Fv*bpmag);
@@ -67,12 +70,13 @@ U0 = (Ln'*K*Ln + (Grel'*Ln)'*(Lrel*Ln)*knl)\(Ln'*Fv*bpmag);
 opt = optimoptions('fsolve', 'specifyObjectiveGradient', true, 'Display', 'iter');
 [U0, ~, ~, ~, J0] = fsolve(@(U) RESFUN([U; bpmag], Ln'*K*Ln, Ln'*Fv, Lrel*Ln, Ln'*Grel, knl), U0, opt);
 
-%% Linearized Modal Analysis
+% * Linearized Modal Analysis
 [V0, D0] = eigs(J0, Ln'*M*Ln, 10, 'SM');
 W0 = sqrt(diag(D0));
 disp(table((1:10)', W0/2/pi, 'VariableNames', {'Index', 'Frequency (Hz)'}))
 
-%% Depict Interfacial Displacement Field
+% * Plots
+% ** Depict Interfacial Displacement Field
 A = zeros(N);  % Graph adjacency matrix
 for ei=1:Ne
        ndis = Elements(ei, 2:end);  % Nodes of the current element
@@ -100,9 +104,11 @@ ylabel('Y Coordinate (m)')
 xx=colorbar('SouthOutside');
 xlabel(xx, 'Nodal Relative Displacement (m)', 'interpreter', 'latex', 'fontsize', 13)
 
-print('./intdisps.png', '-dpng', '-r300')
+if savfigs
+    print('./intdisps.png', '-dpng', '-r300')
+end
 
-%% Show Quadrature Nodes
+% ** Show Quadrature Nodes
 figure(2)
 pos=get(gcf, 'Position');
 set(gcf, 'Position', [pos(1:2) 900 260], 'Color', 'white')
@@ -119,9 +125,11 @@ set(gca, 'XTick', (-6:3:6)*1e-2)
 xlabel('X Coordinate (m)')
 ylabel('Y Coordinate (m)')
 
-print('./quadpts.png', '-dpng', '-r300')
+if savfigs
+    print('./quadpts.png', '-dpng', '-r300')
+end
 
-%% Show Pressure field
+% ** Show Pressure field
 pvals = max(knl*Lrel*Ln*U0, 0);  % pressure @ QPs
 figure(3)
 pos=get(gcf, 'Position');
@@ -141,4 +149,49 @@ ylabel('Y Coordinate (m)')
 xx=colorbar('SouthOutside');
 xlabel(xx, 'Element Normal Pressure (Pa)', 'interpreter', 'latex', 'fontsize', 13)
 
-print('./intpress.png', '-dpng', '-r300')
+if savfigs
+    print('./intpress.png', '-dpng', '-r300')
+end
+
+% ** Show Mode Shapes
+mi = 5;
+scs = [1e1 3e0 5e-1 5e-1 1e-1];
+
+for mi=1:5
+    
+sc = scs(mi);
+scz = sc;
+if mi==5  % Just for visualization
+    scz = 1e1;
+end
+
+figure(4)
+pos=get(gcf, 'Position');
+set(gcf, 'Position', [pos(1:2) 600 320], 'Color', 'white')
+clf()
+plot(G, 'XData', Nodes(:,1)+sc*Ln(1:3:3*N,:)*V0(:, mi), ...
+     'YData', Nodes(:,2)+sc*Ln(2:3:3*N,:)*V0(:, mi), ...
+     'ZData', scz*Ln(3:3:3*N,:)*V0(:, mi), ...
+     'NodeCData', ones(N,1), ...
+     'MarkerSize', 4, 'LineWidth', 3); hold on
+plot(G, 'XData', Nodes(:,1)+sc*Ln(3*N+(1:3:3*N),:)*V0(:, mi), ...
+     'YData', Nodes(:,2)+sc*Ln(3*N+(2:3:3*N),:)*V0(:, mi), ...
+     'ZData', scz*Ln(3*N+(3:3:3*N),:)*V0(:, mi), ...
+     'NodeCData', 2*ones(N,1), ...
+     'MarkerSize', 4, 'LineWidth', 3); hold on
+ll = legend('Top Face', 'Bottom Face', 'Location', 'northwestoutside');
+lpos = get(ll, 'Position');
+set(ll, 'Position', [lpos(1)+eps lpos(2:end)]);
+colormap(jet)
+grid on
+axis equal
+axis tight
+set(gca, 'XTick', (-6:3:6)*1e-2)
+xlabel('X Coord. (m)')
+ylabel('Y Coord. (m)')
+zlabel('Z Coord. (m)')
+
+if savfigs
+    print(sprintf('./mode_%d.eps', mi), '-depsc');
+end
+end
