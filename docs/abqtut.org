@@ -1763,7 +1763,7 @@ We start with the file [[https://github.com/Nidish96/Abaqus4Joints/blob/main/ass
 :PROPERTIES:
 :CUSTOM_ID: sec:outro
 :END:
-You can contact me at [[mailto:nidish.balaji@ila.uni-stuttgart.de][nidish.balaji@ila.uni-stuttgart.de]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
+You can contact me at [[mailto:nidish@iitm.ac.in][nidish@iitm.ac.in]] or [[mailto:nidbid@gmail.com][nidbid@gmail.com]] for any questions/suggestions.
 Don't forget to check out the repository in github at [[https://github.com/Nidish96/Abaqus4Joints][https://github.com/Nidish96/Abaqus4Joints]].
 
 If you found this useful, please consider citing [[https://www.sciencedirect.com/science/article/abs/pii/S0888327020300017][this paper]] and/or [[https://scholarship.rice.edu/handle/1911/113700][this thesis]].
