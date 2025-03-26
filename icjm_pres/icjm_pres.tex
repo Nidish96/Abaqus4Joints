@@ -3,6 +3,7 @@
 
 % \includeonlyframes{cur}
 
+\usepackage{siunitx}
 \usepackage{mathtools}
 \usepackage{accents}
 \usepackage{graphicx}
@@ -67,14 +68,14 @@
 \begin{document}
 
 \begin{frame}
-  % \begin{beamercolorbox}[sep=0.3cm,ht=1.8em,wd=\paperwidth]{frametitle}
-  %   \vbox{}\vskip-4ex%
-  %   \strut\insertframetitle{\begin{tikzpicture}[remember picture,overlay]
-  %       \node[anchor=north] at (current page.north) (A)
-  %       {\includegraphics[height=1.75cm]{template/logo.png}};
-  %     \end{tikzpicture}}\strut
-  %   \vskip-0.5ex%				
-  % \end{beamercolorbox}
+  \begin{beamercolorbox}[sep=0.3cm,ht=1.8em,wd=\paperwidth]{frametitle}
+    \vbox{}\vskip-4ex%
+    \strut\insertframetitle{\begin{tikzpicture}[remember picture,overlay]
+        \node[anchor=north] at (current page.north) (A)
+        {\includegraphics[height=1.75cm]{template/logo.png}};
+      \end{tikzpicture}}\strut
+    \vskip-0.5ex%				
+  \end{beamercolorbox}
   \titlepage
 \end{frame}
 
@@ -99,6 +100,10 @@
         \item Prof. Matt Allen
         \end{itemize}
       \end{block}
+      \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.8\linewidth]{FIGS/workflow_abaqus}
+      \end{figure}
     \end{column}
   \end{columns}
 \end{frame}
@@ -333,8 +338,8 @@
       
       \includegraphics[width=0.9\linewidth]{FIGS/rcsinp}};
 
-    \draw[-Latex, red, very thick] (0.2740, -1.9) -- (-2.4658,
-    -1.9);
+    \draw[visible on=<3->, -Latex, red, very thick] (0.2740, -1.9) --
+    (-2.4658, -1.9);
     \node[visible on=<3->, nidbox] at (0.6712, -1.9444) {$
       \vc{u}_{TOP} - \mhl{\vc{u}_{rel}} - \vc{u}_{BOT} = \vc{0} $};
   \end{tikzpicture}
@@ -343,9 +348,67 @@
 \section{Nonlinear Analysis in MATLAB}
 
 \begin{frame}
-  \frametitle{Nonlinear Analysis in Under 100 Lines of MATLAB Code!}
+  \frametitle{Nonlinear Analysis in Sub-100 Lines of MATLAB Code!}
   \framesubtitle{\insertsectionnumber.~\insertsection}
-  
+  \begin{figure}
+    \centering
+    \includegraphics<1>[width=\linewidth]{FIGS/workflow_0}%
+    \includegraphics<2>[width=\linewidth]{FIGS/workflow_1}%
+    \includegraphics<3-4>[width=\linewidth]{FIGS/workflow}
+  \end{figure}
+
+  \begin{tikzpicture}[overlay,remember picture]
+    \pgftransformshift{\pgfpointanchor{current page}{center}}
+
+    \node[visible on=<1>, text width=0.5\textwidth] at (-3.1096,
+    -0.6)
+    {\includegraphics[width=\linewidth]{FIGS/workflow_abaqus}};
+
+    \node[visible on=<2>, text width=0.5\textwidth] at (0, -0.6)
+    {\includegraphics[width=\linewidth]{FIGS/workflow_matlab}};
+
+    \node[visible on=<3>, text width=0.5\textwidth] at (3.1, -0.6)
+    {\includegraphics[width=\linewidth]{FIGS/workflow_results}};
+  \end{tikzpicture}
+\end{frame}
+
+% Time taken:
+% 1. Absolute Coordinate: 39.86 s 
+% 2. Relative Coordinate: 8.33 s
+
+\begin{frame}
+  \frametitle{Comparison Between Absolute and Relative Coordinate Pipelines}
+  \framesubtitle{\insertsection}
+  \begin{block}{\centering Component-Mode Synthesis}
+    \begin{description}
+    \item[Absolute Coordinates (AC)] Fixed interface HCB/CMS.
+    \item[Relative Coordinates (RC)] Relative DoFs are fixed. Not exactly HCB.
+    \end{description}
+  \end{block}
+
+  \begin{block}{\centering Numerical Comparison}
+    \begin{table}
+      \centering
+      \begin{tabular}{r||ccccc|c}
+        \hline\hline
+        \textbf{Type} & \textbf{Mode 1} & \textbf{Mode 2} & \textbf{Mode 3} & \textbf{Mode 4} & \textbf{Mode 5} & \textbf{Time} (s) \\\hline
+        AC & 143.74 & 151.30 & 575.08 & 642.81 & 870.59 & \qty{39.86}{s}\\
+        RC & 143.74 & 151.30 & 575.04 & 642.77 & 870.5 & \mhl{\qty{8.33}{s}}\\
+        \hline\hline
+      \end{tabular}
+    \end{table}
+  \end{block}
+
+  \begin{tikzpicture}[overlay,remember picture]
+    \pgftransformshift{\pgfpointanchor{current page}{center}}
+
+    \node[visible on=<2->, text width=0.9\textwidth, nidbox] at (0, 0)
+    {\rtxt{\textbf{First Five Mode-Shapes At the
+          Interface}}
+
+      \includegraphics[width=\linewidth]{FIGS/modeshps}
+    };
+  \end{tikzpicture}
 \end{frame}
 
 \section{Outro and Recommendations}
@@ -366,6 +429,57 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{We've \ul{GOT} to Speak About Free and Open Source Software!}
+  \framesubtitle{\insertsection}
+  \vspace{-0.25cm}
+  \begin{columns}
+    \begin{column}{.48\textwidth}
+      \begin{itemize}
+      \item ABAQUS is an impressive piece of software.
+      \end{itemize}
+      \uncover<3->{\begin{block}{\centering FOSS Alternatives}
+          \begin{itemize}
+          \item \href{https://www.calculix.de/}{Calculix}: input very similar to ABAQUS, very practical.
+          \item \href{https://www.code-aster.org/}{Code\_Aster}: \hl{Feature Rich!}, super functional GUI front-end through \href{https://www.salome-platform.org/}{Salome}.
+          \end{itemize}
+        \end{block}}
+      \vspace{4.25cm}
+    \end{column}
+
+    \begin{column}{.48\textwidth}
+      \begin{itemize}
+      \item MATLAB is great, too!
+      \end{itemize}
+      \uncover<2->{\begin{block}{\centering Less Annoying Alternatives?}
+          \begin{itemize}
+          \item Do check out \href{https://julialang.org/}{Julia}!
+          \item \href{https://www.python.org/}{Python} has a great ecosystem too.
+          \end{itemize}
+        \end{block}}
+      \vspace{5cm}
+    \end{column}
+  \end{columns}
+
+  \begin{tikzpicture}[overlay,remember picture]
+    \pgftransformshift{\pgfpointanchor{current page}{center}}
+
+    \node[visible on=<3->] at (-4.9041, -2.3889)
+    {\includegraphics[width=0.15\textwidth]{FIGS/calculix}};
+    \node[visible on=<3->] at (-1.6849, -2.1250)
+    {\includegraphics[width=0.2\textwidth]{FIGS/codeaster}};
+    \node[visible on=<3->] at (-2.2466, -3.9722)
+    {\includegraphics[width=0.2\textwidth]{FIGS/salome-meca}};
+    
+    \node[visible on=<2->] at (1.3288, -1.8889)
+    {\includegraphics[width=0.2\textwidth]{FIGS/julia}};    
+    \node[visible on=<2->] at (4.2603, -3.3472)
+    {\includegraphics[width=0.2\textwidth]{FIGS/python}};
+    
+  \end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
   \frametitle{\centering Thank You!}
   
   \begin{figure}
@@ -379,12 +493,12 @@
   Please email me at \href{mailto:nidish@iitm.ac.in}{nidish@iitm.ac.in}.  
 \end{frame}
 
-\begin{frame}[allowframebreaks]
-  \frametitle{References}
-  \renewcommand*{\bibfont}{\tiny}
-  \vspace{-0.25cm}
-  \printbibliography
-\end{frame}
+% \begin{frame}[allowframebreaks]
+%   \frametitle{References}
+%   \renewcommand*{\bibfont}{\tiny}
+%   \vspace{-0.25cm}
+%   \printbibliography
+% \end{frame}
 
 \end{document}
 

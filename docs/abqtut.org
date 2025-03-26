@@ -39,6 +39,14 @@ Here is an overview of the sections and their contents:
 
    When the relative coordinate DOFs format is desired, [[cref:sec:meshproc]] and [[cref:sec:mex]] don't need to be followed. This can be substituted completely with [[cref:sec:relcsp]].
 7. *Outro/Contact* ([[Cref:sec:outro]]): Concludes the tutorial, giving contact information of the authors, etc.
+
+** Outline Presentation
+The following presentation was delivered at the monthly seminar series of the [[https://jointmechanics.org/index.php/Main_Page][International Committee of Jointed Structures]] in March 2025.
+It provides an overview of the tutorial.
+
+#+html: <embed src="./figs/icjm_pres.pdf" width="80%" height="375">
+
+
 #+latex: \pagebreak
 * Preprocess
 :PROPERTIES:
