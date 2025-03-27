@@ -3,6 +3,7 @@
 
 % \includeonlyframes{cur}
 
+\usepackage{setspace}
 \usepackage{siunitx}
 \usepackage{mathtools}
 \usepackage{accents}
@@ -331,6 +332,9 @@
     (0, 0) {\textbf{...And this is what it looks like on ABAQUS.}
 
       \includegraphics[width=\linewidth]{FIGS/rcs_pic}};
+    \node[visible on=<2->, red, text width=0.2\textwidth] at (3.3835,
+    -2.1805)
+    {\tiny *The bolt-nut equation constraint is shown here.\par};
 
     \node[visible on=<3->, nidbox, text width=0.25\textwidth] at
     (-3.9178, -1.9444)

@@ -9,7 +9,6 @@
 #+HTML: <style> summary:hover {background:pink;} </style>
 #+HTML: <script>var HS_STARTUP_FOLDED = true;</script>
 # #+HTML_HEAD: <style> #content{max-width:2000px;} *{font-size: large;}</style>
-# #+HTML_HEAD: <link rel="stylesheet" href="./themes/codize.css">
 
 #+LATEX: \pagebreak
 
@@ -42,7 +41,7 @@ Here is an overview of the sections and their contents:
 
 ** Outline Presentation
 The following presentation was delivered at the monthly seminar series of the [[https://jointmechanics.org/index.php/Main_Page][International Committee of Jointed Structures]] in March 2025.
-It provides an overview of the tutorial.
+It provides an overview of the tutorial. You can find the file in the repository [[https://github.com/Nidish96/Abaqus4Joints/blob/832076ec8b4464826727a101fc5bf3c435ec9701/icjm_pres/icjm_pres.pdf][here]].
 
 #+html: <embed src="./figs/icjm_pres.pdf" width="80%" height="375">
 
